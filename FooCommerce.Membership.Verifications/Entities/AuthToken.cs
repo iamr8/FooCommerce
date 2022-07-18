@@ -3,7 +3,7 @@
 using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
 
-namespace FooCommerce.Verifications.Entities
+namespace FooCommerce.Membership.Verifications.Entities
 {
     public class AuthToken : Entity, IEntityRequestLog
     {

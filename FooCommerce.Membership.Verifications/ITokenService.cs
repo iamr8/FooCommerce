@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Verifications
+﻿namespace FooCommerce.Membership.Verifications
 {
     public interface ITokenService
     {

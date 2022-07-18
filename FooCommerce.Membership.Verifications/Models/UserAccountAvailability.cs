@@ -1,6 +1,6 @@
-﻿using FooCommerce.Verifications.Enums;
+﻿using FooCommerce.Membership.Verifications.Enums;
 
-namespace FooCommerce.Verifications.Models
+namespace FooCommerce.Membership.Verifications.Models
 {
     public class UserAccountAvailability
     {

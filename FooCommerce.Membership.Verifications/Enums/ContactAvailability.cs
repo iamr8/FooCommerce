@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Verifications.Enums
+﻿namespace FooCommerce.Membership.Verifications.Enums
 {
     public enum ContactAvailability
     {

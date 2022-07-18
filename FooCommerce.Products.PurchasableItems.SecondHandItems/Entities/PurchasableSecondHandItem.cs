@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Products.Entities.Products;
 
-namespace FooCommerce.PurchasableItems.SecondHandItems.Entities
+namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities
 {
     public class PurchasableSecondHandItem : Product
     {
