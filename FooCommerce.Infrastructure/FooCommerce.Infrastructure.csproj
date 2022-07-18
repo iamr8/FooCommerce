@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FooCommerce.Membership.Application\FooCommerce.Membership.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Membership.Verifications.Application\FooCommerce.Membership.Verifications.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Ordering.Application\FooCommerce.Ordering.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Products.Application\FooCommerce.Products.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Subscriptions.Application\FooCommerce.Subscriptions.Application.csproj" />
+  </ItemGroup>
+
+</Project>

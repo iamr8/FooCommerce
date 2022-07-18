@@ -1,7 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FooCommerce.Pages
+namespace FooCommerce.Web.Pages
 {
     public class IndexModel : PageModel
     {
