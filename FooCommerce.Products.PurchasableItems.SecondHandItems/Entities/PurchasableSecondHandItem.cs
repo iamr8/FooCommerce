@@ -1,8 +1,11 @@
-﻿using FooCommerce.Products.Entities.Products;
+﻿using FooCommerce.Domain.DbProvider;
+using FooCommerce.Products.Products.Interfaces;
 
-namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities
+namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities;
+
+public class PurchasableSecondHandItem : Entity, IProduct<PurchasableSecondHandItemAd>
 {
-    public class PurchasableSecondHandItem : Product
-    {
-    }
+    public long ExternalId { get; set; }
+    public Guid? CategoryId { get; set; }
+    public ICollection<PurchasableSecondHandItemAd> Ads { get; set; }
 }

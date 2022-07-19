@@ -2,7 +2,7 @@
 {
     public enum UserContactType
     {
-        EmailAddress,
-        MobileNumber
+        EmailAddress = 0,
+        MobileNumber = 1
     }
 }

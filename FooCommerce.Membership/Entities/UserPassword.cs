@@ -7,5 +7,6 @@ namespace FooCommerce.Membership.Entities
         public string Salt { get; set; }
         public string Hash { get; set; }
         public Guid UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }

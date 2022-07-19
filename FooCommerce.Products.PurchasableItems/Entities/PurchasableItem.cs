@@ -1,8 +1,11 @@
-﻿using FooCommerce.Products.Entities.Products;
+﻿using FooCommerce.Domain.DbProvider;
+using FooCommerce.Products.Products.Interfaces;
 
-namespace FooCommerce.Products.PurchasableItems.Entities
+namespace FooCommerce.Products.PurchasableItems.Entities;
+
+public class PurchasableItem : Entity, IProduct<PurchasableItemAd>
 {
-    public class PurchasableItem : Product
-    {
-    }
+    public long ExternalId { get; set; }
+    public Guid? CategoryId { get; set; }
+    public ICollection<PurchasableItemAd> Ads { get; set; }
 }

@@ -3,6 +3,5 @@
     public interface IEntityProductBarcode
     {
         string Barcode { get; set; }
-        int BarcodeType { get; set; }
     }
 }

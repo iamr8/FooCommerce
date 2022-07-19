@@ -13,7 +13,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FooCommerce.Membership.Application\FooCommerce.Membership.Application.csproj" />
-    <ProjectReference Include="..\FooCommerce.Membership.Verifications.Application\FooCommerce.Membership.Verifications.Application.csproj" />
     <ProjectReference Include="..\FooCommerce.Ordering.Application\FooCommerce.Ordering.Application.csproj" />
     <ProjectReference Include="..\FooCommerce.Products.Application\FooCommerce.Products.Application.csproj" />
     <ProjectReference Include="..\FooCommerce.Subscriptions.Application\FooCommerce.Subscriptions.Application.csproj" />
