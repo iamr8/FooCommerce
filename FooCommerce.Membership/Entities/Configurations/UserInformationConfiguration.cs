@@ -9,6 +9,7 @@ public class UserInformationConfiguration : EntityConfiguration<UserInformation>
 {
     public override void Configure(EntityTypeBuilder<UserInformation> builder)
     {
+        base.Configure(builder);
         builder.ToTable("UserInformation");
         builder.HasOne(x => x.User)
             .WithMany(x => x.Information)

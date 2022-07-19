@@ -49,6 +49,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Products.RealEs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Products.Vehicles", "FooCommerce.Products.Vehicles\FooCommerce.Products.Vehicles.csproj", "{6A877C29-E1D5-4627-BB2F-C347B307C0FE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.Products.RealEstates.Tests", "FooCommerce.Products.RealEstates.Tests\FooCommerce.Products.RealEstates.Tests.csproj", "{9C926746-BB93-4B66-B3A8-455107718226}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -119,6 +121,10 @@ Global
 		{6A877C29-E1D5-4627-BB2F-C347B307C0FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A877C29-E1D5-4627-BB2F-C347B307C0FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A877C29-E1D5-4627-BB2F-C347B307C0FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C926746-BB93-4B66-B3A8-455107718226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C926746-BB93-4B66-B3A8-455107718226}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C926746-BB93-4B66-B3A8-455107718226}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C926746-BB93-4B66-B3A8-455107718226}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -144,6 +150,7 @@ Global
 		{5FBD3365-667F-4DF0-B0D5-F0EDECCDA674} = {1F15DC35-A5DF-40B5-837E-B71F4EA2821E}
 		{6D4CA4C0-E581-4120-8786-31CF9DFDF077} = {1F15DC35-A5DF-40B5-837E-B71F4EA2821E}
 		{6A877C29-E1D5-4627-BB2F-C347B307C0FE} = {1F15DC35-A5DF-40B5-837E-B71F4EA2821E}
+		{9C926746-BB93-4B66-B3A8-455107718226} = {1F15DC35-A5DF-40B5-837E-B71F4EA2821E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9A554E03-2FFD-4B69-9403-8056E86381DB}

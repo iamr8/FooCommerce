@@ -9,6 +9,7 @@ public class PurchasableItemConfiguration : EntityConfiguration<PurchasableItem>
 {
     public override void Configure(EntityTypeBuilder<PurchasableItem> builder)
     {
+        base.Configure(builder);
         builder.ToTable("PurchasableItems");
         builder.HasMany(x => x.Ads)
             .WithOne(x => x.Product)

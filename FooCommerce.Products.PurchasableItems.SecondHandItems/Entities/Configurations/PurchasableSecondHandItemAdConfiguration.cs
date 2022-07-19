@@ -9,6 +9,7 @@ public class PurchasableSecondHandItemAdConfiguration : EntityConfiguration<Purc
 {
     public override void Configure(EntityTypeBuilder<PurchasableSecondHandItemAd> builder)
     {
+        base.Configure(builder);
         builder.ToTable("PurchasableSecondHandItemAds");
     }
 }

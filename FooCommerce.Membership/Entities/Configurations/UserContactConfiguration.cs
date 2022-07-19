@@ -9,6 +9,7 @@ public class UserContactConfiguration : EntityConfiguration<UserContact>
 {
     public override void Configure(EntityTypeBuilder<UserContact> builder)
     {
+        base.Configure(builder);
         builder.ToTable("UserContacts");
         builder.HasOne(x => x.User)
             .WithMany(x => x.Contacts)

@@ -9,6 +9,7 @@ public class VehicleConfiguration : EntityConfiguration<Vehicle>
 {
     public override void Configure(EntityTypeBuilder<Vehicle> builder)
     {
+        base.Configure(builder);
         builder.ToTable("Vehicles");
         builder.HasMany(x => x.Ads)
             .WithOne(x => x.Product)

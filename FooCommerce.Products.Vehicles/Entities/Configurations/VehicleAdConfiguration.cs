@@ -9,6 +9,7 @@ public class VehicleAdConfiguration : EntityConfiguration<VehicleAd>
 {
     public override void Configure(EntityTypeBuilder<VehicleAd> builder)
     {
+        base.Configure(builder);
         builder.ToTable("VehicleAds");
     }
 }

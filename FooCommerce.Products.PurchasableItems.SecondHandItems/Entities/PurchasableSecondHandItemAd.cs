@@ -3,8 +3,9 @@ using FooCommerce.Products.Ads.Interfaces;
 
 namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities;
 
-public class PurchasableSecondHandItemAd : Entity, IAd<PurchasableSecondHandItem>
+public class PurchasableSecondHandItemAd : Entity, IEntityProductAd<PurchasableSecondHandItem>
 {
+    public long ExternalId { get; set; }
     public DateTime EndDate { get; set; }
     public Guid ProductId { get; set; }
     public Guid? ParentAdId { get; set; }

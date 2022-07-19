@@ -3,9 +3,8 @@ using FooCommerce.Products.Products.Interfaces;
 
 namespace FooCommerce.Products.PurchasableItems.Entities;
 
-public class PurchasableItem : Entity, IProduct<PurchasableItemAd>
+public class PurchasableItem : Entity, IEntityProduct<PurchasableItemAd>
 {
-    public long ExternalId { get; set; }
     public Guid? CategoryId { get; set; }
     public ICollection<PurchasableItemAd> Ads { get; set; }
 }

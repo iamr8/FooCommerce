@@ -9,6 +9,7 @@ public class RealEstateConfiguration : EntityConfiguration<RealEstate>
 {
     public override void Configure(EntityTypeBuilder<RealEstate> builder)
     {
+        base.Configure(builder);
         builder.ToTable("RealEstates");
         builder.HasMany(x => x.Ads)
             .WithOne(x => x.Product)

@@ -9,6 +9,7 @@ public class PurchasableItemAdConfiguration : EntityConfiguration<PurchasableIte
 {
     public override void Configure(EntityTypeBuilder<PurchasableItemAd> builder)
     {
+        base.Configure(builder);
         builder.ToTable("PurchasableItemAds");
     }
 }

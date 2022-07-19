@@ -9,6 +9,7 @@ public class AuthTokenConfiguration : EntityConfiguration<AuthToken>
 {
     public override void Configure(EntityTypeBuilder<AuthToken> builder)
     {
+        base.Configure(builder);
         builder.ToTable("AuthTokens");
         builder.HasOne(x => x.UserContact)
             .WithMany(x => x.Tokens)

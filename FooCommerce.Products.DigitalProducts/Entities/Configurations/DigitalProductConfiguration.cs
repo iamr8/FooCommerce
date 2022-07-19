@@ -9,6 +9,7 @@ public class DigitalProductConfiguration : EntityConfiguration<DigitalProduct>
 {
     public override void Configure(EntityTypeBuilder<DigitalProduct> builder)
     {
+        base.Configure(builder);
         builder.ToTable("DigitalProducts");
         builder.Property(x => x.Name).IsRequired();
         builder.HasMany(x => x.Ads)

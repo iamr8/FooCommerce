@@ -9,6 +9,7 @@ public class UserPasswordConfiguration : EntityConfiguration<UserPassword>
 {
     public override void Configure(EntityTypeBuilder<UserPassword> builder)
     {
+        base.Configure(builder);
         builder.ToTable("UserPasswords");
         builder.HasOne(x => x.User)
             .WithMany(x => x.Passwords)

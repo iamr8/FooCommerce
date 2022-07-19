@@ -1,6 +1,8 @@
-﻿namespace FooCommerce.Products.Ads.Interfaces
+﻿using FooCommerce.Domain.DbProvider.Interfaces;
+
+namespace FooCommerce.Products.Ads.Interfaces
 {
-    public interface IAd
+    public interface IEntityAd : IEntityExternalId
     {
         DateTime EndDate { get; set; }
         Guid ProductId { get; set; }

@@ -9,6 +9,7 @@ public class RealEstateAdConfiguration : EntityConfiguration<RealEstateAd>
 {
     public override void Configure(EntityTypeBuilder<RealEstateAd> builder)
     {
+        base.Configure(builder);
         builder.ToTable("RealEstateAds");
     }
 }

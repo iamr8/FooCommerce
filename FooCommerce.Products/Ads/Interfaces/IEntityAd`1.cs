@@ -2,7 +2,7 @@
 
 namespace FooCommerce.Products.Ads.Interfaces
 {
-    public interface IAd<TProduct> : IAd where TProduct : IProduct
+    public interface IEntityProductAd<TProduct> : IEntityAd where TProduct : IEntityProduct
     {
         TProduct Product { get; set; }
     }

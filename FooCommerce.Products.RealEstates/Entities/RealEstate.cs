@@ -6,10 +6,8 @@ using NetTopologySuite.Geometries;
 
 namespace FooCommerce.Products.RealEstates.Entities;
 
-public class RealEstate : Entity, IProduct<RealEstateAd>, IEntityCoordinate, IEntityProductBarcode
+public class RealEstate : Entity, IEntityProduct<RealEstateAd>, IEntityCoordinate
 {
-    public long ExternalId { get; set; }
-    public string Barcode { get; set; }
     public Point? Coordinate { get; set; }
     public Guid? CategoryId { get; set; }
     public ICollection<RealEstateAd> Ads { get; set; }

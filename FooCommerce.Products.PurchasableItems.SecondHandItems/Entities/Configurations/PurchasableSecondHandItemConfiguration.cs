@@ -9,6 +9,7 @@ public class PurchasableSecondHandItemConfiguration : EntityConfiguration<Purcha
 {
     public override void Configure(EntityTypeBuilder<PurchasableSecondHandItem> builder)
     {
+        base.Configure(builder);
         builder.ToTable("PurchasableSecondHandItems");
         builder.HasMany(x => x.Ads)
             .WithOne(x => x.Product)
