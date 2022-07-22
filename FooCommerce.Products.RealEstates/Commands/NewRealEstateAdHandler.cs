@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Products.Domain.Models;
-using FooCommerce.Products.RealEstates.Application.Models;
+using FooCommerce.Products.RealEstates.Models;
 
 using MediatR;
 

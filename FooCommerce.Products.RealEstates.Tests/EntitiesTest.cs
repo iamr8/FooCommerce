@@ -1,17 +1,22 @@
+using Autofac;
+
 using FooCommerce.Domain.DbProvider;
 using FooCommerce.Products.RealEstates.Entities;
+
+using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.Products.RealEstates.Tests;
 
 public class EntitiesTest : Fixture
 {
     [Fact]
-    public void EntityCreation()
+    public async Task EntityCreationAsync()
     {
         // Arrange
-        using var dbContext = new AppDbContext(this.DbContextOptions, null);
-        dbContext.Database.EnsureDeleted();
-        dbContext.Database.EnsureCreated();
+        var dbContextFactory = this.Container.Resolve<IDbContextFactory<AppDbContext>>();
+        await using var dbContext = await dbContextFactory.CreateDbContextAsync();
+        await dbContext.Database.EnsureDeletedAsync();
+        await dbContext.Database.EnsureCreatedAsync();
 
         // Act
         var product = dbContext.Set<RealEstate>().Add(new RealEstate()).Entity;
@@ -21,9 +26,13 @@ public class EntitiesTest : Fixture
             EndDate = DateTime.UtcNow.AddDays(30),
         }).Entity;
 
-        dbContext.SaveChanges();
-        var fetch = dbContext.Set<RealEstate>().First();
+        await dbContext.SaveChangesAsync();
+        var fetchedProduct = dbContext.Set<RealEstate>().First();
+        var fetchedAd = dbContext.Set<RealEstateAd>().First();
 
-        Assert.NotNull(fetch);
+        Assert.NotNull(fetchedProduct);
+        Assert.NotNull(fetchedAd);
+        Assert.Equal(product.Id, fetchedProduct.Id);
+        Assert.Equal(ad.ProductId, fetchedAd.ProductId);
     }
 }

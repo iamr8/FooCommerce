@@ -3,10 +3,11 @@ using FooCommerce.Products.Domain.Models;
 
 using MediatR;
 
-namespace FooCommerce.Products.Ads.Services
+namespace FooCommerce.Products.Services
 {
     public interface IPostingService
     {
+        Task<bool> NewAsync<TRequest>(TRequest request) where TRequest : IAdRequest;
     }
 
     public class PostingService : IPostingService

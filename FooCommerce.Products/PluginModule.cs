@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Products.Ads.Services;
+using FooCommerce.Products.Services;
 
 namespace FooCommerce.Products;
 
@@ -14,9 +14,7 @@ public class PluginModule : Module
         builder.Properties.Add(GetType().AssemblyQualifiedName, null);
         Console.WriteLine($"Registering {GetType().AssemblyQualifiedName}");
 
-        builder.RegisterType<PostingService>()
-            .AsImplementedInterfaces()
-            .InstancePerDependency();
+        builder.RegisterType<PostingService>().AsImplementedInterfaces().InstancePerDependency();
 
         var assemblies = AppDomain.CurrentDomain.GetAssemblies()
             .Where(x => x.GetName().Name.StartsWith($"{nameof(FooCommerce)}.{nameof(FooCommerce.Products)}."));

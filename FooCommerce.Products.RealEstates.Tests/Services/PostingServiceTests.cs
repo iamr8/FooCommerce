@@ -1,5 +1,7 @@
-using FooCommerce.Products.Ads.Services;
-using FooCommerce.Products.RealEstates.Application.Models;
+using Autofac;
+
+using FooCommerce.Products.RealEstates.Models;
+using FooCommerce.Products.Services;
 
 namespace FooCommerce.Products.RealEstates.Tests.Services;
 
@@ -9,7 +11,7 @@ public class PostingServiceTests : Fixture
     public async Task NewAsync()
     {
         // Arrange
-        var service = new PostingService(this.Mediator);
+        var service = this.Container.Resolve<IPostingService>();
         var request = new NewRealEstateAdRequest();
 
         // Act

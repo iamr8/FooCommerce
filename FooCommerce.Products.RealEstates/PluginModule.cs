@@ -1,12 +1,8 @@
 ﻿using Autofac;
 
 using FooCommerce.Domain.Plugins.Interfaces;
-using FooCommerce.Products.Domain.Models;
-using FooCommerce.Products.RealEstates.Application.Models;
 using FooCommerce.Products.RealEstates.Commands;
 using FooCommerce.Products.RealEstates.Entities;
-
-using MediatR;
 
 namespace FooCommerce.Products.RealEstates;
 
