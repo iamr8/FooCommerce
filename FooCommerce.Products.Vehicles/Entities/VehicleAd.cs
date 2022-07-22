@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
-using FooCommerce.Products.Ads.Interfaces;
+using FooCommerce.Products.Domain.Interfaces;
 
 namespace FooCommerce.Products.Vehicles.Entities;
 

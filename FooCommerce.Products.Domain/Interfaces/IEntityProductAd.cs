@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Domain.DbProvider.Interfaces;
 
-namespace FooCommerce.Products.Ads.Interfaces
+namespace FooCommerce.Products.Domain.Interfaces
 {
-    public interface IEntityAd : IEntityExternalId
+    public interface IEntityProductAd : IEntityExternalId
     {
         DateTime EndDate { get; set; }
         Guid ProductId { get; set; }

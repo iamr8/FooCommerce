@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Products.Products.Interfaces
+﻿namespace FooCommerce.Products.Domain.Interfaces
 {
     public interface IEntityProduct
     {

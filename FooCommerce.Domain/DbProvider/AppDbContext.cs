@@ -1,21 +1,22 @@
 ﻿using FooCommerce.Domain.DbProvider.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.Domain.DbProvider
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+        private readonly ILoggerFactory _loggerFactory;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options, ILoggerFactory loggerFactory) : base(options)
         {
+            _loggerFactory = loggerFactory;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(x => x.GetName().Name.StartsWith(nameof(FooCommerce)))
-                .Where(x => !x.GetName().Name.EndsWith(".Tests"))
-                .ToList();
+            var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies().ToList();
             foreach (var assembly in assemblies)
             {
                 modelBuilder.ApplyConfigurationsFromAssembly(assembly);

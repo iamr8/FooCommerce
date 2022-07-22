@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Products.Ads.Interfaces;
+using FooCommerce.Products.Domain.Interfaces;
 
 namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities;
 

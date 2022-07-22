@@ -1,5 +1,3 @@
-using Autofac.Extensions.DependencyInjection;
-
 var builder = WebApplication.CreateBuilder(args);
 
 //builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());

@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
-using FooCommerce.Products.Products.Interfaces;
+using FooCommerce.Products.Domain.Interfaces;
 
 using NetTopologySuite.Geometries;
 

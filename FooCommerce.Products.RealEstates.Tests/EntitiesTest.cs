@@ -3,13 +3,13 @@ using FooCommerce.Products.RealEstates.Entities;
 
 namespace FooCommerce.Products.RealEstates.Tests;
 
-public class UnitTest1 : Fixture
+public class EntitiesTest : Fixture
 {
     [Fact]
     public void EntityCreation()
     {
         // Arrange
-        using var dbContext = new AppDbContext(this.DbContextOptions);
+        using var dbContext = new AppDbContext(this.DbContextOptions, null);
         dbContext.Database.EnsureDeleted();
         dbContext.Database.EnsureCreated();
 
