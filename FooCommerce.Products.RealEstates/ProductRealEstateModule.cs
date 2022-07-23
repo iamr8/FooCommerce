@@ -1,17 +1,13 @@
 ﻿using Autofac;
 
-using FooCommerce.Domain.Plugins.Interfaces;
 using FooCommerce.Products.RealEstates.Commands;
-using FooCommerce.Products.RealEstates.Entities;
+
+using MassTransit;
 
 namespace FooCommerce.Products.RealEstates;
 
-public class PluginModule : Module, IPlugin
+public class ProductRealEstateModule : Module
 {
-    public string Name => nameof(RealEstate);
-    public bool Active => true;
-    public string[] Tags => new[] { "realestate", "land" };
-
     protected override void Load(ContainerBuilder builder)
     {
         if (builder.Properties.ContainsKey(GetType().AssemblyQualifiedName))
@@ -20,9 +16,14 @@ public class PluginModule : Module, IPlugin
         builder.Properties.Add(GetType().AssemblyQualifiedName, null);
         Console.WriteLine($"Registering {GetType().AssemblyQualifiedName}");
 
-        builder.RegisterType<NewRealEstateAdHandler>()
-            .AsImplementedInterfaces()
-            .InstancePerDependency();
+        builder.Register(context => Bus.Factory.CreateUsingInMemory(cfg =>
+        {
+            cfg.ReceiveEndpoint("create-realestate-ad", endpoint_cfg =>
+            {
+                endpoint_cfg.Instance(new CreateRealEstateAdConsumer());
+            });
+        }));
+
         base.Load(builder);
     }
 }

@@ -25,7 +25,7 @@ namespace FooCommerce.Membership
             if (!request.Validate())
                 return null;
 
-            return SignUpStatus.NeedVerifyEmail;
+            return SignUpStatus.NeedEmailVerification;
         }
 
         public async Task<SignInStatus?> SignIn(SignInRequest request)

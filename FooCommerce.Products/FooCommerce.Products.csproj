@@ -10,8 +10,4 @@
     <ProjectReference Include="..\FooCommerce.Products.Domain\FooCommerce.Products.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Ads\Commands\" />
-  </ItemGroup>
-
 </Project>

@@ -2,8 +2,8 @@
 {
     public enum SignUpStatus
     {
-        NeedVerifyEmail = 0,
+        NeedEmailVerification = 0,
         SignedIn = 1,
-        NeedVerifyMobile = 2,
+        NeedMobileVerification = 2,
     }
 }

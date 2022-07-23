@@ -1,10 +1,9 @@
 ﻿using Autofac;
 
-using FooCommerce.Domain;
 using FooCommerce.Domain.Modules;
+using FooCommerce.Products.RealEstates.Commands;
 
-using MediatR;
-using MediatR.Extensions.Autofac.DependencyInjection;
+using MassTransit.Testing;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -13,20 +12,16 @@ namespace FooCommerce.Products.RealEstates.Tests;
 public class Fixture
 {
     protected readonly IContainer Container;
-
-    protected readonly IMediator Mediator;
+    protected readonly ITestHarness TestHarness;
 
     protected Fixture()
     {
         var containerBuilder = new ContainerBuilder();
-
-        containerBuilder.RegisterModule(
-            new DbContextModule(builder =>
-                builder.UseInMemoryDatabase("ProductsInMemoryDatabase")));
-        containerBuilder.RegisterMediatR(AppDomain.CurrentDomain.GetExecutingAssemblies().ToArray());
-        containerBuilder.RegisterModule<FooCommerce.Products.PluginModule>();
+        containerBuilder.RegisterModule(new DatabaseModule(builder => builder.UseInMemoryDatabase("ProductsInMemoryDatabase")));
+        containerBuilder.RegisterModule(new BusModule(true, typeof(CreateRealEstateAdConsumer).Assembly));
+        containerBuilder.RegisterModule(new ProductModule());
 
         Container = containerBuilder.Build();
-        Mediator = Container.Resolve<IMediator>();
+        TestHarness = this.Container.Resolve<ITestHarness>();
     }
 }

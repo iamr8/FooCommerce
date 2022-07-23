@@ -2,6 +2,7 @@
 
 namespace FooCommerce.Products.RealEstates.Models;
 
-public record NewRealEstateAdRequest : IAdRequest
+public class NewRealEstateAdResponse : IAdRequestResponse
 {
+    public bool IsSuccess { get; set; }
 }
