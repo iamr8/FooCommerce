@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 //builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
 // Add services to the container.
+builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -22,6 +24,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller}/{action=Index}/{id?}");
+
 app.MapRazorPages();
+
+app.MapFallbackToFile("index.html"); ;
 
 app.Run();

@@ -1,0 +1,29 @@
+﻿/* Bootstrap Sass variables overrides */
+/*$link-color: var(--bs-body-color-rgb);*/
+
+$font-size-base: 13px;
+
+$link-decoration: none;
+
+$headings-font-weight: 600;
+
+$hr-color: var(--bs-gray-200);
+$hr-opacity: 1;
+
+$btn-close-opacity: 1;
+$btn-font-size: calc(var(--bs-body-font-size) + 2px);
+
+$input-padding-y: 0.5rem;
+$input-padding-x: 0.4rem;
+$input-font-size: $font-size-base;
+$input-border-radius: 5px;
+$input-transition: border 0.2s ease-in-out;
+$input-bg: white;
+$input-focus-border-color: var(--bs-gray-500);
+
+$form-switch-padding-start: 3.5rem;
+$form-switch-width: 40px;
+$form-check-input-checked-bg-color: black;
+$form-check-input-checked-border-color: transparent;
+$form-check-input-width: 20px;
+$form-select-font-size: 0.8125rem;

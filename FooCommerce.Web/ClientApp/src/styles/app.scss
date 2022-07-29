@@ -1,0 +1,75 @@
+@import "base/_base";
+
+html,
+body {
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+body {
+    &:not(.no-notch) {
+        .notch-blur {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: var(--safe-area-inset-top);
+            width: 100%;
+            z-index: 1000000;
+            background-color: var(--primary-color);
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+        }
+    }
+
+    &.no-notch {
+        .notch-blur {
+            display: none;
+        }
+    }
+
+    &.modal-open {
+        overscroll-behavior-y: none;
+
+        .notch-blur {
+            opacity: 0;
+        }
+    }
+
+    >#app {
+        width: 100vw;
+        height: 100vh;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+        /* enables “momentum” (smooth) scrolling */
+        overscroll-behavior: none;
+        position: fixed;
+        top: 0;
+        bottom: var(--navbar-bottom-height);
+        left: 0;
+        right: 0;
+        height: calc(100% - var(--navbar-bottom-height) - var(--safe-area-inset-bottom));
+
+        .fullscreen & {
+            padding-top: 0;
+        }
+
+        >main {
+            overflow-x: hidden;
+            position: relative;
+            padding-top: var(--safe-area-inset-top);
+            height: 100%;
+
+            @media screen and (orientation:landscape) {
+                padding-left: calc(15px + var(--safe-area-inset-left));
+                padding-right: calc(15px + var(--safe-area-inset-right));
+            }
+
+            body.no-notch & {
+                padding-top: 0;
+            }
+        }
+    }
+}
