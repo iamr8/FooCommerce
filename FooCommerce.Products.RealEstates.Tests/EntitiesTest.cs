@@ -19,20 +19,15 @@ public class EntitiesTest : Fixture
         await dbContext.Database.EnsureCreatedAsync();
 
         // Act
-        var product = dbContext.Set<RealEstate>().Add(new RealEstate()).Entity;
-        var ad = dbContext.Set<RealEstateAd>().Add(new RealEstateAd
+        var ad = dbContext.Set<RealEstate>().Add(new RealEstate
         {
-            ProductId = product.Id,
             EndDate = DateTime.UtcNow.AddDays(30),
         }).Entity;
 
         await dbContext.SaveChangesAsync();
-        var fetchedProduct = dbContext.Set<RealEstate>().First();
-        var fetchedAd = dbContext.Set<RealEstateAd>().First();
+        var fetchedAd = dbContext.Set<RealEstate>().First();
 
-        Assert.NotNull(fetchedProduct);
         Assert.NotNull(fetchedAd);
-        Assert.Equal(product.Id, fetchedProduct.Id);
-        Assert.Equal(ad.ProductId, fetchedAd.ProductId);
+        Assert.Equal(ad.Id, fetchedAd.Id);
     }
 }

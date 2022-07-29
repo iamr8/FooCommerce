@@ -1,9 +1,9 @@
 ﻿using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
 
-namespace FooCommerce.Products.Products.Entities
+namespace FooCommerce.Products.Domain.Ads.Entities
 {
-    public class ProductSpecification : Entity, IEntityProductSpecification
+    public class AdSpecification : Entity, IEntityProductSpecification
     {
         public int Key { get; set; }
         public string Value { get; set; }

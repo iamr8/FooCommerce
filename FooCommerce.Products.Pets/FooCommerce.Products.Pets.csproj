@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
+		<ProjectReference Include="..\FooCommerce.Products.Application\FooCommerce.Products.Application.csproj" />
+	</ItemGroup>
+
 </Project>

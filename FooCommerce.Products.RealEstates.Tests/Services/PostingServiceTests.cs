@@ -18,11 +18,11 @@ public class PostingServiceTests : Fixture
         await this.TestHarness.Start();
         var client = this.TestHarness.GetRequestClient<NewRealEstateAdRequest>();
 
-        var response1 = await client.GetResponse<IAdRequestResponse>(request);
-        dynamic response2 = this.TestHarness.Sent.Select<IAdRequestResponse>().First().MessageObject;
+        var response1 = await client.GetResponse<IAdRequestResult>(request);
+        var response2 = this.TestHarness.Sent.Select<IAdRequestResult>().First().MessageObject as IAdRequestResult;
 
         // Assert
-        Assert.True(await this.TestHarness.Sent.Any<IAdRequestResponse>());
+        Assert.True(await this.TestHarness.Sent.Any<IAdRequestResult>());
         Assert.True(await this.TestHarness.Consumed.Any<NewRealEstateAdRequest>());
         Assert.True(await this.TestHarness.GetConsumerHarness<CreateRealEstateAdConsumer>().Consumed.Any<NewRealEstateAdRequest>());
         Assert.NotNull(response1.Message);

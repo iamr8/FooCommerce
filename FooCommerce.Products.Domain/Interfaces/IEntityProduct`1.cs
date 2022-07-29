@@ -1,7 +1,10 @@
-﻿namespace FooCommerce.Products.Domain.Interfaces
+﻿#nullable enable
+
+namespace FooCommerce.Products.Domain.Interfaces
 {
-    public interface IEntityProduct<T> : IEntityProduct where T : class
+    public interface IEntityProduct<T> : IEntityProduct where T : IEntityProduct
     {
-        ICollection<T> Ads { get; set; }
+        T? Base { get; set; }
+        ICollection<T> Extensions { get; set; }
     }
 }

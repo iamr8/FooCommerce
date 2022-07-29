@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.Products.Domain.Interfaces
 {
-    public interface IAdRequestResponse
+    public interface IAdRequestResult
     {
         bool IsSuccess { get; set; }
     }

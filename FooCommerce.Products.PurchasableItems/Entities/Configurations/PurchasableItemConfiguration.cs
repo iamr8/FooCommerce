@@ -11,10 +11,10 @@ public class PurchasableItemConfiguration : EntityConfiguration<PurchasableItem>
     {
         base.Configure(builder);
         builder.ToTable("PurchasableItems");
-        builder.HasMany(x => x.Ads)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
-            .IsRequired()
+        builder.HasMany(x => x.Extensions)
+            .WithOne(x => x.Base)
+            .HasForeignKey(x => x.BaseId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

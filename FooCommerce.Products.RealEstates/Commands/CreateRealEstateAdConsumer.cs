@@ -9,7 +9,7 @@ public class CreateRealEstateAdConsumer : IConsumer<NewRealEstateAdRequest>
 {
     public async Task Consume(ConsumeContext<NewRealEstateAdRequest> context)
     {
-        await context.RespondAsync<IAdRequestResponse>(new
+        await context.RespondAsync<IAdRequestResult>(new
         {
             IsSuccess = true
         });

@@ -11,10 +11,11 @@ public class RealEstateConfiguration : EntityConfiguration<RealEstate>
     {
         base.Configure(builder);
         builder.ToTable("RealEstates");
-        builder.HasMany(x => x.Ads)
-            .WithOne(x => x.Product)
-            .HasForeignKey(x => x.ProductId)
-            .IsRequired()
+        builder.Property(x => x.ExternalId).UseHiLo("realestateadsseq", "realestate");
+        builder.HasMany(x => x.Extensions)
+            .WithOne(x => x.Base)
+            .HasForeignKey(x => x.BaseId)
+            .IsRequired(false)
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

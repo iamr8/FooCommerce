@@ -3,7 +3,7 @@ using FooCommerce.Domain.DbProvider.Interfaces;
 
 using NetTopologySuite.Geometries;
 
-namespace FooCommerce.Products.Ads.Entities
+namespace FooCommerce.Products.Domain.Ads.Entities
 {
     public class AdImage : Entity, IEntityCoordinate, IEntityExternalId, IEntitySortable, IEntityImage
     {
@@ -11,7 +11,7 @@ namespace FooCommerce.Products.Ads.Entities
         public string Path { get; set; }
         public bool IsOriginal { get; set; }
         public int Order { get; set; }
-        public Point? Coordinate { get; set; }
+        public Point Coordinate { get; set; }
         public Guid AdId { get; set; }
     }
 }
