@@ -19,7 +19,7 @@ namespace FooCommerce.Domain.DbProvider
 
                 var externalIdTypes = assembly.DefinedTypes
                     .Where(x => x.IsClass)
-                    .Where(x => x.GetInterfaces().Any(c => c == typeof(IEntityExternalId)))
+                    .Where(x => x.GetInterfaces().Any(c => c == typeof(IEntityPublicId)))
                     .ToList();
                 if (externalIdTypes is { Count: > 0 })
                 {

@@ -6,7 +6,7 @@ using FooCommerce.Membership.Enums;
 
 namespace FooCommerce.Membership.Entities
 {
-    public class AuthToken : Entity, IEntityRequestLog
+    public record AuthToken : Entity, IEntityRequestLog
     {
         public TokenAction Action { get; set; }
         public string Token { get; set; }

@@ -11,7 +11,7 @@ public class RealEstateConfiguration : EntityConfiguration<RealEstate>
     {
         base.Configure(builder);
         builder.ToTable("RealEstates");
-        builder.Property(x => x.ExternalId).UseHiLo("realestateadsseq", "realestate");
+        builder.Property(x => x.PublicId).UseHiLo("realestateadsseq", "realestate");
         builder.HasMany(x => x.Extensions)
             .WithOne(x => x.Base)
             .HasForeignKey(x => x.BaseId)

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace FooCommerce.Domain.DbProvider
+﻿namespace FooCommerce.Domain.DbProvider
 {
     public abstract class TypedIdValueBase : IEquatable<TypedIdValueBase>
     {

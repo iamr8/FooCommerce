@@ -2,7 +2,7 @@
 
 namespace FooCommerce.Membership.Entities
 {
-    public class UserPassword : Entity
+    public record UserPassword : Entity
     {
         public string Salt { get; set; }
         public string Hash { get; set; }

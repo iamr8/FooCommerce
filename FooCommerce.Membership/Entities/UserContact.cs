@@ -3,7 +3,7 @@ using FooCommerce.Membership.Enums;
 
 namespace FooCommerce.Membership.Entities
 {
-    public class UserContact : Entity
+    public record UserContact : Entity
     {
         public UserContactType Type { get; set; }
         public string Value { get; set; }

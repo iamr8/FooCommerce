@@ -1,13 +1,14 @@
 ﻿using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
+using FooCommerce.Products.Domain.Interfaces;
 
 using NetTopologySuite.Geometries;
 
-namespace FooCommerce.Products.Domain.Ads.Entities
+namespace FooCommerce.Products.Domain.Entities
 {
-    public class AdImage : Entity, IEntityCoordinate, IEntityExternalId, IEntitySortable, IEntityImage
+    public record AdImage : Entity, IEntityCoordinate, IEntityPublicId, IEntitySortable, IEntityMedia
     {
-        public long ExternalId { get; set; }
+        public long PublicId { get; set; }
         public string Path { get; set; }
         public bool IsOriginal { get; set; }
         public int Order { get; set; }

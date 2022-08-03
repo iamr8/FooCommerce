@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Domain.DbProvider.Interfaces
+﻿namespace FooCommerce.Products.Domain.Interfaces
 {
     public interface IEntityProductSpecification : IEntityProductFeature
     {

@@ -2,7 +2,7 @@
 
 namespace FooCommerce.Subscriptions.Entities
 {
-    public class PricingPlan : Entity
+    public record PricingPlan : Entity
     {
         public int? MaxPictures { get; set; }
         public int? MinPictures { get; set; }

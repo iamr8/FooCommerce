@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 
 namespace FooCommerce.Domain.DbProvider
 {
-    public abstract class Entity
+    public abstract record Entity
     {
         public Guid Id { get; set; }
         public DateTime Created { get; set; }

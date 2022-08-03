@@ -2,7 +2,7 @@
 
 namespace FooCommerce.Membership.Entities
 {
-    public class User : Entity
+    public record User : Entity
     {
         public Guid? ParentId { get; set; }
         public virtual User Parent { get; set; }

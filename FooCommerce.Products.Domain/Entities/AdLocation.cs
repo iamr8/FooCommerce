@@ -1,9 +1,9 @@
 ﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Products.Domain.Ads.Enums;
+using FooCommerce.Products.Domain.Enums;
 
-namespace FooCommerce.Products.Domain.Ads.Entities
+namespace FooCommerce.Products.Domain.Entities
 {
-    public class AdLocation : Entity
+    public record AdLocation : Entity
     {
         // Country, State/Region/Province/Locality, City/County/Area, District, Quarter?, Street, PostalCode
         public AdLocationType Type { get; set; }

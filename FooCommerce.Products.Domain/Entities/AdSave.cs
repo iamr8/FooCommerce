@@ -3,9 +3,9 @@
 using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.DbProvider.Interfaces;
 
-namespace FooCommerce.Products.Domain.Ads.Entities
+namespace FooCommerce.Products.Domain.Entities
 {
-    public class AdView : Entity, IEntityRequestLog
+    public record AdSave : Entity, IEntityRequestLog
     {
         public IPAddress IPAddress { get; set; }
         public string UserAgent { get; set; }

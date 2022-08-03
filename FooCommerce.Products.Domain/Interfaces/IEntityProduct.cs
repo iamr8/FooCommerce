@@ -1,9 +1,9 @@
 ﻿using FooCommerce.Domain.DbProvider.Interfaces;
-using FooCommerce.Products.Domain.Ads.Entities;
+using FooCommerce.Products.Domain.Entities;
 
 namespace FooCommerce.Products.Domain.Interfaces
 {
-    public interface IEntityProduct : IEntityExternalId
+    public interface IEntityProduct : IEntityPublicId
     {
         Guid? CategoryId { get; set; }
 
@@ -14,7 +14,9 @@ namespace FooCommerce.Products.Domain.Interfaces
         ICollection<AdSpecification> Specifications { get; set; }
         ICollection<AdView> Views { get; set; }
         ICollection<AdImage> Images { get; set; }
-        ICollection<AdWish> Wishes { get; set; }
-        ICollection<AdLocation> Locations { get; set; }
+        ICollection<AdVideo> Videos { get; set; }
+        ICollection<AdSave> Saves { get; set; }
+        ICollection<AdLike> Likes { get; set; }
+        ICollection<AdComment> Comments { get; set; }
     }
 }

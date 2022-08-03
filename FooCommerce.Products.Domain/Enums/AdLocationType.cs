@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Products.Domain.Ads.Enums
+﻿namespace FooCommerce.Products.Domain.Enums
 {
     [Flags]
     public enum AdLocationType
