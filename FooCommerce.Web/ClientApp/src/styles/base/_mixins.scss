@@ -1,0 +1,10 @@
+@mixin square($width: auto) {
+    flex: 1 0 $width;
+    height: auto;
+
+    &::before {
+        content: '';
+        float: left;
+        padding-top: 100%;
+    }
+}

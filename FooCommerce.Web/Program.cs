@@ -1,6 +1,15 @@
+using Autofac.Extensions.DependencyInjection;
+
 var builder = WebApplication.CreateBuilder(args);
 
-//builder.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Configuration.AddJsonFile("appsettings.json", true, true);
+if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
+{
+    var path = $"appsettings.{builder.Environment.EnvironmentName}.json";
+    builder.Configuration.AddJsonFile(path, true, true);
+}
+builder.Configuration.AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -23,7 +32,6 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
 
 app.MapControllerRoute(
     name: "default",

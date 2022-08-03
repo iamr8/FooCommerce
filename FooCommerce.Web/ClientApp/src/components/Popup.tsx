@@ -91,7 +91,7 @@ export class Container extends Component<IPopupProps, IPopupState> {
 		this.modalElementRef = element => { this.setState({ container: element }) };
 	}
 
-	static async show(id: string) {
+	static show(id: string) {
 		const modalEl = document.querySelector(".modal#" + id) as HTMLDivElement;
 		if (modalEl) {
 			const modal = BootstrapModal.getOrCreateInstance(modalEl);

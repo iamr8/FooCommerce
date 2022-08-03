@@ -1,0 +1,75 @@
+@import "./base/mixins";
+
+.search-bar.input-group {
+    --search-bar-border-radius: 50%;
+    height: 60px;
+
+    &:not(.has-validation) {
+
+        > :not(:last-child):not(.dropdown-toggle):not(.dropdown-menu):not(.form-floating),
+        >.dropdown-toggle:nth-last-child(n + 3),
+        >.form-floating:not(:last-child)>.form-control,
+        >.form-floating:not(:last-child)>.form-select {
+            border-top-left-radius: var(--search-bar-border-radius);
+            border-bottom-left-radius: var(--search-bar-border-radius);
+            background: none;
+            border-right: none;
+
+            svg {
+                width: 17px;
+                height: 17px;
+
+                path {
+                    fill: #989898;
+                }
+            }
+        }
+    }
+
+    > :not(:first-child):not(.dropdown-menu):not(.form-floating),
+    >.form-floating:not(:first-child)>.form-control,
+    >.form-floating:not(:first-child)>.form-select {
+        border-top-right-radius: var(--search-bar-border-radius);
+        border-bottom-right-radius: var(--search-bar-border-radius);
+        background: none;
+        border-left: none;
+    }
+
+    .form-control {
+        height: auto;
+        font-size: 15px;
+
+        &::placeholder {
+            color: #CDCDCD;
+        }
+    }
+
+    .btn {
+        border-radius: 50%;
+        padding: 10px;
+        min-height: auto;
+    }
+
+    .search-bar-button {
+        border: 2px solid #F5F5F5;
+
+        &-container {
+            padding: 0 0.75rem;
+        }
+    }
+
+    .input-group-text {
+        width: 60px;
+        justify-content: center;
+    }
+
+}
+
+.search-toolbar {
+    @at-root {
+        .search-bar+& {
+            margin-top: calc(var(--bs-gutter-y) * 0.5);
+            overflow-x: scroll;
+        }
+    }
+}

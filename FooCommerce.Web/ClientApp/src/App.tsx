@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import AppRoutes from './AppRoutes';
-import { Layout } from './components/Layout';
 import './styles/app.scss';
 
 export default class App extends Component {
@@ -9,14 +8,14 @@ export default class App extends Component {
 
 	render() {
 		return (
-			<Layout>
-				<Routes>
-					{AppRoutes.map((route, index) => {
-						const { element, ...rest } = route;
-						return <Route key={index} {...rest} element={element} />;
-					})}
-				</Routes>
-			</Layout>
+			// <Layout>
+			<Routes>
+				{AppRoutes.map((route, index) => {
+					const { element, ...props } = route;
+					return <Route key={index} {...props} element={element} />;
+				})}
+			</Routes>
+			// </Layout>
 		);
 	}
 }

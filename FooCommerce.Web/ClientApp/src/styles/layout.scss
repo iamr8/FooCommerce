@@ -1,0 +1,5 @@
+#root {
+    >.container-fluid {
+        margin-top: calc(var(--safe-area-inset-top) + calc(var(--bs-gutter-y) * 0.5));
+    }
+}

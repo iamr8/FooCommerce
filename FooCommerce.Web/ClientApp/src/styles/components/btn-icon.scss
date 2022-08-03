@@ -1,0 +1,46 @@
+@import "../base/mixins";
+
+.btn-icon {
+    --bs-btn-bg: transparent;
+    --bs-btn-color: #989898;
+    --bs-btn-font-size: 12px;
+    --bs-btn-border-color: #CDCDCD;
+    --bs-btn-border-width: 2px;
+    --bs-btn-font-weight: normal;
+    --bs-btn-padding-y: 0.75rem;
+    --bs-btn-padding-x: 0;
+    flex-direction: column;
+    border: none;
+
+    .btn {
+        &-icon-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            font-size: 20px;
+            border-radius: var(--bs-btn-border-radius);
+            border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+            @include square;
+
+            svg {
+                @media screen and (min-width: 768px) {
+                    width: 35px;
+                    height: 35px;
+                }
+
+                path {
+                    fill: var(--primary-color);
+                }
+            }
+
+
+        }
+
+        &-text {
+            margin-top: 4px;
+            white-space: nowrap;
+            font-size: 11px;
+        }
+    }
+}

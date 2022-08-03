@@ -1,31 +1,42 @@
+import { IconName, library } from '@fortawesome/fontawesome-svg-core';
+import { faBriefcase, faCar, faCouch, faHand, faHome, faPersonDress, fas, faStore, faTelevision, faWrench } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import * as Popup from '../components/Popup';
+import "../styles/components/btn-icon.scss";
+import "../styles/home.scss";
+import ListingCategories from './services/Categories';
 
+library.add(fas, faHome, faCar, faStore, faCouch, faHand, faTelevision, faWrench, faBriefcase, faPersonDress);
 export class Home extends Component {
 	static displayName = Home.name;
 
 	render() {
-		return (
-			<>
-				<h1>Hello, world!</h1>
-				<p>Welcome to your new single-page application, built with:</p>
-				<ul>
-					<li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-					<li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-					<li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-				</ul>
-				<p>To help you get started, we have also set up:</p>
-				<ul>
-					<li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-					<li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-					<li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-				</ul>
-				<p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-				<button type="button" onClick={e => Popup.Container.show("testModal")}>Show Popup</button>
-				<Popup.Container title="Test" id="testModal">
-					<Popup.Body>Testing</Popup.Body>
-				</Popup.Container>
-			</>
-		);
+		return <div className="home-page">
+			<h2 className="home-pad home-welcome-message">Welcome to Tablo</h2>
+			<div className="container home-categories">
+				<div className="row">
+					{ListingCategories.map((route, index) => {
+						const { title, icon, ...rest } = route;
+						return <div className="col-4">
+							<Link key={index} {...rest} className="btn btn-icon">
+								<div className='btn-icon-container'>
+									<FontAwesomeIcon icon={['fas', icon as IconName]} />
+								</div>
+								<span className="btn-text">
+									{title}
+								</span>
+							</Link>
+						</div>
+					})}
+				</div>
+			</div>
+			<h2 className="home-pad">Buy and Sell DIRECTLY!</h2>
+			<button type="button" className="btn btn-secondary" onClick={e => Popup.Container.show("testModal")}>Show Popup</button>
+			<Popup.Container title="Test" id="testModal">
+				<Popup.Body>Testing</Popup.Body>
+			</Popup.Container>
+		</div>
 	}
 }
