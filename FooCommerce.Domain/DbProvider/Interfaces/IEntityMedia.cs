@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Application.DbProvider.Interfaces
+﻿namespace FooCommerce.Domain.DbProvider.Interfaces
 {
     public interface IEntityMedia
     {

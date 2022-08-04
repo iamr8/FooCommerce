@@ -1,4 +1,5 @@
-﻿
+﻿using FooCommerce.Domain.DbProvider;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

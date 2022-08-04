@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.DbProvider;
+﻿using FooCommerce.Domain.DbProvider;
 
 namespace FooCommerce.Membership.Entities
 {

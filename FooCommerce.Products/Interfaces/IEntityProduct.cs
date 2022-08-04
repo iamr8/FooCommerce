@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.DbProvider.Interfaces;
+﻿using FooCommerce.Domain.DbProvider.Interfaces;
 using FooCommerce.Products.Entities;
 
 namespace FooCommerce.Products.Interfaces

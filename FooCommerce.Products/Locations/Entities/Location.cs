@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.DbProvider;
+﻿using FooCommerce.Domain.DbProvider;
 using FooCommerce.Products.Interfaces;
 using FooCommerce.Products.Locations.Enums;
 

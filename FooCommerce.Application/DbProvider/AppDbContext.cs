@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.DbProvider.Interfaces;
+﻿using FooCommerce.Domain.DbProvider.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 

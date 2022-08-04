@@ -1,8 +1,15 @@
 using Autofac.Extensions.DependencyInjection;
 
+using FooCommerce.Application.DbProvider;
+using FooCommerce.Ordering.Contracts;
+using FooCommerce.Ordering.StateMachines;
+
+using MassTransit;
+
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory(c => c.Populate(builder.Services)));
+
 builder.Configuration.AddJsonFile("appsettings.json", true, true);
 if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
 {
@@ -10,6 +17,28 @@ if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
     builder.Configuration.AddJsonFile(path, true, true);
 }
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddMassTransit(x =>
+{
+    x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+        .EntityFrameworkRepository(r =>
+        {
+            r.ExistingDbContext<AppDbContext>();
+            r.UseSqlServer();
+        });
+
+    x.AddRequestClient<AcceptOrder>();
+    x.AddRequestClient<GetOrder>();
+
+    x.UsingInMemory((context, cfg) =>
+    {
+        //cfg.Host(new InMemoryHostConfiguration(new InMemoryBusConfiguration()));
+        cfg.AutoStart = true;
+
+        cfg.ConfigureEndpoints(context);
+    });
+});
+builder.Services.AddMassTransitHostedService(true);
 
 // Add services to the container.
 builder.Services.AddControllers();

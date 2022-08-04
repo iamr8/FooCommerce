@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -17,6 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Membership\FooCommerce.Membership.csproj" />
+    <ProjectReference Include="..\FooCommerce.Ordering\FooCommerce.Ordering.csproj" />
+    <ProjectReference Include="..\FooCommerce.Products\FooCommerce.Products.csproj" />
+    <ProjectReference Include="..\FooCommerce.Subscriptions\FooCommerce.Subscriptions.csproj" />
   </ItemGroup>
 
 </Project>

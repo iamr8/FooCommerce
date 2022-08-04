@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
-namespace FooCommerce.Application.DbProvider
+namespace FooCommerce.Domain.DbProvider
 {
     public abstract record Entity
     {

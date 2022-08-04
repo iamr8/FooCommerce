@@ -1,5 +1,5 @@
-﻿using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.DbProvider.Interfaces;
+﻿using FooCommerce.Domain.DbProvider;
+using FooCommerce.Domain.DbProvider.Interfaces;
 
 namespace FooCommerce.Products.Entities
 {
