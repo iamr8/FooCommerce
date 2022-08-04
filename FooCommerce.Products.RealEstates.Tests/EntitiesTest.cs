@@ -1,6 +1,6 @@
 using Autofac;
 
-using FooCommerce.Domain.DbProvider;
+using FooCommerce.Application.DbProvider;
 using FooCommerce.Products.RealEstates.Entities;
 
 using Microsoft.EntityFrameworkCore;

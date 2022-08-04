@@ -16,6 +16,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
 		<ProjectReference Include="..\FooCommerce.Infrastructure\FooCommerce.Infrastructure.csproj" />
 	</ItemGroup>
 

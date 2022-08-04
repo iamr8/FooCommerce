@@ -11,8 +11,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
+		<ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
 		<ProjectReference Include="..\FooCommerce.Products.Application\FooCommerce.Products.Application.csproj" />
+		<ProjectReference Include="..\FooCommerce.Products\FooCommerce.Products.csproj" />
 	</ItemGroup>
 
 </Project>

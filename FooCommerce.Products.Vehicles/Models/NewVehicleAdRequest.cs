@@ -1,4 +1,4 @@
-﻿using FooCommerce.Products.Domain.Interfaces;
+﻿using FooCommerce.Products.Interfaces;
 
 namespace FooCommerce.Products.Vehicles.Models;
 

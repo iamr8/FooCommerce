@@ -10,8 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
-    <ProjectReference Include="..\FooCommerce.Ordering.Application\FooCommerce.Ordering.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
 </Project>

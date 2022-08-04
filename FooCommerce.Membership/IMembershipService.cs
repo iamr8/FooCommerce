@@ -1,7 +1,7 @@
-﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Membership.Application.Models;
+﻿using FooCommerce.Application.DbProvider;
 using FooCommerce.Membership.Entities;
 using FooCommerce.Membership.Enums;
+using FooCommerce.Membership.Models;
 
 using Microsoft.EntityFrameworkCore;
 

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Domain;
+using FooCommerce.Application;
 
 namespace FooCommerce.Products;
 

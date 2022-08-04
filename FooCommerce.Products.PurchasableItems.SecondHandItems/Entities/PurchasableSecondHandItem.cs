@@ -1,6 +1,6 @@
-﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Products.Domain.Entities;
-using FooCommerce.Products.Domain.Interfaces;
+﻿using FooCommerce.Application.DbProvider;
+using FooCommerce.Products.Entities;
+using FooCommerce.Products.Interfaces;
 
 namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities;
 

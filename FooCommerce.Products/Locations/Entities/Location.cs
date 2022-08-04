@@ -1,5 +1,5 @@
-﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Products.Domain.Interfaces;
+﻿using FooCommerce.Application.DbProvider;
+using FooCommerce.Products.Interfaces;
 using FooCommerce.Products.Locations.Enums;
 
 using NetTopologySuite.Geometries;

@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Domain.Modules;
+using FooCommerce.Application.Modules;
 using FooCommerce.Products.RealEstates.Commands;
 
 using MassTransit.Testing;

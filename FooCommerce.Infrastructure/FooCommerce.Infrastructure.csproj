@@ -16,11 +16,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
-    <ProjectReference Include="..\FooCommerce.Membership.Application\FooCommerce.Membership.Application.csproj" />
-    <ProjectReference Include="..\FooCommerce.Ordering.Application\FooCommerce.Ordering.Application.csproj" />
-    <ProjectReference Include="..\FooCommerce.Products.Application\FooCommerce.Products.Application.csproj" />
-    <ProjectReference Include="..\FooCommerce.Subscriptions.Application\FooCommerce.Subscriptions.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -6,8 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
-    <ProjectReference Include="..\FooCommerce.Products.Domain\FooCommerce.Products.Domain.csproj" />
+    <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-using FooCommerce.Products.Domain.Interfaces;
+using FooCommerce.Products.Interfaces;
 using FooCommerce.Products.RealEstates.Commands;
 using FooCommerce.Products.RealEstates.Models;
 
