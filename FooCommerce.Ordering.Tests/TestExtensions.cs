@@ -1,9 +1,10 @@
-﻿using MassTransit;
+﻿
+using MassTransit;
 
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Ordering.Tests;
+namespace FooCommerce.Infrastructure.Tests;
 
 public static class TestExtensions
 {

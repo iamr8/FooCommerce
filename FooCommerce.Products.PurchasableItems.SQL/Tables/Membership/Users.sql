@@ -1,0 +1,12 @@
+﻿CREATE TABLE [dbo].[Users]
+(
+	[Id] uniqueidentifier ROWGUIDCOL PRIMARY KEY DEFAULT NEWSEQUENTIALID(),
+    [Created] DATETIME2 DEFAULT GETUTCDATE() NOT NULL, 
+    [RowVersion] ROWVERSION, 
+	[ParentId] UNIQUEIDENTIFIER NULL, 
+    CONSTRAINT [FK_Users_Users] FOREIGN KEY ([ParentId]) REFERENCES [Users]([Id]) 
+)
+
+GO
+
+CREATE UNIQUE INDEX [IX_Users_Id] ON [dbo].[Users] ([Id])

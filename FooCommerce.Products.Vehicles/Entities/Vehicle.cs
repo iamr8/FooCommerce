@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Domain.DbProvider.Interfaces;
+using FooCommerce.Domain.Entities;
 using FooCommerce.Products.Entities;
 using FooCommerce.Products.Interfaces;
 
@@ -11,7 +11,7 @@ public record Vehicle : Entity, IEntityProduct<Vehicle>, IEntityBarcode, IEntity
 {
     public Point? Coordinate { get; set; }
     public string? Barcode { get; set; }
-    public long PublicId { get; set; }
+    public uint PublicId { get; init; }
     public Guid? CategoryId { get; set; }
     public DateTime EndDate { get; set; }
     public Guid? BaseId { get; set; }

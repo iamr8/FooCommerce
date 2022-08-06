@@ -6,7 +6,7 @@ namespace FooCommerce.Products.Events.Entities;
 
 public record Event : Entity, IEntityProduct<Event>, IEntityProductLocation
 {
-    public long PublicId { get; set; }
+    public uint PublicId { get; init; }
     public Guid? CategoryId { get; set; }
     public DateTime EndDate { get; set; }
     public Guid? BaseId { get; set; }

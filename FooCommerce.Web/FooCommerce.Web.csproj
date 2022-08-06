@@ -12,6 +12,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.1.3" />
 		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.7" />
 	</ItemGroup>
 

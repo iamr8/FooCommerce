@@ -1,0 +1,10 @@
+﻿using System.Net;
+
+namespace FooCommerce.Domain.Entities
+{
+    public interface IEntityRequestLog
+    {
+        IPAddress IPAddress { get; set; }
+        string UserAgent { get; set; }
+    }
+}

@@ -1,15 +1,15 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Ordering.Contracts;
-using FooCommerce.Ordering.StateMachines;
+using FooCommerce.Infrastructure.Shopping.Contracts;
+using FooCommerce.Infrastructure.Shopping.StateMachines;
 
 using MassTransit;
 using MassTransit.Testing;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Ordering.Tests
+namespace FooCommerce.Infrastructure.Tests
 {
     public class Fixture : IAsyncLifetime
     {

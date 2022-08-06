@@ -1,7 +1,7 @@
 ﻿using System.Net;
 
 using FooCommerce.Domain.DbProvider;
-using FooCommerce.Domain.DbProvider.Interfaces;
+using FooCommerce.Domain.Entities;
 
 namespace FooCommerce.Products.Entities
 {

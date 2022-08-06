@@ -1,5 +1,5 @@
-﻿using FooCommerce.Ordering.Client;
-using FooCommerce.Ordering.Contracts;
+﻿using FooCommerce.Infrastructure.Shopping.Client;
+using FooCommerce.Infrastructure.Shopping.Contracts;
 
 using MassTransit;
 

@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Domain.DbProvider;
-using FooCommerce.Domain.DbProvider.Interfaces;
+using FooCommerce.Domain.Entities;
 using FooCommerce.Products.Entities;
 using FooCommerce.Products.Interfaces;
 
@@ -11,7 +11,7 @@ public record RealEstate : Entity, IEntityProduct<RealEstate>, IEntityBarcode, I
 {
     public Point? Coordinate { get; set; }
     public string? Barcode { get; set; }
-    public long PublicId { get; set; }
+    public uint PublicId { get; init; }
     public Guid? CategoryId { get; set; }
     public DateTime EndDate { get; set; }
     public Guid? BaseId { get; set; }
@@ -19,8 +19,6 @@ public record RealEstate : Entity, IEntityProduct<RealEstate>, IEntityBarcode, I
     public ICollection<AdFeature> Features { get; set; }
     public ICollection<AdSpecification> Specifications { get; set; }
     public ICollection<AdView> Views { get; set; }
-    public ICollection<AdImage> Images { get; set; }
-    public ICollection<AdVideo> Videos { get; set; }
     public ICollection<AdSave> Saves { get; set; }
     public ICollection<AdLike> Likes { get; set; }
     public ICollection<AdComment> Comments { get; set; }

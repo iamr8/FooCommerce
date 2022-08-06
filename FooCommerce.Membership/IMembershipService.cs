@@ -1,7 +1,6 @@
 ﻿using FooCommerce.Application.DbProvider;
 using FooCommerce.Membership.Entities;
 using FooCommerce.Membership.Enums;
-using FooCommerce.Membership.Models;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -22,16 +21,16 @@ namespace FooCommerce.Membership
 
         public SignUpStatus? SignUp(SignUpRequest request)
         {
-            if (!request.Validate())
-                return null;
+            // if (!request.Validate())
+            // return null;
 
             return SignUpStatus.NeedEmailVerification;
         }
 
         public async Task<SignInStatus?> SignIn(SignInRequest request)
         {
-            if (request.Validate())
-                return null;
+            // if (request.Validate())
+            // return null;
 
             await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
             var query = from user in dbContext.Set<User>().AsNoTracking().AsSplitQuery()

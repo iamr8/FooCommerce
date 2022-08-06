@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿
+using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;
 
-namespace FooCommerce.Ordering.Tests.Internals;
+namespace FooCommerce.Infrastructure.Tests.Internals;
 
 public class XUnitLoggerFactory<T> : ILoggerFactory
 {

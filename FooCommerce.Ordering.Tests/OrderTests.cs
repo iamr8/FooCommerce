@@ -1,7 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Ordering.Contracts;
+using FooCommerce.Infrastructure.Shopping.Contracts;
 
 using MassTransit;
 
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;
 
-namespace FooCommerce.Ordering.Tests
+namespace FooCommerce.Infrastructure.Tests
 {
     public partial class OrderTests : IClassFixture<Fixture>
     {

@@ -1,8 +1,10 @@
 using Autofac.Extensions.DependencyInjection;
 
+using FluentValidation.AspNetCore;
+
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Ordering.Contracts;
-using FooCommerce.Ordering.StateMachines;
+using FooCommerce.Infrastructure.Shopping.Contracts;
+using FooCommerce.Infrastructure.Shopping.StateMachines;
 
 using MassTransit;
 
@@ -18,6 +20,8 @@ if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
 }
 builder.Configuration.AddEnvironmentVariables();
 
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
 builder.Services.AddMassTransit(x =>
 {
     x.AddSagaStateMachine<OrderStateMachine, OrderState>()

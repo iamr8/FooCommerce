@@ -9,4 +9,9 @@
     <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Locations\Entities\" />
+    <Folder Include="Locations\Enums\" />
+  </ItemGroup>
+
 </Project>

@@ -6,7 +6,7 @@ namespace FooCommerce.Products.PurchasableItems.SecondHandItems.Entities;
 
 public record PurchasableSecondHandItem : Entity, IEntityProduct<PurchasableSecondHandItem>
 {
-    public long PublicId { get; set; }
+    public uint PublicId { get; init; }
     public Guid? CategoryId { get; set; }
     public DateTime EndDate { get; set; }
     public Guid? BaseId { get; set; }
