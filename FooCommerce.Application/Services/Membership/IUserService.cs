@@ -4,5 +4,5 @@ namespace FooCommerce.Application.Services.Membership;
 
 public interface IUserService
 {
-    Task<SignUpResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken);
+    Task<SignUpResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default);
 }

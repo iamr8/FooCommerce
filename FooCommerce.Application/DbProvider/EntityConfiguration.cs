@@ -9,9 +9,6 @@ namespace FooCommerce.Application.DbProvider
     {
         public virtual void Configure(EntityTypeBuilder<T> builder)
         {
-            builder.HasKey(x => x.Id);
-            builder.Property(x => x.Created).HasDefaultValueSql("getutcdate()");
-            builder.Property(x => x.RowVersion).IsRowVersion();
         }
     }
 }

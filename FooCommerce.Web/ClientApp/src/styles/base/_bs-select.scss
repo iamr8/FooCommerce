@@ -120,8 +120,6 @@
                 box-shadow: none;
             }
 
-            &.show {}
-
             &:after {
                 width: 16px;
                 height: 15px;
@@ -198,12 +196,6 @@
             &[data-popper-placement='top-start'] {
                 .dropdown-menu.inner {
                     padding-bottom: 13px !important;
-                }
-            }
-
-            &[data-popper-placement='bottom-start'] {
-                .dropdown-menu.inner {
-                    /*padding-top: 13px !important;*/
                 }
             }
         }

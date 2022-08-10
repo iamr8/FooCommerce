@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.Domain.Enums;
 
-public enum Status : ushort
+public enum JobStatus : ushort
 {
     Failed = 0,
     Success = 1,

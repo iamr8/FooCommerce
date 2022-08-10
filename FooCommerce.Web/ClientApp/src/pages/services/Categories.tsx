@@ -1,8 +1,17 @@
+import { IconName } from '@fortawesome/fontawesome-svg-core';
 import { LinkProps } from 'react-router-dom';
 
 interface IListingCategory {
+	/**
+	 * The title of the category.
+	 */
 	title: string;
-	icon: string;
+	/**
+	 * The icon of the category.
+	 * @see https://fontawesome.com/icons
+	 * @example 'home'
+	 */
+	icon: IconName;
 }
 
 const ListingCategories: Array<LinkProps & IListingCategory> = [

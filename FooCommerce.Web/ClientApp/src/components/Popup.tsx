@@ -12,43 +12,80 @@ type PopupChildrenProps = (
 )[];
 
 interface IPopupState {
+	/**
+	 * A ref to the popup DOM element.
+	 */
 	container: HTMLDivElement,
+	/**
+	 * A ref to the popup modal object.
+	 */
 	modal: BootstrapModal
 }
 
-interface IPopupProps extends React.HTMLAttributes<HTMLElement> {
-	title?: string,
-	showClose?: boolean,
+interface IPopupProps extends IHeaderInternalProps {
+	/**
+	 * The children of the popup.
+	 */
 	children: PopupChildrenProps | ReactElement<Body> | ReactElement<Footer>,
 }
 
-interface IHeaderProps extends React.HTMLAttributes<HTMLElement> {
-	title: string,
-	showClose?: boolean,
+interface IHeaderInternalProps extends React.HTMLAttributes<HTMLElement>, IPopupConcept {
+	/**
+	 * The title of the popup.
+	 */
+	title: string
 }
 
 
 interface IBodyProps extends React.HTMLAttributes<HTMLElement> {
 }
 
-interface IFooterProps extends React.HTMLAttributes<HTMLElement> {
+interface IFooterProps extends React.HTMLAttributes<HTMLElement>, IFooterState {
+	/**
+	 * The children of the popup.
+	 */
 	children?: any,
+}
+
+interface IPopupConcept {
+	/**
+	 * Whether the popup must have close button.
+	 */
 	showClose?: boolean,
+}
+
+interface IFooterState extends IPopupConcept {
+	/**
+	 * The text to display in the close button.
+	 */
 	closeText?: string,
 }
 
-interface IFooterState {
-	showClose: boolean,
-	closeText: string,
-}
-
 type PopupContextType = {
-	hasFooter: boolean;
+	/**
+	 * Returns the popup's modal config.
+	 */
 	Modal: BootstrapModal;
+	/**
+	 * Returns the popup's DOM element.
+	 */
 	ContainerElement: HTMLDivElement
 }
-const PopupContext = createContext<PopupContextType | null>({ hasFooter: false, Modal: undefined as unknown as BootstrapModal, ContainerElement: undefined as unknown as HTMLDivElement });
 
+/**
+ * The context of the popup.
+ */
+const PopupContext = createContext<PopupContextType | null>({ Modal: undefined as unknown as BootstrapModal, ContainerElement: undefined as unknown as HTMLDivElement });
+
+/**
+ * Popup component
+ * @example
+ * import * as Popup from '../components/Popup'
+ * <Popup.Container>
+ *    <Popup.Body></Popup.Body>
+ *    <Popup.Footer></Popup.Footer>
+ * </Popup.Container>
+ */
 export class Container extends Component<IPopupProps, IPopupState> {
 	static displayName = Container.name;
 	static contextType = PopupContext;
@@ -116,7 +153,7 @@ export class Container extends Component<IPopupProps, IPopupState> {
 	render() {
 		return ReactDOM.createPortal(
 			<React.StrictMode>
-				<PopupContext.Provider value={{ hasFooter: this.footer !== null, Modal: this.state.modal, ContainerElement: this.state.container }}>
+				<PopupContext.Provider value={{ Modal: this.state.modal, ContainerElement: this.state.container }}>
 					<div className={classnames({ modal: true, fade: true }, this.props.className?.split(" "))} id={this.id} tabIndex={-1} ref={this.modalElementRef}>
 						<div className="modal-dialog modal-dialog-centered modal-dialog-scrollable">
 							<div className="modal-content">
@@ -133,7 +170,7 @@ export class Container extends Component<IPopupProps, IPopupState> {
 
 }
 
-const Header: React.FC<IHeaderProps> = (props) => {
+const Header: React.FC<IHeaderInternalProps> = (props) => {
 	const context = useContext(PopupContext);
 
 	const modalContentElementRef = React.useRef<HTMLDivElement>();
@@ -280,6 +317,9 @@ const Header: React.FC<IHeaderProps> = (props) => {
 	);
 };
 
+/**
+ * Popup Content
+ */
 export class Body extends Component<IBodyProps, {}> {
 	render() {
 		return <div className="modal-body">
@@ -288,6 +328,9 @@ export class Body extends Component<IBodyProps, {}> {
 	}
 }
 
+/**
+ * Popup Footer
+ */
 export class Footer extends Component<IFooterProps, IFooterState> {
 	static contextType = PopupContext;
 	context!: React.ContextType<typeof PopupContext>;
@@ -301,15 +344,15 @@ export class Footer extends Component<IFooterProps, IFooterState> {
 		}
 	}
 
-	componentDidMount(): void {
+	// componentDidMount(): void {
 
-		console.debug("Popup Footer Mounted.");
-		if (this.context) {
-			var footer = (this.props.children && this.props.children.length > 0) || this.props.showClose;
-			this.context.hasFooter = footer;
-		}
+	// 	console.debug("Popup Footer Mounted.");
+	// 	if (this.context) {
+	// 		var footer = (this.props.children && this.props.children.length > 0) || this.props.showClose;
+	// 		this.context.hasFooter = footer;
+	// 	}
 
-	}
+	// }
 
 	componentDidUpdate(prevProps: Readonly<IFooterProps>, prevState: Readonly<IFooterState>, snapshot?: any): void {
 		_.isEqual(prevState, this.state) || console.debug("Popup Footer Updated.", this.state);

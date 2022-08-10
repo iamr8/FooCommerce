@@ -1,5 +1,4 @@
-﻿using FooCommerce.Domain.Entities;
-
+﻿using FooCommerce.Application.Entities.Listings;
 using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.Application.DbProvider
@@ -12,24 +11,11 @@ namespace FooCommerce.Application.DbProvider
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Listing>();
             var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies().ToList();
             foreach (var assembly in assemblies)
             {
                 modelBuilder.ApplyConfigurationsFromAssembly(assembly);
-
-                var externalIdTypes = assembly.DefinedTypes
-                    .Where(x => x.IsClass)
-                    .Where(x => x.GetInterfaces().Any(c => c == typeof(IEntityPublicId)))
-                    .ToList();
-                if (externalIdTypes is { Count: > 0 })
-                {
-                    foreach (var type in externalIdTypes)
-                    {
-                        modelBuilder.HasSequence<long>(type.Name)
-                            .StartsAt(1000)
-                            .IncrementsBy(1);
-                    }
-                }
             }
         }
     }

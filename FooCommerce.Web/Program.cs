@@ -22,27 +22,24 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddMassTransit(x =>
+builder.Services.AddMassTransit(configurator =>
 {
-    x.AddSagaStateMachine<OrderStateMachine, OrderState>()
+    configurator.AddSagaStateMachine<OrderStateMachine, OrderState>()
         .EntityFrameworkRepository(r =>
         {
             r.ExistingDbContext<AppDbContext>();
             r.UseSqlServer();
         });
 
-    x.AddRequestClient<AcceptOrder>();
-    x.AddRequestClient<GetOrder>();
+    configurator.AddRequestClient<AcceptOrder>();
+    configurator.AddRequestClient<GetOrder>();
 
-    x.UsingInMemory((context, cfg) =>
+    configurator.UsingInMemory((context, cfg) =>
     {
-        //cfg.Host(new InMemoryHostConfiguration(new InMemoryBusConfiguration()));
         cfg.AutoStart = true;
-
         cfg.ConfigureEndpoints(context);
     });
 });
-builder.Services.AddMassTransitHostedService(true);
 
 // Add services to the container.
 builder.Services.AddControllers();

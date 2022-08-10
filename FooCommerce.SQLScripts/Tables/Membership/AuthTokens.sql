@@ -32,6 +32,6 @@ CREATE TRIGGER [dbo].[Trigger_AuthTokensUpdateUserCommunications]
             SET [IsVerified] = (CASE WHEN [INSERTED].Authorized IS NOT NULL THEN 1 ELSE 0 END)
 			FROM [UserCommunications]
             JOIN INSERTED
-                ON [UserCommunications].[Id] = [INSERTED].[UserContactId]
+                ON [UserCommunications].[Id] = [INSERTED].[UserCommunicationId]
 		END
     END

@@ -4,17 +4,17 @@ using FooCommerce.Domain.Enums;
 
 namespace FooCommerce.Application.Models.Membership;
 
-public record SignUpResponse
+public struct SignUpResponse
 {
     public List<ValidationFailure> Errors { get; init; }
-    public Status Status { get; init; }
+    public JobStatus Status { get; init; }
 
-    public static implicit operator SignUpResponse(Status sts)
+    public static implicit operator SignUpResponse(JobStatus sts)
     {
         return new SignUpResponse { Status = sts };
     }
 
-    public static explicit operator Status(SignUpResponse resp)
+    public static explicit operator JobStatus(SignUpResponse resp)
     {
         return resp.Status;
     }

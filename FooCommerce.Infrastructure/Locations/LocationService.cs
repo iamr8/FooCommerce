@@ -3,30 +3,33 @@
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Listings;
 using FooCommerce.Application.Services.Listings;
-using FooCommerce.Domain.Services;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations.Dtos;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.Infrastructure.Locations;
 
 public class LocationService : ILocationService
 {
     private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-    private readonly IMemoryCacheService _cacheService;
+    private readonly ILogger<ILocationService> _logger;
+    private readonly IMemoryCache _cacheService;
 
-    public LocationService(IDbContextFactory<AppDbContext> dbContextFactory, IMemoryCacheService cacheService)
+    public LocationService(IDbContextFactory<AppDbContext> dbContextFactory, IMemoryCache cacheService, ILogger<ILocationService> logger)
     {
         _dbContextFactory = dbContextFactory;
         _cacheService = cacheService;
+        _logger = logger;
     }
 
     private async ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default)
     {
-        return await _cacheService.GetOrCreateAsync("locations", async () =>
+        return await _cacheService.GetOrCreateAsync("high.config.locations", async () =>
         {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync();
+            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
             var query = from l in dbContext.Set<Location>()
                         where !l.IsDeleted && !l.IsHidden
                         orderby l.Division
@@ -71,7 +74,7 @@ public class LocationService : ILocationService
                 .OrderBy(x => x.Division)
                 .AsEnumerable();
             return result;
-        }, cancellationToken);
+        }, _logger, cancellationToken);
     }
 
     public async Task<bool> IsCountryValidAsync(uint countryId, CancellationToken cancellationToken = default)
