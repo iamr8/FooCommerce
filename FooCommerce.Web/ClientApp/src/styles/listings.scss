@@ -66,6 +66,28 @@
 }
 
 .search-toolbar {
+    width: 100%;
+
+    .btn-group {
+        width: 100%;
+
+        .btn {
+            display: flex;
+            flex-direction: column;
+            flex: 1 0 20%;
+
+            svg {
+                width: 1.3rem;
+                height: 1.3rem;
+                margin-bottom: 5px;
+            }
+
+            span {
+                font-weight: 600;
+            }
+        }
+    }
+
     @at-root {
         .search-bar+& {
             margin-top: calc(var(--bs-gutter-y) * 0.5);

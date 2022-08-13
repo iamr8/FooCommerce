@@ -1,4 +1,53 @@
-@import "base/_base";
+@import "./base/_mixins";
+@import "./base/_bs_theme";
+@import "./base/_fonts";
+@import "./base/_bs-select";
+@import "./base/_base";
+
+:root {
+    --primary-color: #7D2AE8;
+    --secondary-color: #5DC33C;
+    --input-height: 45px;
+    --navbar-top-height: 50px;
+    --navbar-bottom-height: 60px;
+    --landscape-max-width: 450px;
+
+    @media screen and (max-width:768px) {
+        --input-height: 50px;
+    }
+
+    @supports (padding-bottom: constant(safe-area-inset-bottom)) {
+        --safe-area-inset-bottom: constant(safe-area-inset-bottom);
+    }
+
+    @supports (padding-top: constant(safe-area-inset-top)) {
+        --safe-area-inset-top: constant(safe-area-inset-top);
+    }
+
+    @supports (padding-left: constant(safe-area-inset-left)) {
+        --safe-area-inset-left: constant(safe-area-inset-left);
+    }
+
+    @supports (padding-right: constant(safe-area-inset-right)) {
+        --safe-area-inset-right: constant(safe-area-inset-right);
+    }
+
+    @supports (padding-bottom: env(safe-area-inset-bottom)) {
+        --safe-area-inset-bottom: env(safe-area-inset-bottom, #{$safe-area-inset-bottom});
+    }
+
+    @supports (padding-top: env(safe-area-inset-top)) {
+        --safe-area-inset-top: env(safe-area-inset-top, #{$safe-area-inset-top});
+    }
+
+    @supports (padding-left: env(safe-area-inset-left)) {
+        --safe-area-inset-left: env(safe-area-inset-left, #{$safe-area-inset-left});
+    }
+
+    @supports (padding-right: env(safe-area-inset-right)) {
+        --safe-area-inset-right: env(safe-area-inset-right, #{$safe-area-inset-right});
+    }
+}
 
 html,
 body {
@@ -9,7 +58,18 @@ body {
     width: 100vw;
 }
 
+html {
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
 body {
+    scrollbar-gutter: stable;
+    touch-action: none;
+    overflow-y: scroll;
+    overscroll-behavior: none;
+    overscroll-behavior-block: none;
+
     &:not(.no-notch) {
         .notch-blur {
             position: fixed;
@@ -37,39 +97,12 @@ body {
             opacity: 0;
         }
     }
+}
 
-    >#app {
-        width: 100vw;
-        height: 100vh;
-        overflow-y: scroll;
-        -webkit-overflow-scrolling: touch;
-        /* enables “momentum” (smooth) scrolling */
-        overscroll-behavior: none;
-        position: fixed;
-        top: 0;
-        bottom: var(--navbar-bottom-height);
-        left: 0;
-        right: 0;
-        height: calc(100% - var(--navbar-bottom-height) - var(--safe-area-inset-bottom));
-
-        .fullscreen & {
-            padding-top: 0;
-        }
-
-        >main {
-            overflow-x: hidden;
-            position: relative;
-            padding-top: var(--safe-area-inset-top);
-            height: 100%;
-
-            @media screen and (orientation:landscape) {
-                padding-left: calc(15px + var(--safe-area-inset-left));
-                padding-right: calc(15px + var(--safe-area-inset-right));
-            }
-
-            body.no-notch & {
-                padding-top: 0;
-            }
-        }
-    }
+body,
+div,
+ul,
+li,
+span {
+    position: relative;
 }

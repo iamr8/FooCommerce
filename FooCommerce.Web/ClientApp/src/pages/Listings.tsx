@@ -3,15 +3,12 @@ import { faMagnifyingGlass, fas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { Component } from 'react';
 import { Layout } from '../components/Layout';
+import "../styles/listings.scss";
 
 library.add(fas, faMagnifyingGlass)
 
 export class Listings extends Component<{}, {}> {
 	static displayName = Listings.name;
-
-	constructor(props: {}) {
-		super(props);
-	}
 
 	render() {
 		return (

@@ -1,0 +1,86 @@
+@import "./../../base/mixins";
+
+.listing-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.listing-overview {
+    --listing-overview-border-radius: 8px;
+    --listing-overview-border-width: 2px;
+    --listing-overview-border-color: #F0F0F0;
+    --listing-overview-border-style: solid;
+    --listing-overview-padding: 16px;
+    --listing-overview-box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+
+    border-width: var(--listing-overview-border-width);
+    border-color: var(--listing-overview-border-color);
+    border-style: var(--listing-overview-border-style);
+    border-radius: var(--listing-overview-border-radius);
+    padding: var(--listing-overview-padding);
+    box-shadow: var(--listing-overview-box-shadow);
+    display: flex;
+    height: 170px;
+
+    &+#{&} {
+        margin-top: var(--listing-overview-padding);
+    }
+
+    .listing {
+        &-body {
+            flex: auto;
+            color: #434343;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        &-picture {
+            overflow: hidden;
+            @include square(30%);
+
+            &-inner {
+                height: 100%;
+
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    border-radius: calc(var(--listing-overview-border-radius) - 3px);
+                }
+            }
+        }
+
+        &-title {
+            h3 {
+                font-size: 1.1rem;
+                font-style: normal;
+                font-weight: 800;
+            }
+        }
+
+        &-badge {
+            .bg-primary {
+                --bs-badge-color: var(--primary-color);
+                --bs-badge-font-size: 0.8rem;
+                background-color: transparent !important;
+                border: 1px solid var(--primary-color);
+            }
+        }
+
+        &-price,
+        &-updated {
+            h3 {
+                font-size: 0.9rem;
+            }
+        }
+
+        &-price,
+        &-updated,
+        &-title {
+            h3 {
+                margin: auto;
+            }
+        }
+    }
+}

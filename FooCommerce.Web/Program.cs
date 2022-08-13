@@ -1,16 +1,9 @@
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FluentValidation.AspNetCore;
-
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Infrastructure.Shopping.Contracts;
-using FooCommerce.Infrastructure.Shopping.StateMachines;
-
-using MassTransit;
+using FooCommerce.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory(c => c.Populate(builder.Services)));
 
 builder.Configuration.AddJsonFile("appsettings.json", true, true);
 if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
@@ -20,31 +13,11 @@ if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
 }
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.AddFluentValidationAutoValidation();
-builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddMassTransit(configurator =>
-{
-    configurator.AddSagaStateMachine<OrderStateMachine, OrderState>()
-        .EntityFrameworkRepository(r =>
-        {
-            r.ExistingDbContext<AppDbContext>();
-            r.UseSqlServer();
-        });
-
-    configurator.AddRequestClient<AcceptOrder>();
-    configurator.AddRequestClient<GetOrder>();
-
-    configurator.UsingInMemory((context, cfg) =>
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(builder =>
     {
-        cfg.AutoStart = true;
-        cfg.ConfigureEndpoints(context);
+        builder.RegisterModule(new AppModule());
     });
-});
-
-// Add services to the container.
-builder.Services.AddControllers();
-builder.Services.AddControllersWithViews();
-builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

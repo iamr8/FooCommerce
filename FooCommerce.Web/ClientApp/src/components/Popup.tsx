@@ -212,7 +212,7 @@ const Header: React.FC<IHeaderInternalProps> = (props) => {
 		}
 
 
-	}, [context?.ContainerElement, modalContentElementRef]);
+	}, [context?.ContainerElement, modalContentElementRef, setContentOriginalHeight]);
 
 	const onTouchStart = (event: React.TouchEvent<HTMLDivElement>) => {
 		setTouchYStart(event.touches[0].clientY)
@@ -302,7 +302,7 @@ const Header: React.FC<IHeaderInternalProps> = (props) => {
 				}
 			}
 		}
-	}, [context, context!.ContainerElement, context!.Modal]);
+	}, [context, setContentElement]);
 
 	var showCloseHtml: JSX.Element | null = null;
 	if (props.showClose) {

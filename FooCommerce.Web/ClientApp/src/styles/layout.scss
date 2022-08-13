@@ -1,5 +1,33 @@
 #root {
+    width: 100vw;
+    height: 100%;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: none;
+    position: fixed;
+    top: 0;
+    bottom: var(--navbar-bottom-height);
+    left: 0;
+    right: 0;
+
     >.container-fluid {
         margin-top: calc(var(--safe-area-inset-top) + calc(var(--bs-gutter-y) * 0.5));
+        height: calc(100% - var(--navbar-bottom-height) - var(--safe-area-inset-bottom));
+        overflow-x: hidden;
+        position: relative;
+        padding-top: var(--safe-area-inset-top);
+        padding-bottom: 40px;
+
+        @media screen and (orientation:landscape) {
+            padding-left: calc(15px + var(--safe-area-inset-left));
+            padding-right: calc(15px + var(--safe-area-inset-right));
+        }
+
+        @at-root {
+            body.no-notch & {
+                padding-top: 0;
+            }
+        }
     }
+
 }

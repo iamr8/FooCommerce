@@ -34,7 +34,7 @@ export class NavMenuBottom extends Component<{}, IState> {
 	render() {
 		return (
 			<nav className="navbar navbar-bottom">
-				<ul className="navbar-nav">
+				<div className="navbar-nav">
 					<Nav.Item>
 						<Nav.Link href="#/" active={true}>
 							<span className="nav-link-image">
@@ -75,7 +75,7 @@ export class NavMenuBottom extends Component<{}, IState> {
 							</span>
 						</Nav.Link>
 					</Nav.Item>
-				</ul>
+				</div>
 			</nav>
 		);
 	}

@@ -1,16 +1,22 @@
 .home {
     &-page {
-        height: 100vh;
+        height: 100%;
         display: flex;
         align-items: center;
         flex-direction: column;
+        font-size: var(--bs-body-font-size);
+
+        h2,
+        .h2 {
+            font-size: var(--bs-body-font-size);
+        }
     }
+
 
     &-pad {
         width: 100%;
         padding: 4rem 0;
         margin: 0;
-        font-size: var(--bs-body-font-size);
         text-align: center;
     }
 
@@ -27,7 +33,7 @@
         }
 
         @media screen and (max-width: 425px) {
-            --bs-gutter-x: 10rem;
+            --bs-gutter-x: 8rem;
         }
 
         @media screen and (max-width: 375px) {
@@ -42,4 +48,22 @@
             --bs-gutter-x: 25rem;
         }
     }
+}
+
+.social-media {
+
+    svg {
+        width: 2rem;
+        height: 2rem;
+
+        path {
+            fill: var(--primary-color);
+        }
+    }
+
+    &-container {
+        border-top: 2px solid #F0F0F0;
+        padding-top: 2rem;
+    }
+
 }

@@ -53,6 +53,31 @@
         --bs-btn-disabled-bg: var(--bs-primary);
         --bs-btn-disabled-border-color: var(--bs-primary);
     }
+
+    &-toolbar {
+
+        .btn-group {
+
+            .btn-outline-primary {
+                --bs-btn-active-bg: transparent;
+                --bs-btn-active-color: var(--primary-color);
+                --bs-btn-active-border-color: transparent;
+                --bs-btn-color: #989898;
+                --bs-btn-border-color: transparent;
+                --bs-btn-font-size: var(--bs-body-font-size);
+                --bs-btn-hover-color: var(--bs-btn-color);
+                --bs-btn-hover-bg: transparent;
+                --bs-btn-hover-border-color: transparent;
+
+                &:hover {
+                    svg {
+                        fill: var(--bs-btn-active-color);
+                    }
+                }
+            }
+
+        }
+    }
 }
 
 .form {
