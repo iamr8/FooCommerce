@@ -23,7 +23,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Tests
+namespace FooCommerce.Infrastructure.Tests.Setups
 {
     public class Fixture : IAsyncLifetime, IFixture
     {

@@ -1,18 +1,22 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
+using MassTransit;
+
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;
 
-namespace FooCommerce.Infrastructure.Tests
+using ILoggerFactory = Microsoft.Extensions.Logging.ILoggerFactory;
+
+namespace FooCommerce.Infrastructure.Tests.Setups
 {
     public static class FixtureExtensions
     {
         public static ILifetimeScope ConfigureLogging<TFixture>(this TFixture fixture, ITestOutputHelper outputHelper) where TFixture : class, IFixture
         {
-            return fixture.Container.BeginLifetimeScope(containerBuilder =>
+            var scope = fixture.Container.BeginLifetimeScope(containerBuilder =>
             {
                 var services = new ServiceCollection();
                 services.AddLogging(loggingBuilder =>
@@ -24,6 +28,11 @@ namespace FooCommerce.Infrastructure.Tests
                 });
                 containerBuilder.Populate(services);
             });
+
+            var loggerFactory = scope.Resolve<ILoggerFactory>();
+            LogContext.ConfigureCurrentLogContext(loggerFactory);
+
+            return scope;
         }
     }
 }

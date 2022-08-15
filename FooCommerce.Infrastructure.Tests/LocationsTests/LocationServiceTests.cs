@@ -5,6 +5,7 @@ using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Services.Listings;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
+using FooCommerce.Infrastructure.Tests.Setups;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ using Xunit.Abstractions;
 
 namespace FooCommerce.Infrastructure.Tests.LocationsTests;
 
-public class LocationServiceTests : IClassFixture<Fixture>, ITest
+public class LocationServiceTests : IClassFixture<Fixture>, ITestScope
 {
     public Fixture Fixture { get; }
     public ITestOutputHelper TestConsole { get; }

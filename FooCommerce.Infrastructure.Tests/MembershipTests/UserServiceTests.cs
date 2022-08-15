@@ -9,6 +9,7 @@ using FooCommerce.Domain.Enums;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Membership;
 using FooCommerce.Infrastructure.Protection.Options;
+using FooCommerce.Infrastructure.Tests.Setups;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,7 @@ using Xunit.Abstractions;
 
 namespace FooCommerce.Infrastructure.Tests.MembershipTests;
 
-public class UserServiceTests : IClassFixture<Fixture>, ITest
+public class UserServiceTests : IClassFixture<Fixture>, ITestScope
 {
     public Fixture Fixture { get; }
     public ITestOutputHelper TestConsole { get; }

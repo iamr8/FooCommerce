@@ -1,6 +1,6 @@
 ﻿using Respawn;
 
-namespace FooCommerce.Infrastructure.Tests
+namespace FooCommerce.Infrastructure.Tests.Setups
 {
     internal class DatabaseCheckpoint
     {
