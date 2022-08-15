@@ -1,6 +1,7 @@
 ﻿namespace FooCommerce.Application.Enums.Membership;
 
-public enum RoleTypes : ushort
+public enum RoleTypes : byte
 {
-    NormalUser = 0
+    NormalUser = 0,
+    Admin = 100
 }

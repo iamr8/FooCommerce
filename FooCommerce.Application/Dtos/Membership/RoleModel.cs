@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Application.Enums.Membership;
 
-namespace FooCommerce.Infrastructure.Membership.Dtos;
+namespace FooCommerce.Application.Dtos.Membership;
 
 public record RoleModel
 {

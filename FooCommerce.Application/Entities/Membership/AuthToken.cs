@@ -8,9 +8,9 @@ public record AuthToken
     : IEntity, IEntityRequestTrackable
 {
     public Guid Id { get; init; }
-    public DateTimeOffset Created { get; init; }
+    public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public ushort Action { get; init; }
+    public byte Action { get; init; }
     public IPAddress IPAddress { get; init; }
     public string UserAgent { get; init; }
     public DateTimeOffset? Sent { get; init; }

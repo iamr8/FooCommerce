@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.Application.Enums.Membership;
 
-public enum LocationDivisions : ushort
+public enum LocationDivisions : byte
 {
     Country = 0,
     State = 1,

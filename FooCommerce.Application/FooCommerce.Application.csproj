@@ -28,5 +28,8 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
 	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Helpers\" />
+	</ItemGroup>
 
 </Project>

@@ -1,12 +1,11 @@
-﻿using System.Collections.Concurrent;
+﻿using Dapper;
 
 using FooCommerce.Application.DbProvider;
+using FooCommerce.Application.Dtos.Listings;
 using FooCommerce.Application.Entities.Listings;
 using FooCommerce.Application.Services.Listings;
 using FooCommerce.Infrastructure.Caching;
-using FooCommerce.Infrastructure.Locations.Dtos;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
@@ -14,67 +13,35 @@ namespace FooCommerce.Infrastructure.Locations;
 
 public class LocationService : ILocationService
 {
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-    private readonly ILogger<ILocationService> _logger;
+    private readonly IDbConnectionFactory _dbConnectionFactory;
     private readonly IMemoryCache _cacheService;
+    private readonly ILogger<ILocationService> _logger;
 
-    public LocationService(IDbContextFactory<AppDbContext> dbContextFactory, IMemoryCache cacheService, ILogger<ILocationService> logger)
+    public LocationService(IDbConnectionFactory dbConnectionFactory, IMemoryCache cacheService, ILogger<ILocationService> logger)
     {
-        _dbContextFactory = dbContextFactory;
         _cacheService = cacheService;
         _logger = logger;
+        _dbConnectionFactory = dbConnectionFactory;
     }
 
-    private async ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<LocationModel>> GetLocationsNonCachedAsync()
     {
-        return await _cacheService.GetOrCreateAsync("high.config.locations", async () =>
-        {
-            await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-            var query = from l in dbContext.Set<Location>()
-                        where !l.IsDeleted && !l.IsHidden
-                        orderby l.Division
-                        select new
-                        {
-                            l.Id,
-                            l.Division,
-                            l.Name,
-                            l.PublicId,
-                            l.ParentId,
-                        };
-            var locations = await query.ToListAsync();
-            if (locations is null or { Count: <= 0 })
-                return default;
+        using var dbConnection = _dbConnectionFactory.CreateConnection();
 
-            var output = new ConcurrentDictionary<Guid, LocationModel>();
-            foreach (var location in locations)
-            {
-                output.TryAdd(location.Id, new LocationModel(location.ParentId)
-                {
-                    Division = location.Division,
-                    Name = location.Name,
-                    PublicId = location.PublicId,
-                });
-            }
+        var locations = await dbConnection.QueryAsync<LocationModel>($"SELECT [location].{nameof(Location.Id)}, [location].{nameof(Location.Division)}, [location].{nameof(Location.Name)}, [location].{nameof(Location.PublicId)}, [location].{nameof(Location.ParentId)} " +
+                                                              "FROM [Locations] AS [location] " +
+                                                              $"WHERE [location].{nameof(Location.IsDeleted)} <> 1 AND [location].{nameof(Location.IsHidden)} <> 1");
 
-            foreach (var (id, locationModel) in output)
-            {
-                if (locationModel.ParentId is null)
-                    continue;
+        _logger.LogInformation("Locations are retrieved from database directly.");
+        return locations;
+    }
 
-                var hasParent = output.TryGetValue(locationModel.ParentId.Value, out var parent);
-                if (!hasParent)
-                    continue;
+    public const string CacheKey = "config.locations";
 
-                parent.Children = parent.Children.Concat(new[] { locationModel });
-                locationModel.Parent = parent;
-            }
-
-            var result = output
-                .Select(x => x.Value)
-                .OrderBy(x => x.Division)
-                .AsEnumerable();
-            return result;
-        }, _logger, cancellationToken);
+    public async ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default)
+    {
+        return await _cacheService.GetOrCreateAsync(CacheKey,
+            async () => await GetLocationsNonCachedAsync(), _logger, cancellationToken);
     }
 
     public async Task<bool> IsCountryValidAsync(uint countryId, CancellationToken cancellationToken = default)

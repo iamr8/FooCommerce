@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "FooCommerce.Infrastructure.Tests": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\Work\\Develop\\FooCommerce\\FooCommerce\\FooCommerce.Infrastructure.Tests"
+    }
+  }
+}

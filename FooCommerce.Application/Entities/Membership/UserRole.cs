@@ -16,7 +16,7 @@ public record UserRole
     }
 
     public Guid Id { get; init; }
-    public DateTimeOffset Created { get; init; }
+    public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
     public Guid UserId { get; init; }
     public Guid RoleId { get; init; }

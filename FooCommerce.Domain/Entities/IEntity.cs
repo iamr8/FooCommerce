@@ -16,7 +16,7 @@ public interface IEntity
     /// <remarks>
     /// It will be generated automatically, when entity saved to the database.
     /// </remarks>
-    DateTimeOffset Created { get; init; }
+    DateTime Created { get; init; }
 
     /// <summary>
     /// A byte[] timestamp which helps concurrency in the database.

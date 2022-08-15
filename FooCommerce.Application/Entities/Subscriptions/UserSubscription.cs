@@ -6,7 +6,7 @@ public record UserSubscription
     : IEntity
 {
     public Guid Id { get; init; }
-    public DateTimeOffset Created { get; init; }
+    public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
     public bool IsSuspended { get; init; }
     public bool IsTrial { get; init; }

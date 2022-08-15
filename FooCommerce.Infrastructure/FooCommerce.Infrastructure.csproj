@@ -13,7 +13,6 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
-    <ProjectReference Include="..\FooCommerce.Products\FooCommerce.Products.csproj" />
   </ItemGroup>
 
 </Project>

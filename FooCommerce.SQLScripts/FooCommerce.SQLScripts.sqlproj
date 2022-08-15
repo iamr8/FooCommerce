@@ -11,8 +11,8 @@
     <OutputType>Database</OutputType>
     <RootPath>
     </RootPath>
-    <RootNamespace>FooCommerce.Products.PurchasableItems.SQL</RootNamespace>
-    <AssemblyName>FooCommerce.Products.PurchasableItems.SQL</AssemblyName>
+    <RootNamespace>FooCommerce.SQLScripts</RootNamespace>
+    <AssemblyName>FooCommerce.SQLScripts</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
     <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
     <DeployToDatabase>True</DeployToDatabase>
@@ -22,6 +22,7 @@
     <SqlServerVerification>False</SqlServerVerification>
     <IncludeCompositeObjects>True</IncludeCompositeObjects>
     <TargetDatabaseSet>True</TargetDatabaseSet>
+    <GenerateCreateScript>True</GenerateCreateScript>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -63,7 +64,6 @@
     <Folder Include="Tables\Membership" />
     <Folder Include="Tables\Listings" />
     <Folder Include="Tables\Subscriptions" />
-    <Folder Include="StoredProcedures" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="More\FullTextCatalog.sql" />
@@ -100,8 +100,5 @@
   <ItemGroup>
     <Build Include="Tables\Membership\UserCommunications.sql" />
     <Build Include="Tables\Membership\UserPasswords.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <RefactorLog Include="FooCommerce.SQLScripts.refactorlog" />
   </ItemGroup>
 </Project>

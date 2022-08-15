@@ -6,7 +6,7 @@ public record TopCategory
     : IEntity, IEntitySoftDeletable, IEntityHideable, IEntityCategory, IEntitySortable
 {
     public Guid Id { get; init; }
-    public DateTimeOffset Created { get; init; }
+    public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
     public bool IsDeleted { get; init; }
     public bool IsHidden { get; init; }

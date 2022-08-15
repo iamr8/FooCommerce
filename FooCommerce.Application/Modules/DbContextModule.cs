@@ -9,11 +9,11 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.Application.Modules;
 
-public class DatabaseModule : Module
+public class DbContextModule : Module
 {
     private readonly Action<DbContextOptionsBuilder<AppDbContext>> _dbContextOptionsBuilder;
 
-    public DatabaseModule(Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
+    public DbContextModule(Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
     {
         _dbContextOptionsBuilder = dbContextOptionsBuilder;
     }
@@ -24,10 +24,6 @@ public class DatabaseModule : Module
             return;
 
         builder.Properties.Add(GetType().AssemblyQualifiedName, null);
-        //builder.RegisterType<SqlConnectionFactory>()
-        //    .As<ISqlConnectionFactory>()
-        //    .WithParameter("connectionString", _databaseConnectionString)
-        //    .InstancePerLifetimeScope();
 
         var serviceCollection = new ServiceCollection();
         serviceCollection.AddDbContextFactory<AppDbContext>(options =>
@@ -39,6 +35,7 @@ public class DatabaseModule : Module
                 .EnableThreadSafetyChecks()
                 .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
         });
+
         builder.Populate(serviceCollection);
     }
 }

@@ -1,7 +1,10 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Infrastructure;
+using FooCommerce.Application.Modules;
+using FooCommerce.Infrastructure.Modules;
+
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,11 +15,29 @@ if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
     builder.Configuration.AddJsonFile(path, true, true);
 }
 builder.Configuration.AddEnvironmentVariables();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-    .ConfigureContainer<ContainerBuilder>(builder =>
+    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
-        builder.RegisterModule(new AppModule());
+        containerBuilder.RegisterModule(new AutoFluentValidationModule());
+        containerBuilder.RegisterModule(new MvcModule());
+        containerBuilder.RegisterModule(new EventBusModule());
+        containerBuilder.RegisterModule(new CachingModule());
+        containerBuilder.RegisterModule(new DapperModule(connectionString));
+        containerBuilder.RegisterModule(new DbContextModule(config =>
+        {
+            config.UseSqlServer(connectionString,
+                config =>
+                {
+                    config.EnableRetryOnFailure(3);
+                    config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
+                    //config.ExecutionStrategy(dependencies =>
+                    //{
+                    //    dependencies.Logger.
+                    //})
+                });
+        }));
     });
 
 var app = builder.Build();
