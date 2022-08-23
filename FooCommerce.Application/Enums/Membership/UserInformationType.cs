@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.Application.Enums.Membership;
 
-public enum UserInformationTypes : byte
+public enum UserInformationType : byte
 {
     Name = 0,
     Surname = 1

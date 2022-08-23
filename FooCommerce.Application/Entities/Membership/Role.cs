@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Domain.Entities;
+using FooCommerce.Domain.Interfaces.Database;
 
 namespace FooCommerce.Application.Entities.Membership;
 
@@ -11,5 +11,5 @@ public record Role
     public byte[] RowVersion { get; init; }
     public bool IsDeleted { get; init; }
     public bool IsHidden { get; init; }
-    public RoleTypes Type { get; init; }
+    public RoleType Type { get; init; }
 }

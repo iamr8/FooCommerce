@@ -1,5 +1,7 @@
 ﻿using Autofac;
 
+using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Models.Membership;
@@ -8,14 +10,9 @@ using FooCommerce.Application.Services.Membership;
 using FooCommerce.Domain.Enums;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Membership;
-using FooCommerce.Infrastructure.Protection.Options;
 using FooCommerce.Infrastructure.Tests.Setups;
 
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-
-using Moq;
 
 using Xunit.Abstractions;
 
@@ -34,12 +31,13 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope
         TestConsole = outputHelper;
         Scope = fixture.ConfigureLogging(outputHelper);
 
-        var memoryCache = Scope.Resolve<IMemoryCache>();
-        var logger = Scope.Resolve<ILogger<IUserService>>();
-        var hashingOptions = Scope.Resolve<IOptions<HashingOptions>>();
+        var easyCaching = Scope.Resolve<IEasyCachingProvider>();
+        var locationServiceLogger = Scope.Resolve<ILogger<ILocationService>>();
+        var userServiceLogger = Scope.Resolve<ILogger<IUserService>>();
         var dbConnectionFactory = Scope.Resolve<IDbConnectionFactory>();
-        var locationService = new LocationService(dbConnectionFactory, memoryCache, Mock.Of<ILogger<ILocationService>>());
-        UserService = new UserService(locationService, dbConnectionFactory, memoryCache, logger);
+        easyCaching.Flush();
+        var locationService = new LocationService(dbConnectionFactory, easyCaching, locationServiceLogger);
+        UserService = new UserService(locationService, dbConnectionFactory, easyCaching, userServiceLogger);
     }
 
     [Fact]
@@ -52,15 +50,15 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope
         Assert.NotNull(roles);
         Assert.NotEmpty(roles);
         Assert.Equal(2, roles.Count());
-        Assert.Contains(roles, l => l.Type == RoleTypes.Admin);
-        Assert.Contains(roles, l => l.Type == RoleTypes.NormalUser);
+        Assert.Contains(roles, l => l.Type == RoleType.Admin);
+        Assert.Contains(roles, l => l.Type == RoleType.NormalUser);
     }
 
     [Fact]
     public async Task Should_Return_Role()
     {
         // Arrange
-        const RoleTypes role = RoleTypes.NormalUser;
+        const RoleType role = RoleType.NormalUser;
 
         // Act
         var roleModel = await UserService.GetRoleAsync(role);
@@ -68,7 +66,7 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope
         // Assert
         Assert.NotNull(roleModel);
         Assert.NotEqual(Guid.Empty, roleModel.Id);
-        Assert.Equal(RoleTypes.NormalUser, roleModel.Type);
+        Assert.Equal(RoleType.NormalUser, roleModel.Type);
     }
 
     [Fact]
@@ -86,6 +84,34 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope
 
         // Act
         var response = await UserService.SignUpAsync(input);
+
+        // Assert
+        Assert.Equal(JobStatus.Success, response.Status);
+        Assert.Null(response.Errors);
+    }
+
+    [Fact]
+    public async Task Should_Return_True_SignIn()
+    {
+        // Arrange
+        var signUpInput = new SignUpRequest
+        {
+            Country = 0,
+            Email = "arash.shabbeh@gmail.com",
+            FirstName = "Arash",
+            LastName = "Shabbeh",
+            Password = "12345678"
+        };
+        var signInInput = new SignInRequest
+        {
+            Remember = true,
+            Username = "arash.shabbeh@gmail.com",
+            Password = "12345678"
+        };
+
+        // Act
+        await UserService.SignUpAsync(signUpInput);
+        var response = await UserService.SignInAsync(signInInput);
 
         // Assert
         Assert.Equal(JobStatus.Success, response.Status);

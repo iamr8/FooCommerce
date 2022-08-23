@@ -1,20 +1,17 @@
-﻿using System.Net;
-
-using FooCommerce.Domain.Entities;
+﻿using FooCommerce.Application.Enums.Membership;
+using FooCommerce.Domain.Interfaces.Database;
 
 namespace FooCommerce.Application.Entities.Membership;
 
 public record AuthToken
-    : IEntity, IEntityRequestTrackable
+    : IEntity
 {
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public byte Action { get; init; }
-    public IPAddress IPAddress { get; init; }
-    public string UserAgent { get; init; }
-    public DateTimeOffset? Sent { get; init; }
-    public DateTimeOffset? Delivered { get; init; }
+    public AuthTokenAction Action { get; init; }
+    public string Token { get; init; }
     public DateTimeOffset? Authorized { get; init; }
-    public Guid UserCommunicationId { get; set; }
+    public Guid UserNotificationId { get; init; }
+    public Guid UserCommunicationId { get; init; }
 }

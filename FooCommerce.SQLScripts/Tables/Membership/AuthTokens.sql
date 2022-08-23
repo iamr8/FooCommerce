@@ -3,15 +3,13 @@
     [Id] uniqueidentifier ROWGUIDCOL PRIMARY KEY DEFAULT NEWSEQUENTIALID(),
     [Created] DATETIME2 DEFAULT GETUTCDATE() NOT NULL, 
     [RowVersion] ROWVERSION, 
-    [Action] BIT NOT NULL, 
+    [Action] TINYINT NOT NULL, 
     [Token] NVARCHAR(20) NOT NULL, 
-    [IPAddress] NCHAR(39) NOT NULL, 
-    [UserAgent] NVARCHAR(MAX) NOT NULL, 
-    [Sent] DATETIME2 NULL, 
-    [Delivered] DATETIME2 NULL, 
     [Authorized] DATETIME2 NULL, 
+    [UserNotificationId] UNIQUEIDENTIFIER NOT NULL, 
     [UserCommunicationId] UNIQUEIDENTIFIER NOT NULL, 
-    CONSTRAINT [FK_Tokens_ToTable] FOREIGN KEY ([UserCommunicationId]) REFERENCES [UserCommunications]([Id]), 
+    CONSTRAINT [FK_AuthTokens_UserCommunications] FOREIGN KEY ([UserCommunicationId]) REFERENCES [UserCommunications]([Id]), 
+    CONSTRAINT [FK_AuthTokens_Notifications] FOREIGN KEY ([UserNotificationId]) REFERENCES [UserNotifications]([Id]), 
 )
 
 GO

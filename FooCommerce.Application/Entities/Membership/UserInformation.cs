@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Domain.Entities;
+using FooCommerce.Domain.Interfaces.Database;
 
 namespace FooCommerce.Application.Entities.Membership;
 
@@ -10,7 +10,7 @@ public record UserInformation
     {
     }
 
-    public UserInformation(UserInformationTypes type, string value, Guid userId)
+    public UserInformation(UserInformationType type, string value, Guid userId)
     {
         Type = type;
         Value = value;
@@ -20,7 +20,7 @@ public record UserInformation
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public UserInformationTypes Type { get; init; }
+    public UserInformationType Type { get; init; }
     public string Value { get; init; }
     public Guid UserId { get; init; }
 }
