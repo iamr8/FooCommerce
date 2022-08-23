@@ -1,13 +1,13 @@
 ﻿using Autofac;
 
+using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Services.Listings;
-using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Tests.Setups;
 
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;
@@ -27,11 +27,11 @@ public class LocationServiceTests : IClassFixture<Fixture>, ITestScope
         TestConsole = outputHelper;
         Scope = fixture.ConfigureLogging(outputHelper);
 
-        var memoryCache = Scope.Resolve<IMemoryCache>();
+        var easyCaching = Scope.Resolve<IEasyCachingProvider>();
         var logger = Scope.Resolve<ILogger<ILocationService>>();
         var dbConnectionFactory = Scope.Resolve<IDbConnectionFactory>();
-        memoryCache.Clear(LocationService.CacheKey);
-        LocationService = new LocationService(dbConnectionFactory, memoryCache, logger);
+        easyCaching.Flush();
+        LocationService = new LocationService(dbConnectionFactory, easyCaching, logger);
     }
 
     [Fact]
@@ -46,11 +46,11 @@ public class LocationServiceTests : IClassFixture<Fixture>, ITestScope
         Assert.NotNull(locations);
         Assert.NotEmpty(locations);
         Assert.Equal(5, locations.Count());
-        Assert.Contains(locations, l => l.Division == LocationDivisions.Country && l.Name == "Iran");
-        Assert.Contains(locations, l => l.Division == LocationDivisions.Province && l.Name == "Khuzestan");
-        Assert.Contains(locations, l => l.Division == LocationDivisions.City && l.Name == "Ahvaz");
-        Assert.Contains(locations, l => l.Division == LocationDivisions.District && l.Name == "Kianpars");
-        Assert.Contains(locations, l => l.Division == LocationDivisions.Quarter && l.Name == "Western");
+        Assert.Contains(locations, l => l.Division == LocationDivision.Country && l.Name == "Iran");
+        Assert.Contains(locations, l => l.Division == LocationDivision.Province && l.Name == "Khuzestan");
+        Assert.Contains(locations, l => l.Division == LocationDivision.City && l.Name == "Ahvaz");
+        Assert.Contains(locations, l => l.Division == LocationDivision.District && l.Name == "Kianpars");
+        Assert.Contains(locations, l => l.Division == LocationDivision.Quarter && l.Name == "Western");
     }
 
     [Fact]

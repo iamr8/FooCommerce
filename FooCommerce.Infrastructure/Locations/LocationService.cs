@@ -1,5 +1,7 @@
 ﻿using Dapper;
 
+using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Dtos.Listings;
 using FooCommerce.Application.Entities.Listings;
@@ -14,17 +16,17 @@ namespace FooCommerce.Infrastructure.Locations;
 public class LocationService : ILocationService
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IMemoryCache _cacheService;
+    private readonly IEasyCachingProvider _easyCaching;
     private readonly ILogger<ILocationService> _logger;
 
-    public LocationService(IDbConnectionFactory dbConnectionFactory, IMemoryCache cacheService, ILogger<ILocationService> logger)
+    public LocationService(IDbConnectionFactory dbConnectionFactory, IEasyCachingProvider easyCaching, ILogger<ILocationService> logger)
     {
-        _cacheService = cacheService;
+        _easyCaching = easyCaching;
         _logger = logger;
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task<IEnumerable<LocationModel>> GetLocationsNonCachedAsync()
+    private async Task<IEnumerable<LocationModel>> GetLocationsNonCachedAsync()
     {
         using var dbConnection = _dbConnectionFactory.CreateConnection();
 
@@ -40,7 +42,7 @@ public class LocationService : ILocationService
 
     public async ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default)
     {
-        return await _cacheService.GetOrCreateAsync(CacheKey,
+        return await _easyCaching.GetOrCreateAsync(CacheKey,
             async () => await GetLocationsNonCachedAsync(), _logger, cancellationToken);
     }
 

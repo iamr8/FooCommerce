@@ -1,4 +1,4 @@
-﻿using FooCommerce.Domain.Entities;
+﻿using FooCommerce.Domain.Interfaces.Database;
 
 namespace FooCommerce.Application.Entities.Listings;
 

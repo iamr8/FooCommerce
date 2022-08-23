@@ -1,5 +1,6 @@
 ﻿using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Domain.Entities;
+using FooCommerce.Application.Interfaces;
+using FooCommerce.Domain.Interfaces.Database;
 
 using NetTopologySuite.Geometries;
 
@@ -16,7 +17,7 @@ public record Location
     public bool IsHidden { get; init; }
 
     // Country, State/Region/Province/Locality, City/County/Area, District, Quarter
-    public LocationDivisions Division { get; init; }
+    public LocationDivision Division { get; init; }
     public string Name { get; init; }
     public Point? Coordinate { get; init; }
     public Guid? ParentId { get; init; }
