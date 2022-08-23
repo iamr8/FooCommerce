@@ -7,6 +7,8 @@ public enum JobStatus : ushort
     InputDataNotValid = 10,
 
     EmailAlreadyEstablished = 100,
+    IncorrectUsernameOrPassword = 101,
+
     NeedVerifyEmail = 110,
     NeedVerifyMobile = 111,
     TemporarilyBanned = 120,

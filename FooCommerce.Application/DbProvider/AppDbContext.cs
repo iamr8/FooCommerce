@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Application.Entities.Listings;
-
+using FooCommerce.Application.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.Application.DbProvider

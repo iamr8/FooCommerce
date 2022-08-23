@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace FooCommerce.Domain.Entities;
+namespace FooCommerce.Domain.Interfaces.Database;
 
 public interface IEntityRequestTrackable
 {

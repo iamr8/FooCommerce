@@ -64,6 +64,8 @@
     <Folder Include="Tables\Membership" />
     <Folder Include="Tables\Listings" />
     <Folder Include="Tables\Subscriptions" />
+    <Folder Include="Tables\Configurations" />
+    <Folder Include="Tables\Messagings" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="More\FullTextCatalog.sql" />
@@ -93,6 +95,11 @@
     <Build Include="Tables\Products\ProductMultimedias.sql" />
     <Build Include="Tables\Products\ProductSpecifications.sql" />
     <Build Include="Tables\Products\Specifications.sql" />
+    <Build Include="Tables\Configurations\Translations.sql" />
+    <Build Include="Tables\Configurations\Settings.sql" />
+    <Build Include="Tables\Messagings\Notifications.sql" />
+    <Build Include="Tables\Messagings\UserNotifications.sql" />
+    <Build Include="Tables\Messagings\NotificationTemplates.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Membership\AuthTokens.sql" />

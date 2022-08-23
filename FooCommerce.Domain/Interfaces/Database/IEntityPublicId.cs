@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Domain.Entities
+﻿namespace FooCommerce.Domain.Interfaces.Database
 {
     public interface IEntityPublicId
     {

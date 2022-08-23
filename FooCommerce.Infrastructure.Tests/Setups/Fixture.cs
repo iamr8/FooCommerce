@@ -83,30 +83,30 @@ namespace FooCommerce.Infrastructure.Tests.Setups
         {
             var country = dbContext.Set<Location>().Add(new Location
             {
-                Division = LocationDivisions.Country,
+                Division = LocationDivision.Country,
                 Name = "Iran",
             }).Entity;
             var province = dbContext.Set<Location>().Add(new Location
             {
-                Division = LocationDivisions.Province,
+                Division = LocationDivision.Province,
                 Name = "Khuzestan",
                 ParentId = country.Id,
             }).Entity;
             var city = dbContext.Set<Location>().Add(new Location
             {
-                Division = LocationDivisions.City,
+                Division = LocationDivision.City,
                 Name = "Ahvaz",
                 ParentId = province.Id,
             }).Entity;
             var district = dbContext.Set<Location>().Add(new Location
             {
-                Division = LocationDivisions.District,
+                Division = LocationDivision.District,
                 Name = "Kianpars",
                 ParentId = city.Id,
             }).Entity;
             var neighborhood = dbContext.Set<Location>().Add(new Location
             {
-                Division = LocationDivisions.Quarter,
+                Division = LocationDivision.Quarter,
                 Name = "Western",
                 ParentId = district.Id,
             }).Entity;
@@ -117,11 +117,11 @@ namespace FooCommerce.Infrastructure.Tests.Setups
         {
             var normalUserRole = dbContext.Set<Role>().Add(new Role
             {
-                Type = RoleTypes.NormalUser,
+                Type = RoleType.NormalUser,
             }).Entity;
             var adminUserRole = dbContext.Set<Role>().Add(new Role
             {
-                Type = RoleTypes.Admin,
+                Type = RoleType.Admin,
             }).Entity;
             dbContext.SaveChanges();
         }

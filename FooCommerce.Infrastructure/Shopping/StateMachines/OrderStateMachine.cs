@@ -10,11 +10,13 @@ public class OrderStateMachine : MassTransitStateMachine<OrderState>
     {
         Event(() => AcceptOrder, x =>
         {
-            x.OnMissingInstance(m => m.ExecuteAsync(context => context.RespondAsync<OrderNotFound>(new { context.Message.OrderId })));
+            x.OnMissingInstance(m =>
+                m.ExecuteAsync(context => context.RespondAsync<OrderNotFound>(new { context.Message.OrderId })));
         });
         Event(() => GetOrder, x =>
         {
-            x.OnMissingInstance(m => m.ExecuteAsync(context => context.RespondAsync<OrderNotFound>(new { context.Message.OrderId })));
+            x.OnMissingInstance(m =>
+                m.ExecuteAsync(context => context.RespondAsync<OrderNotFound>(new { context.Message.OrderId })));
         });
 
         InstanceState(x => x.CurrentState);
