@@ -5,7 +5,7 @@
 @import "_variables.scss";
 
 :root {
-    --bs-font-sans-serif: -apple-system, BlinkMacSystemFont, Roboto, "Inter", "Segoe UI", system-ui, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --bs-font-sans-serif: "Inter", -apple-system, BlinkMacSystemFont, Roboto, "Segoe UI", system-ui, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --bs-body-font-size: 13px;
     --bs-body-bg: white;
     --bs-body-bg-rgb: 255, 255, 255;

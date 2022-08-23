@@ -1,5 +1,4 @@
-import './styles/app.scss';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App';
@@ -10,13 +9,27 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href') as string;
 const root = createRoot(document.getElementById('root') as HTMLElement);
 
+var fonts: ReactElement;
+if (process.env.NODE_ENV === 'development') {
+	require("./styles/base/_fonts.scss");
+	fonts = (<></>);
+} else {
+	fonts = (<>
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin='anonymous' />
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
+	</>);
+}
+
 root.render(
+
 	<HelmetProvider>
 		<BrowserRouter basename={baseUrl}>
 			<App>
 				<Helmet prioritizeSeoTags>
-					<title>Hello World</title>
-					<link rel="canonical" href="https://reactjs.org/tutorial/tutorial.html" />
+					{/* <title>Hello World</title> */}
+					{/* <link rel="canonical" href="https://reactjs.org/tutorial/tutorial.html" /> */}
+					{fonts}
 				</Helmet>
 			</App>
 		</BrowserRouter>
