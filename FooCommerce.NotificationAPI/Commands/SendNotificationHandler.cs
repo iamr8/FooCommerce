@@ -6,7 +6,7 @@ using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Models.Notifications.Options;
 using FooCommerce.Application.Services.Notifications;
-using FooCommerce.Infrastructure.Notifications.Models;
+using FooCommerce.NotificationAPI.Models;
 
 using MediatR;
 
@@ -14,7 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Infrastructure.Notifications.Commands;
+namespace FooCommerce.NotificationAPI.Commands;
 
 public class SendNotificationHandler : INotificationHandler<SendNotification>
 {

@@ -9,7 +9,7 @@ using FooCommerce.Infrastructure.Localization;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Infrastructure.Notifications.Extensions;
+namespace FooCommerce.NotificationAPI.Extensions;
 
 public static class NotificationTemplateEmailModelExtensions
 {

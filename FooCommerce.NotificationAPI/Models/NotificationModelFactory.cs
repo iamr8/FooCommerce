@@ -6,7 +6,7 @@ using FooCommerce.Application.Interfaces.Notifications;
 using FooCommerce.Application.Models.Notifications.Contents;
 using FooCommerce.Application.Models.Notifications.Options;
 using FooCommerce.Application.Models.Notifications.Types;
-using FooCommerce.Infrastructure.Notifications.Extensions;
+using FooCommerce.NotificationAPI.Extensions;
 
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
@@ -14,7 +14,7 @@ using HtmlAgilityPack.CssSelectors.NetCore;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Infrastructure.Notifications.Models;
+namespace FooCommerce.NotificationAPI.Models;
 
 internal record NotificationModelFactory : INotificationModelFactory
 {

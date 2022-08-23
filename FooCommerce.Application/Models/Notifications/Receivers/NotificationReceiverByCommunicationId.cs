@@ -8,7 +8,7 @@ using FooCommerce.Application.Models.Membership;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Infrastructure.Notifications.Receivers;
+namespace FooCommerce.Application.Models.Notifications.Receivers;
 
 public record NotificationReceiverByCommunicationId(Guid UserCommunicationId) : INotificationReceiver
 {
@@ -22,20 +22,20 @@ public record NotificationReceiverByCommunicationId(Guid UserCommunicationId) : 
 
         var userId = await dbContext.Set<UserCommunication>()
             .AsNoTracking()
-            .Where(x => x.Id == this.UserCommunicationId && x.IsVerified)
+            .Where(x => x.Id == UserCommunicationId && x.IsVerified)
             .Select(x => new { x.UserId })
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
-        this.UserId = userId.UserId;
+        UserId = userId.UserId;
 
         var name = await dbContext.Set<UserInformation>()
             .AsNoTracking()
-            .Where(x => x.UserId == this.UserId && x.Type == UserInformationType.Name)
+            .Where(x => x.UserId == UserId && x.Type == UserInformationType.Name)
             .OrderByDescending(x => x.Created)
             .Select(x => new { x.Value })
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         var communications = await dbContext.Set<UserCommunication>()
             .AsNoTracking()
-            .Where(x => x.UserId == this.UserId && x.IsVerified && x.Id != this.UserCommunicationId)
+            .Where(x => x.UserId == UserId && x.IsVerified && x.Id != UserCommunicationId)
             .Select(x => new
             {
                 x.Id,

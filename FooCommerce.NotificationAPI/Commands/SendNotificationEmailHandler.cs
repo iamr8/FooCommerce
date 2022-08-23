@@ -9,7 +9,7 @@ using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
-using FooCommerce.Infrastructure.Notifications.Models;
+using FooCommerce.NotificationAPI.Models;
 
 using MediatR;
 
@@ -20,7 +20,7 @@ using Microsoft.Extensions.Logging;
 
 using MimeKit;
 
-namespace FooCommerce.Infrastructure.Notifications.Commands
+namespace FooCommerce.NotificationAPI.Commands
 {
     public class SendNotificationEmailHandler : INotificationHandler<SendNotificationEmail>
     {

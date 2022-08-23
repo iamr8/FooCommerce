@@ -8,9 +8,9 @@ using FooCommerce.Application.Entities.Membership;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Models.Notifications.Contents;
+using FooCommerce.Application.Models.Notifications.Receivers;
 using FooCommerce.Application.Services.Membership;
 using FooCommerce.Domain.Enums;
-using FooCommerce.Infrastructure.Notifications.Receivers;
 
 using MediatR;
 

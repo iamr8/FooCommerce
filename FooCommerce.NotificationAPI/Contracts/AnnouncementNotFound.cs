@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Infrastructure.Notifications.Contracts;
+﻿namespace FooCommerce.NotificationAPI.Contracts;
 
 public record AnnouncementNotFound
 {

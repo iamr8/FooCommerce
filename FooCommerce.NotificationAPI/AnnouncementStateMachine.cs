@@ -1,8 +1,8 @@
-﻿using FooCommerce.Infrastructure.Notifications.Contracts;
+﻿using FooCommerce.NotificationAPI.Contracts;
 
 using MassTransit;
 
-namespace FooCommerce.Infrastructure.Notifications;
+namespace FooCommerce.NotificationAPI;
 
 public class AnnouncementStateMachine
     : MassTransitStateMachine<Announcement>

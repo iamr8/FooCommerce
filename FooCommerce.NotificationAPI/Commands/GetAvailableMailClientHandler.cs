@@ -1,9 +1,10 @@
 ﻿using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.Interfaces.Notifications;
-using FooCommerce.Infrastructure.Notifications.Models;
+using FooCommerce.NotificationAPI.Models;
+
 using MediatR;
 
-namespace FooCommerce.Infrastructure.Notifications.Commands;
+namespace FooCommerce.NotificationAPI.Commands;
 
 public class GetAvailableMailClientHandler : IRequestHandler<GetAvailableMailClient, IEmailClient>
 {

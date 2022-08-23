@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using IMediator = MediatR.IMediator;
 
-namespace FooCommerce.Infrastructure.Notifications.Commands;
+namespace FooCommerce.NotificationAPI.Commands;
 
 public class SendNotificationSmsHandler : INotificationHandler<SendNotificationSms>
 {

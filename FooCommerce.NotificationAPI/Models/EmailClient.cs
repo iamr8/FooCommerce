@@ -6,7 +6,7 @@ using MailKit.Net.Smtp;
 
 using MimeKit;
 
-namespace FooCommerce.Infrastructure.Notifications.Models;
+namespace FooCommerce.NotificationAPI.Models;
 
 public record EmailClient : IEmailClient
 {

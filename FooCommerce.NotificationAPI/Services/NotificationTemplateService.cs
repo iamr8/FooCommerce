@@ -13,13 +13,13 @@ using FooCommerce.Application.Interfaces.Notifications;
 using FooCommerce.Application.Services.Notifications;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Localization;
-using FooCommerce.Infrastructure.Notifications.Dtos;
+using FooCommerce.NotificationAPI.Dtos;
 
 using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json.Linq;
 
-namespace FooCommerce.Infrastructure.Notifications.Services
+namespace FooCommerce.NotificationAPI.Services
 {
     public class NotificationTemplateService : INotificationTemplateService
     {

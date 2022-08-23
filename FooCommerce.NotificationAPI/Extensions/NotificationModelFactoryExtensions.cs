@@ -2,7 +2,7 @@
 
 using WebMarkupMin.Core;
 
-namespace FooCommerce.Infrastructure.Notifications.Extensions;
+namespace FooCommerce.NotificationAPI.Extensions;
 
 public static class NotificationModelFactoryExtensions
 {

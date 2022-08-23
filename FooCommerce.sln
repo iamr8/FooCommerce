@@ -33,6 +33,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{3E
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FooCommerce.SQLScripts", "FooCommerce.SQLScripts\FooCommerce.SQLScripts.sqlproj", "{A61BC536-2451-44CB-9BBC-1F6DB18E6A56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.NotificationAPI", "FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj", "{D1CFEB08-7573-441E-8B77-E321EC6DAF29}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -85,6 +87,10 @@ Global
 		{A61BC536-2451-44CB-9BBC-1F6DB18E6A56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A61BC536-2451-44CB-9BBC-1F6DB18E6A56}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A61BC536-2451-44CB-9BBC-1F6DB18E6A56}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D1CFEB08-7573-441E-8B77-E321EC6DAF29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CFEB08-7573-441E-8B77-E321EC6DAF29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CFEB08-7573-441E-8B77-E321EC6DAF29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CFEB08-7573-441E-8B77-E321EC6DAF29}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

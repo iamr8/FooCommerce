@@ -8,7 +8,7 @@ using FooCommerce.Application.Models.Membership;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Infrastructure.Notifications.Receivers;
+namespace FooCommerce.Application.Models.Notifications.Receivers;
 
 public record NotificationReceiverByUserId(Guid UserId) : INotificationReceiver
 {
@@ -21,13 +21,13 @@ public record NotificationReceiverByUserId(Guid UserId) : INotificationReceiver
         await using var dbContext = await dbConnection.CreateDbContextAsync(cancellationToken);
         var name = await dbContext.Set<UserInformation>()
             .AsNoTracking()
-            .Where(x => x.UserId == this.UserId && x.Type == UserInformationType.Name)
+            .Where(x => x.UserId == UserId && x.Type == UserInformationType.Name)
             .OrderByDescending(x => x.Created)
             .Select(x => new { x.Value })
             .FirstOrDefaultAsync(cancellationToken: cancellationToken);
         var communications = await dbContext.Set<UserCommunication>()
             .AsNoTracking()
-            .Where(x => x.UserId == this.UserId && x.IsVerified)
+            .Where(x => x.UserId == UserId && x.IsVerified)
             .Select(x => new
             {
                 x.Id,

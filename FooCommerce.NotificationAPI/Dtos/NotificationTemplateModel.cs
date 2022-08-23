@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Application.Enums.Membership;
 
-namespace FooCommerce.Infrastructure.Notifications.Dtos;
+namespace FooCommerce.NotificationAPI.Dtos;
 
 internal record NotificationTemplateModel
 {

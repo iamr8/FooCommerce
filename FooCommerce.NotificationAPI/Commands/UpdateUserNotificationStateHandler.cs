@@ -7,7 +7,7 @@ using FooCommerce.Application.Enums.Notifications;
 
 using MediatR;
 
-namespace FooCommerce.Infrastructure.Notifications.Commands;
+namespace FooCommerce.NotificationAPI.Commands;
 
 public class UpdateUserNotificationStateHandler : INotificationHandler<UpdateUserNotificationState>
 {
@@ -34,7 +34,7 @@ public class UpdateUserNotificationStateHandler : INotificationHandler<UpdateUse
                 $"UPDATE [UserNotifications] SET {columnName} = GETUTCDATE() OUTPUT UPDATED.* WHERE Id = @UserNotificationId",
                 new
                 {
-                    UserNotificationId = notificationState.UserNotificationId
+                    notificationState.UserNotificationId
                 });
         }
     }
