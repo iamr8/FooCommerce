@@ -1,6 +1,7 @@
 ﻿using System.Data;
 
 using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Listings;
@@ -18,6 +19,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.NotificationAPI.Tests.Setups;
 
@@ -30,7 +32,8 @@ public class Fixture : IAsyncLifetime, IFixture
     {
         // ConfigureServices
         Configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", true, true)
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false, true)
             .AddEnvironmentVariables()
             .Build();
         var connectionString = Configuration.GetConnectionString("Default");
@@ -50,6 +53,10 @@ public class Fixture : IAsyncLifetime, IFixture
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
+
+        var services = new ServiceCollection();
+        services.AddSingleton<IConfiguration>(Configuration);
+        containerBuilder.Populate(services);
 
         // Configure
         Container = containerBuilder.Build();
