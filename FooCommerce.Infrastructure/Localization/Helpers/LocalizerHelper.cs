@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Html;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace FooCommerce.Infrastructure.Localization;
+namespace FooCommerce.Infrastructure.Localization.Helpers;
 
 public static class LocalizerHelper
 {

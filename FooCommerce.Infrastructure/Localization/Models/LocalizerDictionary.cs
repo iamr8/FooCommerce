@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.Models.Localization;
 
-namespace FooCommerce.Infrastructure.Localization;
+namespace FooCommerce.Infrastructure.Localization.Models;
 
 public class LocalizerDictionary : ReadOnlyDictionary<string, LocalizerValueCollection>
 {

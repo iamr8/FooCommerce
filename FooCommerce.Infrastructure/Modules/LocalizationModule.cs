@@ -9,6 +9,7 @@ using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Models.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization;
+using FooCommerce.Infrastructure.Localization.Models;
 
 using Microsoft.Extensions.DependencyInjection;
 

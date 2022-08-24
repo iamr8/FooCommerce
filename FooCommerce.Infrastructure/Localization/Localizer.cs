@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.Commands.Localization;
 using FooCommerce.Domain.Interfaces;
-
+using FooCommerce.Infrastructure.Localization.Models;
 using MediatR;
 
 namespace FooCommerce.Infrastructure.Localization

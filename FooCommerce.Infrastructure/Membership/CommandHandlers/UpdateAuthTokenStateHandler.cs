@@ -10,7 +10,7 @@ using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Infrastructure.Membership.Commands;
+namespace FooCommerce.Infrastructure.Membership.CommandHandlers;
 
 public class UpdateAuthTokenStateHandler : INotificationHandler<UpdateAuthTokenState>
 {
@@ -34,7 +34,7 @@ public class UpdateAuthTokenStateHandler : INotificationHandler<UpdateAuthTokenS
                              $"ORDER BY [userNotification].{nameof(UserNotification.Created)} DESC";
         var notificationId = await dbConnection.QuerySingleAsync<Guid?>(query, new
         {
-            AuthTokenId = notificationState.AuthTokenId
+            notificationState.AuthTokenId
         });
         if (notificationId is not { })
         {

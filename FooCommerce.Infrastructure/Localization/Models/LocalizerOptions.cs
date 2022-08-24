@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Infrastructure.Localization;
+﻿namespace FooCommerce.Infrastructure.Localization.Models;
 
 public record LocalizerOptions
 {

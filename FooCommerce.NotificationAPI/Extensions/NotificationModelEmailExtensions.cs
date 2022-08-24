@@ -4,8 +4,7 @@ using System.Text;
 using FooCommerce.Application.Dtos.Notifications;
 using FooCommerce.Application.Models.Notifications.Options;
 using FooCommerce.Infrastructure.Helpers;
-using FooCommerce.Infrastructure.Localization;
-
+using FooCommerce.Infrastructure.Localization.Helpers;
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 

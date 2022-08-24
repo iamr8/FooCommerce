@@ -1,14 +1,14 @@
 ﻿using FooCommerce.Application.Commands.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Caching;
-
+using FooCommerce.Infrastructure.Localization.Models;
 using MediatR;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace FooCommerce.Infrastructure.Localization;
+namespace FooCommerce.Infrastructure.Localization.CommandHandlers;
 
 public class RefreshLocalizerHandler : INotificationHandler<RefreshLocalizer>
 {
