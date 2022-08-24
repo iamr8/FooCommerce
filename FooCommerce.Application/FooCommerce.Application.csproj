@@ -3,14 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="FluentValidation" Version="11.2.0" />
 		<PackageReference Include="MassTransit" Version="8.0.6" />
-		<!--<PackageReference Include="MassTransit.Analyzers" Version="8.0.5" />-->
 		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
 		<PackageReference Include="MediatR" Version="10.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Html.Abstractions" Version="2.2.0" />

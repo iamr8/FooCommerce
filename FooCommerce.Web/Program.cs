@@ -3,6 +3,7 @@ using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.Modules;
 using FooCommerce.Infrastructure.Modules;
+using FooCommerce.Infrastructure.Mvc;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -21,7 +22,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
         containerBuilder.RegisterModule(new AutoFluentValidationModule());
-        containerBuilder.RegisterModule(new MvcModule());
+        containerBuilder.RegisterModule(new MvcModule(builder.Environment));
         containerBuilder.RegisterModule(new EventBusModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DapperModule(connectionString));
@@ -57,9 +58,13 @@ app.UseRouting();
 
 app.UseAuthorization();
 
+var defaultCulture = app.Configuration.GetSection("SupportedLanguages").Get<string[]>()[0];
+const string culturePattern = $"{Constraints.LanguageKey}:{Constraints.LanguageKey}";
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
+    pattern: "{" + culturePattern + "}/{controller}/{action=Index}/{id?}",
+    defaults: new { culture = defaultCulture });
 
 app.MapRazorPages();
 
