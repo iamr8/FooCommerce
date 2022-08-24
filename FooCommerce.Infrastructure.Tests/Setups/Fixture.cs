@@ -13,6 +13,7 @@ using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Infrastructure.Protection.Options;
 using FooCommerce.Infrastructure.Shopping.StateMachines;
+using FooCommerce.Tests.Base;
 
 using MassTransit;
 using MassTransit.Testing;

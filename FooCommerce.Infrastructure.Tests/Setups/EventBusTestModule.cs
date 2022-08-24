@@ -8,7 +8,7 @@ using MassTransit;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Tests
+namespace FooCommerce.Infrastructure.Tests.Setups
 {
     public class EventBusTestModule : Module
     {
