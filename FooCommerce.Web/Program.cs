@@ -1,7 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Application.Modules;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Infrastructure.Mvc;
 

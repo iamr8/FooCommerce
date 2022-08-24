@@ -1,5 +1,4 @@
 ﻿using FooCommerce.Application.Commands.Localization;
-using FooCommerce.Application.Models.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Caching;
 

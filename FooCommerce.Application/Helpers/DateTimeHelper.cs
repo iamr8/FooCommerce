@@ -1,6 +1,4 @@
-﻿using Autofac;
-
-using FooCommerce.Application.Models;
+﻿using FooCommerce.Application.Models;
 
 using Microsoft.AspNetCore.Http;
 
@@ -50,26 +48,5 @@ public static class DateTimeHelper
 
         var endUser = httpContext.GetEndUser() ?? throw new ArgumentNullException("httpContext.GetEndUser()");
         return utcDateTime.ToLocal(endUser);
-    }
-
-    /// <summary>
-    /// Returns a localized datetime according to the given Timezone.
-    /// </summary>
-    /// <param name="utcDateTime"></param>
-    /// <param name="container"></param>
-    /// <returns></returns>
-    /// <exception cref="ArgumentNullException"></exception>
-    /// <exception cref="ArgumentException"></exception>
-    public static DateTime ToLocal(this DateTime utcDateTime, IContainer container)
-    {
-        if (container == null)
-            throw new ArgumentNullException(nameof(container));
-
-        if (utcDateTime.Kind != DateTimeKind.Utc)
-            throw new ArgumentException($"{nameof(utcDateTime)} must be in kind of UTC.");
-
-        var httpContextAccessor = container.Resolve<IHttpContextAccessor>() ?? throw new ArgumentNullException("container.Resolve<IHttpContextAccessor>()");
-        var httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentNullException("httpContextAccessor.HttpContext");
-        return utcDateTime.ToLocal(httpContext);
     }
 }

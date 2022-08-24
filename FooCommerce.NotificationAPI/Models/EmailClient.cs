@@ -11,14 +11,20 @@ namespace FooCommerce.NotificationAPI.Models;
 public record EmailClient : IEmailClient
 {
     private readonly SmtpClient _client;
-    private readonly string _senderAddress;
-    private readonly string _senderName;
+    public string SenderAddress { get; }
+    public string Password { get; }
+    public string Server { get; }
+    public int SmtpPort { get; }
+    public string SenderAlias { get; }
 
-    private EmailClient(SmtpClient client, string senderAddress, string senderName) : this()
+    private EmailClient(SmtpClient client, string senderAddress, string senderAlias, string password, string server, int smtpPort) : this()
     {
         _client = client;
-        _senderAddress = senderAddress;
-        _senderName = senderName;
+        SenderAddress = senderAddress;
+        SenderAlias = senderAlias;
+        Password = password;
+        Server = server;
+        SmtpPort = smtpPort;
     }
 
     private EmailClient()
@@ -32,7 +38,7 @@ public record EmailClient : IEmailClient
     /// <param name="senderAddress"></param>
     /// <param name="password"></param>
     /// <param name="server"></param>
-    /// <param name="senderName"></param>
+    /// <param name="senderAlias"></param>
     /// <param name="smtpPort"></param>
     /// <param name="cancellationToken"></param>
     /// <exception cref="ArgumentNullException"></exception>
@@ -40,7 +46,7 @@ public record EmailClient : IEmailClient
     /// <exception cref="ArgumentException"></exception>
     /// <exception cref="ObjectDisposedException"></exception>
     /// <returns></returns>
-    public static async Task<EmailClient> GetInstanceAsync(string senderAddress, string password, string server, string senderName, int smtpPort, CancellationToken cancellationToken = default)
+    public static async Task<EmailClient> GetInstanceAsync(string senderAddress, string password, string server, string senderAlias, int smtpPort, CancellationToken cancellationToken = default)
     {
         var client = new SmtpClient();
         try
@@ -61,21 +67,21 @@ public record EmailClient : IEmailClient
             throw;
         }
 
-        return new EmailClient(client, senderAddress, senderName);
+        return new EmailClient(client, senderAddress, senderAlias, password, server, smtpPort);
     }
 
     public async Task<bool> SendAsync(MimeMessage mailMessage, CancellationToken cancellationToken = default)
     {
         if (mailMessage == null) throw new ArgumentNullException(nameof(mailMessage));
 
-        var senderName = _senderName;
+        var senderName = SenderAlias;
 
         var subject = mailMessage.Subject;
         if (!string.IsNullOrEmpty(subject))
             senderName += $" - {subject}";
 
         mailMessage.From.Clear();
-        var sender = new MailboxAddress(Encoding.UTF8, senderName, _senderAddress);
+        var sender = new MailboxAddress(Encoding.UTF8, senderName, SenderAddress);
         mailMessage.From.Add(sender);
 
         try

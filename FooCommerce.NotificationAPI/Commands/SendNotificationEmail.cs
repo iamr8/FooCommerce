@@ -2,6 +2,6 @@
 
 using MediatR;
 
-namespace FooCommerce.Application.Commands.Notifications;
+namespace FooCommerce.NotificationAPI.Commands;
 
 public record SendNotificationEmail(SendNotificationEmailOptions Options) : INotification;

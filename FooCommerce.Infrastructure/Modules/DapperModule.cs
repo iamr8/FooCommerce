@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.DbProvider;
 
-namespace FooCommerce.Application.Modules;
+namespace FooCommerce.Infrastructure.Modules;
 
 public class DapperModule : Module
 {

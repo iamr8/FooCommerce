@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Application.Commands.Membership;
-using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.Dtos.Notifications;
 using FooCommerce.Application.Entities.Membership;
 using FooCommerce.Application.Enums.Notifications;
+using FooCommerce.NotificationAPI.Commands;
 
 using MediatR;
 
@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 
 using IMediator = MediatR.IMediator;
 
-namespace FooCommerce.NotificationAPI.Commands;
+namespace FooCommerce.NotificationAPI.CommandsHandlers;
 
 public class SendNotificationSmsHandler : INotificationHandler<SendNotificationSms>
 {

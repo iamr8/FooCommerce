@@ -5,7 +5,7 @@ using FooCommerce.Domain.Interfaces;
 
 using MediatR;
 
-namespace FooCommerce.Application.Models.Localization
+namespace FooCommerce.Infrastructure.Localization
 {
     public class Localizer : ILocalizer
     {

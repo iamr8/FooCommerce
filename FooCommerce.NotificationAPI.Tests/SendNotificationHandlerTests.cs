@@ -9,9 +9,8 @@ using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Models;
 using FooCommerce.Application.Models.Notifications.Receivers;
-using FooCommerce.Application.Services.Membership;
 using FooCommerce.Application.Services.Notifications;
-using FooCommerce.NotificationAPI.Commands;
+using FooCommerce.NotificationAPI.CommandsHandlers;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
 
@@ -31,7 +30,6 @@ namespace FooCommerce.NotificationAPI.Tests
         public ITestOutputHelper TestConsole { get; }
         public ILifetimeScope Scope { get; }
         private IMediator MediatR { get; }
-        private IUserService UserService { get; }
         private INotificationTemplateService NotificationTemplateService { get; }
         private IConfiguration Configuration { get; }
         public ILoggerFactory Logger { get; }
@@ -45,7 +43,6 @@ namespace FooCommerce.NotificationAPI.Tests
             var easyCaching = Scope.Resolve<IEasyCachingProvider>();
             easyCaching.Flush();
             MediatR = Scope.Resolve<IMediator>();
-            UserService = Scope.Resolve<IUserService>();
             NotificationTemplateService = Scope.Resolve<INotificationTemplateService>();
             Configuration = Scope.Resolve<IConfiguration>();
             Logger = Scope.Resolve<ILoggerFactory>();
@@ -86,7 +83,6 @@ namespace FooCommerce.NotificationAPI.Tests
             await handler.Handle(notification, CancellationToken.None);
 
             // Assert
-
         }
     }
 }

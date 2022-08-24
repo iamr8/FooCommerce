@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Application.Modules;
+namespace FooCommerce.Infrastructure.Modules;
 
 public class DbContextModule : Module
 {

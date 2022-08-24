@@ -1,14 +1,14 @@
 ﻿using System.Text;
 
 using FooCommerce.Application.Commands.Membership;
-using FooCommerce.Application.Commands.Notifications;
-using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Dtos.Notifications;
 using FooCommerce.Application.Entities.Membership;
 using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Helpers;
+using FooCommerce.Application.Services.Notifications;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.NotificationAPI.Commands;
 using FooCommerce.NotificationAPI.Models;
 
 using MediatR;
@@ -20,25 +20,30 @@ using Microsoft.Extensions.Logging;
 
 using MimeKit;
 
-namespace FooCommerce.NotificationAPI.Commands
+namespace FooCommerce.NotificationAPI.CommandsHandlers
 {
     public class SendNotificationEmailHandler : INotificationHandler<SendNotificationEmail>
     {
-        private readonly IDbConnectionFactory _dbConnectionFactory;
         private readonly ILogger<SendNotificationEmailHandler> _logger;
+        private readonly INotificationClientService _clientService;
         private readonly ILocalizer _localizer;
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private readonly IMediator _mediator;
 
-        public SendNotificationEmailHandler(ILogger<SendNotificationEmailHandler> logger, ILocalizer localizer, IConfiguration configuration, IWebHostEnvironment environment, IMediator mediator, IDbConnectionFactory dbConnectionFactory)
+        public SendNotificationEmailHandler(ILogger<SendNotificationEmailHandler> logger,
+            INotificationClientService clientService,
+            ILocalizer localizer,
+            IConfiguration configuration,
+            IWebHostEnvironment environment,
+            IMediator mediator)
         {
             _logger = logger;
+            _clientService = clientService;
             _localizer = localizer;
             _configuration = configuration;
             _environment = environment;
             _mediator = mediator;
-            _dbConnectionFactory = dbConnectionFactory;
         }
 
         public async Task Handle(SendNotificationEmail notification, CancellationToken cancellationToken)
@@ -54,12 +59,11 @@ namespace FooCommerce.NotificationAPI.Commands
 
             SendNotificationHandlerGuard.Check(renderedTemplate, notification.Options, _logger);
 
-            var (username, password, server, smtpPort, senderName, domain) = _configuration.GetSection("Emails:NoReply").Get<EmailClientCredential>();
-            var senderAddress = $"{username}@{domain}";
+            var mailCredential = _clientService.GetAvailableMailboxCredentials();
             var mime = new MimeMessage
             {
                 Subject = _localizer[notification.Options.Options.Action.GetLocalizerKey()],
-                Sender = new MailboxAddress(senderName, senderAddress),
+                Sender = new MailboxAddress(mailCredential.SenderAlias, mailCredential.SenderAddress),
                 Importance = notification.Options.IsImportant ? MessageImportance.High : MessageImportance.Normal,
                 Body = new BodyBuilder { HtmlBody = renderedTemplate.Html.GetString() }.ToMessageBody(),
             };
@@ -70,7 +74,7 @@ namespace FooCommerce.NotificationAPI.Commands
             var emailSent = true;
             if (!_environment.IsStaging())
             {
-                await using (var emailClient = await EmailClient.GetInstanceAsync(senderAddress, password, server, senderName, smtpPort, cancellationToken))
+                await using (var emailClient = await EmailClient.GetInstanceAsync(mailCredential.SenderAddress, mailCredential.Password, mailCredential.Server, mailCredential.SenderAlias, mailCredential.SmtpPort, cancellationToken))
                 {
                     emailSent = await emailClient.SendAsync(mime, cancellationToken);
                     if (!emailSent)

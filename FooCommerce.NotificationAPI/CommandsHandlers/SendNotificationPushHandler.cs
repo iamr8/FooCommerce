@@ -1,22 +1,22 @@
-﻿using FooCommerce.Application.Commands.Notifications;
-using FooCommerce.Application.Dtos.Notifications;
+﻿using FooCommerce.Application.Dtos.Notifications;
+using FooCommerce.NotificationAPI.Commands;
 
 using MediatR;
 
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.NotificationAPI.Commands;
+namespace FooCommerce.NotificationAPI.CommandsHandlers;
 
-public class SendNotificationPushInAppHandler : INotificationHandler<SendNotificationPushInApp>
+public class SendNotificationPushHandler : INotificationHandler<SendNotificationPush>
 {
-    private readonly ILogger<SendNotificationPushInAppHandler> _logger;
+    private readonly ILogger<SendNotificationPushHandler> _logger;
 
-    public SendNotificationPushInAppHandler(ILogger<SendNotificationPushInAppHandler> logger)
+    public SendNotificationPushHandler(ILogger<SendNotificationPushHandler> logger)
     {
         _logger = logger;
     }
 
-    public Task Handle(SendNotificationPushInApp notification, CancellationToken cancellationToken)
+    public Task Handle(SendNotificationPush notification, CancellationToken cancellationToken)
     {
         var renderedTemplate = notification.Options.Factory.CreatePushModel(
             (NotificationTemplatePushModel)notification.Options.Template,
@@ -27,8 +27,7 @@ public class SendNotificationPushInAppHandler : INotificationHandler<SendNotific
         var receiver = notification.Options.Options.Receiver.UserCommunications.Single(x => x.Type == notification.Options.Template.Communication);
 
         SendNotificationHandlerGuard.Check(renderedTemplate, notification.Options, _logger);
-
-        // save user notification in database
+        // send Push Notification using relevant SDK
 
         return Task.FromResult(0);
     }

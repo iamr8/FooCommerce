@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.Helpers;
 
-namespace FooCommerce.Application.Modules;
+namespace FooCommerce.Infrastructure.Modules;
 
 public class NotificationAPIModule : Module
 {

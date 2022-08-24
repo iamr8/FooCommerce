@@ -7,7 +7,7 @@ using MassTransit;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Application.Modules;
+namespace FooCommerce.Infrastructure.Modules;
 
 public class BusModule : Autofac.Module
 {

@@ -7,7 +7,7 @@ using FooCommerce.Application.Enums.Notifications;
 
 using MediatR;
 
-namespace FooCommerce.NotificationAPI.Commands;
+namespace FooCommerce.NotificationAPI.CommandsHandlers;
 
 public class UpdateUserNotificationStateHandler : INotificationHandler<UpdateUserNotificationState>
 {

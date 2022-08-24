@@ -8,6 +8,7 @@ using Dapper;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Models.Localization;
 using FooCommerce.Domain.Interfaces;
+using FooCommerce.Infrastructure.Localization;
 
 using Microsoft.Extensions.DependencyInjection;
 

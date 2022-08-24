@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 
-namespace FooCommerce.Application.Models.Localization;
+using FooCommerce.Application.Models.Localization;
+
+namespace FooCommerce.Infrastructure.Localization;
 
 public class LocalizerDictionary : ReadOnlyDictionary<string, LocalizerValueCollection>
 {
