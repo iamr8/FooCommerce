@@ -10,6 +10,7 @@ using FooCommerce.Application.Entities.Messagings;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Interfaces.Notifications;
+using FooCommerce.Application.Services.Notifications;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Localization;
 using FooCommerce.NotificationAPI.Dtos;

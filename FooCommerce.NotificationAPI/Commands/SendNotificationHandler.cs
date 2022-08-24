@@ -4,8 +4,8 @@ using FooCommerce.Application.Dtos.Notifications;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Models.Notifications.Options;
+using FooCommerce.Application.Services.Notifications;
 using FooCommerce.NotificationAPI.Models;
-using FooCommerce.NotificationAPI.Services;
 
 using MediatR;
 

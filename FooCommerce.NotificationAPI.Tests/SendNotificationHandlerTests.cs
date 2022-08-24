@@ -10,8 +10,8 @@ using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Models;
 using FooCommerce.Application.Models.Notifications.Receivers;
 using FooCommerce.Application.Services.Membership;
+using FooCommerce.Application.Services.Notifications;
 using FooCommerce.NotificationAPI.Commands;
-using FooCommerce.NotificationAPI.Services;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
 

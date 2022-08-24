@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
+using FooCommerce.Application.Services.Notifications;
 using FooCommerce.NotificationAPI.Services;
 
 using Microsoft.Extensions.DependencyInjection;

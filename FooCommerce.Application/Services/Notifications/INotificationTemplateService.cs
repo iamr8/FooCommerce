@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Interfaces.Notifications;
 
-namespace FooCommerce.NotificationAPI.Services;
+namespace FooCommerce.Application.Services.Notifications;
 
 public interface INotificationTemplateService
 {

@@ -5,7 +5,7 @@ using MassTransit;
 namespace FooCommerce.NotificationAPI;
 
 public class AnnouncementStateMachine
-    : MassTransitStateMachine<Announcement>
+    : MassTransitStateMachine<AnnouncementStateMachineInstance>
 {
     public AnnouncementStateMachine()
     {
