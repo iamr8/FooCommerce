@@ -1,7 +1,6 @@
 ﻿using System.Data;
 
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Listings;
@@ -11,28 +10,21 @@ using FooCommerce.Application.Modules;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Infrastructure.Protection.Options;
-using FooCommerce.Infrastructure.Shopping.StateMachines;
 using FooCommerce.NotificationAPI.Modules;
 using FooCommerce.Tests.Base;
 
 using MassTransit;
-using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.NotificationAPI.Tests.Setups
 {
     public class Fixture : IAsyncLifetime, IFixture
     {
         public IContainer Container { get; private set; }
-        public InMemoryTestHarness Harness;
-        public IStateMachineSagaTestHarness<OrderState, OrderStateMachine> SagaHarness;
-        public OrderStateMachine Machine;
         public IConfigurationRoot Configuration { get; set; }
 
         public async Task InitializeAsync()
@@ -59,19 +51,9 @@ namespace FooCommerce.NotificationAPI.Tests.Setups
                 .OnRelease(async ins => await ins.DisposeAsync())
                 .As<IDbConnection>();
 
-            var services = new ServiceCollection();
-            services.AddOptions<HashingOptions>().Configure(opt => opt.Iterations = 10_000);
-            containerBuilder.Populate(services);
-
             // Configure
             Container = containerBuilder.Build();
 
-            Harness = Container.Resolve<InMemoryTestHarness>();
-            Harness.OnConfigureInMemoryBus += configurator => configurator.UseDelayedMessageScheduler();
-
-            await Harness.Start();
-            SagaHarness = Container.Resolve<IStateMachineSagaTestHarness<OrderState, OrderStateMachine>>();
-            Machine = Container.Resolve<OrderStateMachine>();
             await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
             var dbContextFactory = Container.Resolve<IDbContextFactory<AppDbContext>>();

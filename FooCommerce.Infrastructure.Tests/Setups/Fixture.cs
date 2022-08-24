@@ -11,7 +11,6 @@ using FooCommerce.Application.Modules;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Infrastructure.Protection.Options;
 using FooCommerce.Infrastructure.Shopping.StateMachines;
 using FooCommerce.Tests.Base;
 
@@ -57,10 +56,6 @@ namespace FooCommerce.Infrastructure.Tests.Setups
             containerBuilder.RegisterType<SqlConnection>()
                 .OnRelease(async ins => await ins.DisposeAsync())
                 .As<IDbConnection>();
-
-            var services = new ServiceCollection();
-            services.AddOptions<HashingOptions>().Configure(opt => opt.Iterations = 10_000);
-            containerBuilder.Populate(services);
 
             // Configure
             Container = containerBuilder.Build();
