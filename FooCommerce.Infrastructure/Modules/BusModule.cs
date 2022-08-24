@@ -1,11 +1,9 @@
 ﻿using System.Reflection;
 
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 
 using MassTransit;
-
-using Microsoft.Extensions.DependencyInjection;
+using MassTransit.AutofacIntegration;
 
 namespace FooCommerce.Infrastructure.Modules;
 
@@ -38,18 +36,13 @@ public class BusModule : Autofac.Module
 
     protected override void Load(ContainerBuilder builder)
     {
-        var serviceCollection = new ServiceCollection();
-
         if (_test)
         {
-            serviceCollection.AddMassTransitTestHarness(cfg => ApplyConfigurator(cfg, _assemblies.ToArray()));
+            builder.AddMassTransitInMemoryTestHarness(cfg => ApplyConfigurator(cfg, _assemblies.ToArray()));
         }
         else
         {
-            serviceCollection.AddMassTransit(cfg => ApplyConfigurator(cfg, _assemblies.ToArray()));
+            builder.AddMassTransit(cfg => ApplyConfigurator(cfg, _assemblies.ToArray()));
         }
-
-        builder.Populate(serviceCollection);
-        base.Load(builder);
     }
 }

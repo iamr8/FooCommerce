@@ -6,17 +6,6 @@ namespace FooCommerce.Application.Entities.Membership;
 public record UserCommunication
     : IEntity
 {
-    public UserCommunication()
-    {
-    }
-
-    public UserCommunication(CommunicationType type, string value, Guid userId) : this()
-    {
-        Type = type;
-        Value = value;
-        UserId = userId;
-    }
-
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }

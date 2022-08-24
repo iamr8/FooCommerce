@@ -54,24 +54,28 @@ namespace FooCommerce.NotificationAPI.Services
 
         private static async Task<IEnumerable<INotificationTemplate>> GetTemplateNonCachedAsync(NotificationAction actionName, IDbConnection dbConnection)
         {
-            const string notificationQuery = $"SELECT TOP(1) [notification].{nameof(Notification.Id)} " +
-                                             $"FROM [Notifications] AS [notification] " +
-                                             $"WHERE [notification].{nameof(Notification.Action)} = @Action" +
-                                             $"ORDER BY [notification].{nameof(Notification.Created)} DESC";
-            var notificationId = await dbConnection.QueryFirstAsync<Guid?>(notificationQuery,
+            var notificationIds = (await dbConnection.QueryAsync<Guid?>(
+                $"SELECT TOP(1) [notification].{nameof(Notification.Id)} " +
+                $"FROM [Notifications] AS [notification] " +
+                $"WHERE [notification].{nameof(Notification.Action)} = @Action " +
+                $"ORDER BY [notification].{nameof(Notification.Created)} DESC",
                 new
                 {
-                    Action = (short)actionName
-                });
+                    Action = (short) actionName
+                })).AsList();
+            if (notificationIds == null || !notificationIds.Any())
+                throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
+
+            var notificationId = notificationIds[0];
             if (notificationId is not { })
                 throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
 
-            const string templatesQuery = $"SELECT [template].{nameof(NotificationTemplate.Id)}, [notification].{nameof(NotificationTemplate.Type)}, [notification].{nameof(NotificationTemplate.JsonTemplate)}, [notification].{nameof(NotificationTemplate.IncludeRequest)} " +
-                                          $"FROM [NotificationTemplates] AS [template] " +
-                                          $"WHERE [template].{nameof(NotificationTemplate.NotificationId)} = @NotificationId" +
-                                          $"ORDER BY [template].{nameof(NotificationTemplate.Created)}";
             // Must be grouped by gateway
-            var __templates = await dbConnection.QueryAsync<NotificationTemplateModel>(templatesQuery,
+            var __templates = await dbConnection.QueryAsync<NotificationTemplateModel>(
+                $"SELECT [template].{nameof(NotificationTemplate.Id)}, [template].{nameof(NotificationTemplate.Type)}, [template].{nameof(NotificationTemplate.JsonTemplate)}, [template].{nameof(NotificationTemplate.IncludeRequest)} " +
+                $"FROM [NotificationTemplates] AS [template] " +
+                $"WHERE [template].{nameof(NotificationTemplate.NotificationId)} = @NotificationId " +
+                $"ORDER BY [template].{nameof(NotificationTemplate.Created)}",
                 new
                 {
                     NotificationId = notificationId.Value

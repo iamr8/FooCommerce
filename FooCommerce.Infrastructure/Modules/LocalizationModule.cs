@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 
 using Dapper;
 
@@ -11,8 +10,6 @@ using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization;
 using FooCommerce.Infrastructure.Localization.Models;
 
-using Microsoft.Extensions.DependencyInjection;
-
 using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.Modules;
@@ -21,15 +18,13 @@ public class LocalizationModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        var services = new ServiceCollection();
-
-        services.AddSingleton(ctx =>
+        builder.Register(ctx =>
         {
             var options = new LocalizerOptions
             {
                 Provider = () =>
                 {
-                    var dbConnectionFactory = ctx.GetService<IDbConnectionFactory>();
+                    var dbConnectionFactory = ctx.Resolve<IDbConnectionFactory>();
                     using var dbConnection = dbConnectionFactory!.CreateConnection();
                     var values = dbConnection.QueryAsync($"SELECT [translation].Key, [translation].Value " +
                                                          $"FROM [Translations] AS [translation]" +
@@ -57,7 +52,8 @@ public class LocalizationModule : Module
             };
             return options;
         });
-        services.AddSingleton<ILocalizer, Localizer>();
-        builder.Populate(services);
+        builder.RegisterType<Localizer>()
+            .As<ILocalizer>()
+            .SingleInstance();
     }
 }

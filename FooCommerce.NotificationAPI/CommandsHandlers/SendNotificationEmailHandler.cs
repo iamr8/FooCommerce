@@ -14,7 +14,6 @@ using FooCommerce.NotificationAPI.Models;
 using MediatR;
 
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
@@ -27,21 +26,18 @@ namespace FooCommerce.NotificationAPI.CommandsHandlers
         private readonly ILogger<SendNotificationEmailHandler> _logger;
         private readonly INotificationClientService _clientService;
         private readonly ILocalizer _localizer;
-        private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment _environment;
         private readonly IMediator _mediator;
 
         public SendNotificationEmailHandler(ILogger<SendNotificationEmailHandler> logger,
             INotificationClientService clientService,
             ILocalizer localizer,
-            IConfiguration configuration,
             IWebHostEnvironment environment,
             IMediator mediator)
         {
             _logger = logger;
             _clientService = clientService;
             _localizer = localizer;
-            _configuration = configuration;
             _environment = environment;
             _mediator = mediator;
         }

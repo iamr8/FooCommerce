@@ -4,11 +4,13 @@ using MassTransit;
 
 namespace FooCommerce.NotificationAPI;
 
-public class AnnouncementStateMachine
-    : MassTransitStateMachine<AnnouncementStateMachineInstance>
+public class NotificationStateMachine
+    : MassTransitStateMachine<NotificationStateMachineInstance>
 {
-    public AnnouncementStateMachine()
+    public NotificationStateMachine()
     {
+        InstanceState(x => x.CurrentState, Sent, Delivered, Authorized);
+
         Event(() => SendAnnouncement, x =>
         {
             x.OnMissingInstance(m =>
@@ -17,7 +19,6 @@ public class AnnouncementStateMachine
             x.CorrelateById(context => context.Message.AnnouncementId);
         });
 
-        InstanceState(x => x.CurrentState, Sent, Delivered, Authorized);
 
         Initially(
             When(SendAnnouncement)
