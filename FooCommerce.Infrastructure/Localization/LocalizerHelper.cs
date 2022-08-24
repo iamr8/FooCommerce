@@ -115,7 +115,7 @@ public static class LocalizerHelper
         return output;
     }
 
-    internal static JsonSerializerSettings SerializerSettings
+    private static JsonSerializerSettings SerializerSettings
     {
         get
         {

@@ -4,21 +4,22 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 
 namespace FooCommerce.Infrastructure.Caching;
 
 public static class CacheHelper
 {
-    private static JsonSerializerSettings Settings =>
-        new()
+    private static JsonSerializerSettings Settings
+    {
+        get
         {
-            Formatting = Formatting.None,
-            ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-            ContractResolver = new CamelCasePropertyNamesContractResolver(),
-            // MaxDepth = 5,
-            NullValueHandling = NullValueHandling.Ignore,
-        };
+            var defaultSettings = JsonCustomization.DefaultSettings.Settings;
+            defaultSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            defaultSettings.NullValueHandling = NullValueHandling.Ignore;
+            defaultSettings.Formatting = Formatting.None;
+            return defaultSettings;
+        }
+    }
 
     public static void Clear(this IMemoryCache cache, string key)
     {
