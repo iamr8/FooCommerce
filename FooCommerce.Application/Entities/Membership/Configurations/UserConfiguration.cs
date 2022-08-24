@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FooCommerce.Application.Entities.Membership.Configurations;
 
-public class RoleConfiguration : IEntityTypeConfiguration<Role>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.ToTable("Roles");
+        builder.ToTable("Users");
         builder.Property(x => x.Id)
             .HasColumnType("UNIQUEIDENTIFIER ROWGUIDCOL");
         builder.HasIndex(x => x.Id)
@@ -21,11 +21,5 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired()
             .IsRowVersion()
             .IsConcurrencyToken();
-        builder.Property(x => x.IsDeleted)
-            .HasColumnType("BIT");
-        builder.Property(x => x.IsHidden)
-            .HasColumnType("BIT");
-        builder.Property(x => x.Type)
-            .HasColumnType("TINYINT");
     }
 }
