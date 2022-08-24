@@ -1,16 +1,14 @@
 ﻿using FooCommerce.Application.Attributes.Communications;
 using FooCommerce.Application.Commands.Notifications;
-using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Dtos.Notifications;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Models.Notifications.Options;
-using FooCommerce.Application.Services.Notifications;
 using FooCommerce.NotificationAPI.Models;
+using FooCommerce.NotificationAPI.Services;
 
 using MediatR;
 
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
@@ -19,24 +17,20 @@ namespace FooCommerce.NotificationAPI.Commands;
 public class SendNotificationHandler : INotificationHandler<SendNotification>
 {
     private readonly INotificationTemplateService _notificationTemplateService;
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-    private readonly ILogger<SendNotification> _logger;
+    private readonly ILogger<SendNotificationHandler> _logger;
     private readonly IMediator _mediator;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _configuration;
 
     public SendNotificationHandler(INotificationTemplateService notificationTemplateService,
-        IDbContextFactory<AppDbContext> dbContextFactory,
         IMediator mediator,
         IConfiguration configuration,
-        ILogger<SendNotification> logger,
         ILoggerFactory loggerFactory)
     {
         _notificationTemplateService = notificationTemplateService;
-        _dbContextFactory = dbContextFactory;
-        _logger = logger;
         _mediator = mediator;
         _loggerFactory = loggerFactory;
+        _logger = _loggerFactory.CreateLogger<SendNotificationHandler>();
         _configuration = configuration;
     }
 
@@ -47,7 +41,6 @@ public class SendNotificationHandler : INotificationHandler<SendNotification>
                 .CommunicationTypes;
 
         await using var mailClient = await _mediator.Send(new GetAvailableMailClient(), cancellationToken);
-        await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
 
         var websiteUrl = _configuration["WebsiteURL"];
         var templates = await _notificationTemplateService.GetTemplateAsync(notification.Options.Action, cancellationToken);
