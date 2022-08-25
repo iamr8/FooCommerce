@@ -22,20 +22,15 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     {
         containerBuilder.RegisterModule(new AutoFluentValidationModule());
         containerBuilder.RegisterModule(new MvcModule(builder.Environment));
-        containerBuilder.RegisterModule(new EventBusModule());
+        containerBuilder.RegisterModule(new BusModule());
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DapperModule(connectionString));
-        containerBuilder.RegisterModule(new DbContextModule(config =>
+        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
         {
-            config.UseSqlServer(connectionString,
+            optionsBuilder.UseSqlServer(connectionString!,
                 config =>
                 {
                     config.EnableRetryOnFailure(3);
                     config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                    //config.ExecutionStrategy(dependencies =>
-                    //{
-                    //    dependencies.Logger.
-                    //})
                 });
         }));
     });
