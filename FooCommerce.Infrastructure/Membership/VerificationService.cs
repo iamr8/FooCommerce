@@ -2,29 +2,29 @@
 
 using Dapper;
 
-using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Membership;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Models.Notifications.Contents;
 using FooCommerce.Application.Models.Notifications.Receivers;
+using FooCommerce.Application.Publishers.Notifications;
 using FooCommerce.Application.Services.Membership;
 using FooCommerce.Domain.Enums;
 
-using MediatR;
+using MassTransit;
 
 namespace FooCommerce.Infrastructure.Membership;
 
 public class VerificationService : IVerificationService
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IMediator _mediator;
+    private readonly IBus _bus;
 
-    public VerificationService(IDbConnectionFactory dbConnectionFactory, IMediator mediator)
+    public VerificationService(IDbConnectionFactory dbConnectionFactory, IBus bus)
     {
         _dbConnectionFactory = dbConnectionFactory;
-        _mediator = mediator;
+        _bus = bus;
     }
 
     private static async Task<Guid?> CheckIfNotVerifiedYetAsync(CommunicationType type, string value, IDbConnection dbConnection, CancellationToken cancellationToken = default)
@@ -82,7 +82,7 @@ public class VerificationService : IVerificationService
         if (authToken == null)
             return JobStatus.Failed;
 
-        await _mediator.Publish(new SendNotification(options =>
+        await _bus.Publish(new SendNotification(options =>
         {
             options.Action = type switch
             {

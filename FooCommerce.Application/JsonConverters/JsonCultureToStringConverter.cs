@@ -2,9 +2,9 @@
 
 using Newtonsoft.Json;
 
-namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
+namespace FooCommerce.Application.JsonConverters;
 
-public class JsonCultureConverter : JsonConverter<CultureInfo>
+public class JsonCultureToStringConverter : JsonConverter<CultureInfo>
 {
     public override async void WriteJson(JsonWriter writer, CultureInfo value, JsonSerializer serializer)
     {
@@ -18,6 +18,10 @@ public class JsonCultureConverter : JsonConverter<CultureInfo>
     public override CultureInfo ReadJson(JsonReader reader, Type objectType, CultureInfo existingValue, bool hasExistingValue,
         JsonSerializer serializer)
     {
-        return existingValue;
+        var twoIso = reader.Value?.ToString();
+        if (string.IsNullOrEmpty(twoIso))
+            return null;
+
+        return new CultureInfo(twoIso);
     }
 }

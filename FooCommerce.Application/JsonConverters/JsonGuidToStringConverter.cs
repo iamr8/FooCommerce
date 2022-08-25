@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
 
-namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
+namespace FooCommerce.Application.JsonConverters;
 
-public class JsonGuidConverter : JsonConverter<Guid?>
+public class JsonGuidToStringConverter : JsonConverter<Guid?>
 {
     public override void WriteJson(JsonWriter writer, Guid? value, JsonSerializer serializer)
     {

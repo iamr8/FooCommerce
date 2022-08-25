@@ -1,9 +1,13 @@
 ﻿using System.Reflection;
 
 using Autofac;
+using Autofac.Core;
+
+using FooCommerce.Infrastructure.Shopping.Contracts;
 
 using MassTransit;
 using MassTransit.AutofacIntegration;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.Infrastructure.Modules;
 
@@ -23,7 +27,7 @@ public class BusModule : Autofac.Module
         _assemblies = assemblies;
     }
 
-    private static void ApplyConfigurator(IRegistrationConfigurator cfg, params Assembly[] assemblies)
+    private static void ApplyConfigurator(IContainerBuilderBusConfigurator cfg, params Assembly[] assemblies)
     {
         cfg.SetKebabCaseEndpointNameFormatter();
         cfg.SetInMemorySagaRepositoryProvider();
@@ -32,6 +36,21 @@ public class BusModule : Autofac.Module
         cfg.AddSagaStateMachines(assemblies);
         cfg.AddSagas(assemblies);
         cfg.AddActivities(assemblies);
+
+        cfg.UsingGrpc((context, cfg) =>
+        {
+            cfg.AutoStart = true;
+            cfg.Host(h =>
+            {
+                h.Host = "127.0.0.1";
+                h.Port = 19796;
+
+                h.AddServer(new Uri("http://127.0.0.1:19797"));
+                h.AddServer(new Uri("http://127.0.0.1:19798"));
+            });
+
+            cfg.ConfigureEndpoints(context);
+        });
     }
 
     protected override void Load(ContainerBuilder builder)

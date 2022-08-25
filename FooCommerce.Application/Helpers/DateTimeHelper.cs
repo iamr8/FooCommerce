@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Models;
+﻿using FooCommerce.Application.Interfaces;
 
 using Microsoft.AspNetCore.Http;
 
@@ -16,7 +16,7 @@ public static class DateTimeHelper
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public static DateTime ToLocal(this DateTime utcDateTime, EndUser endUser)
+    public static DateTime ToLocal(this DateTime utcDateTime, IEndUser endUser)
     {
         if (endUser == null)
             throw new ArgumentNullException(nameof(endUser));

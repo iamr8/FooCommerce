@@ -2,4 +2,9 @@
 
 namespace FooCommerce.Application.Models.Membership;
 
-public record UserCommunicationModel(Guid Id, CommunicationType Type, string Value);
+public record UserCommunicationModel
+{
+    public Guid Id { get; init; }
+    public CommunicationType Type { get; init; }
+    public string Value { get; init; }
+}

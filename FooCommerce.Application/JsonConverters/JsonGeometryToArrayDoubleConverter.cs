@@ -2,9 +2,9 @@
 
 using Newtonsoft.Json;
 
-namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
+namespace FooCommerce.Application.JsonConverters;
 
-public class JsonGeometryConverter : JsonConverter<Geometry>
+public class JsonGeometryToArrayDoubleConverter : JsonConverter<Geometry>
 {
     public override void WriteJson(JsonWriter writer, Geometry value, JsonSerializer serializer)
     {

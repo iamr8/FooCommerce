@@ -41,15 +41,12 @@ public class Fixture : IAsyncLifetime, IFixture
 
         var containerBuilder = new ContainerBuilder();
         containerBuilder.RegisterModule(new AutoFluentValidationModule());
-        containerBuilder.RegisterModule(new EventBusTestModule());
+        containerBuilder.RegisterModule(new OrderAPIEventBusTestModule());
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DapperModule(connectionString));
-        containerBuilder.RegisterModule(new DbContextModule(config =>
-            //config.UseInMemoryDatabase(Guid.NewGuid().ToString(), b => b.EnableNullChecks(false))));
-            config.UseSqlServer(connectionString, builder =>
-            {
-                builder.EnableRetryOnFailure(3);
-            })));
+        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
+            config.UseSqlServer(connectionString!, builder =>
+                builder.EnableRetryOnFailure(3)
+                    .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
@@ -63,6 +60,7 @@ public class Fixture : IAsyncLifetime, IFixture
         await Harness.Start();
         SagaHarness = Container.Resolve<IStateMachineSagaTestHarness<OrderState, OrderStateMachine>>();
         Machine = Container.Resolve<OrderStateMachine>();
+
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
         var dbContextFactory = Container.Resolve<IDbContextFactory<AppDbContext>>();

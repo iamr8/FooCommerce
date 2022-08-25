@@ -2,9 +2,9 @@
 
 using Newtonsoft.Json;
 
-namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
+namespace FooCommerce.Application.JsonConverters;
 
-public class JsonIPAddressConverter : JsonConverter<IPAddress>
+public class JsonIPAddressToStringConverter : JsonConverter<IPAddress>
 {
     public override void WriteJson(JsonWriter writer, IPAddress value, JsonSerializer serializer)
     {

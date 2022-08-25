@@ -10,7 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.Infrastructure.Tests.Setups
 {
-    public class EventBusTestModule : Module
+    public class OrderAPIEventBusTestModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

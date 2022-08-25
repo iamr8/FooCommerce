@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
 
-public class JsonHtmlContentConverter : JsonConverter<IHtmlContent>
+public class JsonHtmlContentToStringConverter : JsonConverter<IHtmlContent>
 {
     public override void WriteJson(JsonWriter writer, IHtmlContent value, JsonSerializer serializer)
     {

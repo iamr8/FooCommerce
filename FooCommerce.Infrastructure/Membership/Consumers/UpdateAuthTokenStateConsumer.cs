@@ -1,31 +1,30 @@
 ﻿using Dapper;
 
-using FooCommerce.Application.Commands.Membership;
-using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Messagings;
 using FooCommerce.Application.Enums.Notifications;
+using FooCommerce.Application.Publishers.Membership;
+using FooCommerce.Application.Publishers.Notifications;
 
-using MediatR;
+using MassTransit;
 
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.Infrastructure.Membership.CommandHandlers;
+namespace FooCommerce.Infrastructure.Membership.Consumers;
 
-public class UpdateAuthTokenStateHandler : INotificationHandler<UpdateAuthTokenState>
+public class UpdateAuthTokenStateConsumer : IConsumer<UpdateAuthTokenState>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IMediator _mediator;
-    private readonly ILogger<UpdateAuthTokenStateHandler> _logger;
+    private readonly ILogger<UpdateAuthTokenStateConsumer> _logger;
 
-    public UpdateAuthTokenStateHandler(IDbConnectionFactory dbConnectionFactory, IMediator mediator, ILogger<UpdateAuthTokenStateHandler> logger)
+    public UpdateAuthTokenStateConsumer(IDbConnectionFactory dbConnectionFactory,
+        ILogger<UpdateAuthTokenStateConsumer> logger)
     {
         _dbConnectionFactory = dbConnectionFactory;
-        _mediator = mediator;
         _logger = logger;
     }
 
-    public async Task Handle(UpdateAuthTokenState notificationState, CancellationToken cancellationToken)
+    public async Task Consume(ConsumeContext<UpdateAuthTokenState> context)
     {
         using var dbConnection = _dbConnectionFactory.CreateConnection();
         const string query = $"SELECT TOP(1) [userNotification].{nameof(UserNotification.Id)} " +
@@ -34,14 +33,14 @@ public class UpdateAuthTokenStateHandler : INotificationHandler<UpdateAuthTokenS
                              $"ORDER BY [userNotification].{nameof(UserNotification.Created)} DESC";
         var notificationId = await dbConnection.QuerySingleAsync<Guid?>(query, new
         {
-            notificationState.AuthTokenId
+            context.Message.AuthTokenId
         });
         if (notificationId is not { })
         {
-            _logger.LogError("Unable to save User Notification for Auth Token {0} as Sent.", notificationState.AuthTokenId);
+            _logger.LogError("Unable to save User Notification for Auth Token {0} as Sent.", context.Message.AuthTokenId);
             return;
         }
 
-        await _mediator.Publish(new UpdateUserNotificationState(notificationId.Value, UserNotificationUpdateState.Sent), cancellationToken);
+        await context.Publish(new UpdateUserNotificationState(notificationId.Value, UserNotificationUpdateState.Sent), context.CancellationToken);
     }
 }

@@ -1,19 +1,20 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Commands.Localization;
+using FooCommerce.Application.Publishers.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization.Models;
-using MediatR;
+
+using MassTransit;
 
 namespace FooCommerce.Infrastructure.Localization
 {
     public class Localizer : ILocalizer
     {
-        private readonly IMediator _mediator;
+        private readonly IBus _bus;
 
-        public Localizer(IContainer container, IMediator mediator)
+        public Localizer(IContainer container, IBus bus)
         {
-            _mediator = mediator;
+            _bus = bus;
             Container = container;
         }
 
@@ -30,7 +31,7 @@ namespace FooCommerce.Infrastructure.Localization
 
         public async Task RefreshAsync()
         {
-            await _mediator.Publish(new RefreshLocalizer());
+            await _bus.Publish(new RefreshLocalizer());
         }
     }
 }

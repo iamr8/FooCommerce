@@ -62,14 +62,14 @@ public static class MockObjects
         httpRequestMoq.SetupGet(x => x.Scheme).Returns("http");
         httpRequestMoq.SetupGet(x => x.Host).Returns(new HostString("localhost"));
         httpRequestMoq.SetupGet(x => x.RouteValues).Returns(routeValueDic);
-        httpRequestMoq.SetupGet(x => x.Cookies).Returns(It.IsAny<IRequestCookieCollection>());
+        httpRequestMoq.SetupGet(x => x.Cookies).Returns(() => new Mock<IRequestCookieCollection>().Object);
         httpRequestMoq.SetupGet(x => x.Headers).Returns(headers);
 
         var connectionInfoMoq = new Mock<ConnectionInfo>();
-        connectionInfoMoq.SetupGet(x => x.RemoteIpAddress).Returns(IPAddress.Parse("31.206.159.221"));
-        connectionInfoMoq.SetupGet(x => x.RemotePort).Returns(443);
-        connectionInfoMoq.SetupGet(x => x.LocalIpAddress).Returns(IPAddress.Parse("192.168.1.35"));
-        connectionInfoMoq.SetupGet(x => x.LocalPort).Returns(443);
+        connectionInfoMoq.SetupGet(x => x.RemoteIpAddress).Returns(IPAddress.Parse("78.173.224.233"));
+        connectionInfoMoq.SetupGet(x => x.RemotePort).Returns(8080);
+        connectionInfoMoq.SetupGet(x => x.LocalIpAddress).Returns(IPAddress.Parse("192.168.1.103"));
+        connectionInfoMoq.SetupGet(x => x.LocalPort).Returns(8080);
 
         var httpContextMoq = new Mock<HttpContext>();
         httpContextMoq.SetupGet(x => x.User).Returns(claimsPrincipal);

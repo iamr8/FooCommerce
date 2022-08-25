@@ -14,15 +14,15 @@ namespace FooCommerce.Infrastructure.Modules
         {
             builder.AddMassTransit(configurator =>
             {
-                configurator.AddSagaStateMachine<OrderStateMachine, OrderState>()
-                    .EntityFrameworkRepository(r =>
-                    {
-                        r.ExistingDbContext<AppDbContext>();
-                        r.UseSqlServer();
-                    });
+                //configurator.AddSagaStateMachine<OrderStateMachine, OrderState>()
+                //    .EntityFrameworkRepository(r =>
+                //    {
+                //        r.ExistingDbContext<AppDbContext>();
+                //        r.UseSqlServer();
+                //    });
 
-                configurator.AddRequestClient<AcceptOrder>();
-                configurator.AddRequestClient<GetOrder>();
+                //configurator.AddRequestClient<AcceptOrder>();
+                //configurator.AddRequestClient<GetOrder>();
             });
         }
     }
