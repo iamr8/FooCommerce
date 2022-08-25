@@ -1,27 +1,26 @@
 ﻿using System.Globalization;
-
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FooCommerce.Application.JsonConverters;
 
 public class JsonCultureToStringConverter : JsonConverter<CultureInfo>
 {
-    public override async void WriteJson(JsonWriter writer, CultureInfo value, JsonSerializer serializer)
+    public override CultureInfo Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var twoIso = reader.GetString();
+        if (string.IsNullOrEmpty(twoIso))
+            return null;
+
+        return new CultureInfo(twoIso);
+    }
+
+    public override void Write(Utf8JsonWriter writer, CultureInfo value, JsonSerializerOptions options)
     {
         if (value == null)
             return;
 
         var culture = value.Name;
-        await writer.WriteValueAsync(culture);
-    }
-
-    public override CultureInfo ReadJson(JsonReader reader, Type objectType, CultureInfo existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        var twoIso = reader.Value?.ToString();
-        if (string.IsNullOrEmpty(twoIso))
-            return null;
-
-        return new CultureInfo(twoIso);
+        writer.WriteStringValue(culture);
     }
 }

@@ -2,13 +2,12 @@
 
 using System.Globalization;
 using System.Net;
+using System.Text.Json.Serialization;
 
 using FooCommerce.Application.Interfaces;
 using FooCommerce.Application.JsonConverters;
 
 using Microsoft.AspNetCore.Http;
-
-using Newtonsoft.Json;
 
 using NodaTime;
 using NodaTime.TimeZones;

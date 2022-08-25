@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 using NodaTime;
 
@@ -6,18 +7,17 @@ namespace FooCommerce.Application.JsonConverters;
 
 public class JsonDateTimeZoneToStringConverter : JsonConverter<DateTimeZone>
 {
-    public override void WriteJson(JsonWriter writer, DateTimeZone value, JsonSerializer serializer)
+    public override DateTimeZone Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        writer.WriteValue(value.Id);
-    }
-
-    public override DateTimeZone ReadJson(JsonReader reader, Type objectType, DateTimeZone existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        var id = reader.Value?.ToString();
+        var id = reader.GetString();
         if (string.IsNullOrEmpty(id))
             return null;
 
         return DateTimeZoneProviders.Tzdb[id];
+    }
+
+    public override void Write(Utf8JsonWriter writer, DateTimeZone value, JsonSerializerOptions options)
+    {
+        writer.WriteStringValue(value.Id);
     }
 }

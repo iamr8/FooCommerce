@@ -25,9 +25,6 @@ public class NotificationAPIModule : Module
 
     private void Apply(IBusRegistrationConfigurator cfg)
     {
-        NewtonsoftJsonMessageSerializer.SerializerSettings = DefaultSettings.Settings;
-        NewtonsoftJsonMessageSerializer.DeserializerSettings = DefaultSettings.Settings;
-
         cfg.SetKebabCaseEndpointNameFormatter();
         cfg.SetInMemorySagaRepositoryProvider();
 
@@ -36,31 +33,28 @@ public class NotificationAPIModule : Module
 
         if (!_test)
         {
-            cfg.UsingGrpc((context, config) =>
-            {
-                config.ConfigureNewtonsoftJsonDeserializer(s => DefaultSettings.Settings);
-                config.ConfigureNewtonsoftJsonSerializer(s => DefaultSettings.Settings);
+            //cfg.UsingGrpc((context, config) =>
+            //{
+            //    config.ConfigureNewtonsoftJsonDeserializer(s => DefaultSettings.Settings);
+            //    config.ConfigureNewtonsoftJsonSerializer(s => DefaultSettings.Settings);
 
-                config.AutoStart = true;
-                config.Host(h =>
-                {
-                    h.Host = "127.0.0.1";
-                    h.Port = 19796;
+            //    config.AutoStart = true;
+            //    config.Host(h =>
+            //    {
+            //        h.Host = "127.0.0.1";
+            //        h.Port = 19796;
 
-                    h.AddServer(new Uri("http://127.0.0.1:19797"));
-                    h.AddServer(new Uri("http://127.0.0.1:19798"));
-                });
+            //        h.AddServer(new Uri("http://127.0.0.1:19797"));
+            //        h.AddServer(new Uri("http://127.0.0.1:19798"));
+            //    });
 
-                config.ConfigureEndpoints(context);
-            });
+            //    config.ConfigureEndpoints(context);
+            //});
         }
         else
         {
             cfg.UsingInMemory((context, config) =>
             {
-                config.ConfigureNewtonsoftJsonDeserializer(s => DefaultSettings.Settings);
-                config.ConfigureNewtonsoftJsonSerializer(s => DefaultSettings.Settings);
-
                 config.AutoStart = true;
                 config.ConfigureEndpoints(context);
             });

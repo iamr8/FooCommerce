@@ -4,12 +4,8 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Web;
 
-using AngleSharp.Html;
-
 using FooCommerce.Application.Helpers;
 using FooCommerce.Domain.Interfaces;
-
-using Ganss.XSS;
 
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
@@ -346,48 +342,6 @@ public static class HtmlHelper
         content.WriteTo(writer, HtmlEncoder.Default);
         var text = writer.ToString();
         return string.IsNullOrEmpty(text) ? null : text;
-    }
-
-    public static string Sanitize(string html)
-    {
-        var sanitizer = new HtmlSanitizer();
-        sanitizer.AllowedCssProperties.Clear();
-        sanitizer.AllowedAttributes.Clear();
-        sanitizer.AllowedTags.Clear();
-
-        sanitizer.AllowedTags.Add("b");
-        sanitizer.AllowedTags.Add("i");
-        sanitizer.AllowedTags.Add("u");
-        sanitizer.AllowedTags.Add("s");
-        sanitizer.AllowedTags.Add("sub");
-        sanitizer.AllowedTags.Add("sup");
-        sanitizer.AllowedTags.Add("hr");
-        sanitizer.AllowedTags.Add("ol");
-        sanitizer.AllowedTags.Add("ul");
-        sanitizer.AllowedTags.Add("li");
-        sanitizer.AllowedTags.Add("strong");
-        sanitizer.AllowedTags.Add("div");
-        sanitizer.AllowedTags.Add("span");
-        sanitizer.AllowedTags.Add("br");
-        sanitizer.AllowedTags.Add("p");
-        sanitizer.AllowedTags.Add("table");
-        sanitizer.AllowedTags.Add("thead");
-        sanitizer.AllowedTags.Add("tbody");
-        sanitizer.AllowedTags.Add("tr");
-        sanitizer.AllowedTags.Add("td");
-
-        sanitizer.AllowedAttributes.Add("style");
-
-        sanitizer.AllowedCssProperties.Add("text-decoration");
-        sanitizer.AllowedCssProperties.Add("margin");
-        sanitizer.AllowedCssProperties.Add("font-weight");
-        sanitizer.AllowedCssProperties.Add("font-size");
-        sanitizer.AllowedCssProperties.Add("text-indent");
-        sanitizer.AllowedCssProperties.Add("text-align");
-        sanitizer.AllowedCssProperties.Add("padding");
-
-        var result = sanitizer.Sanitize(html, null!, new MinifyMarkupFormatter());
-        return result;
     }
 
     /// <summary>

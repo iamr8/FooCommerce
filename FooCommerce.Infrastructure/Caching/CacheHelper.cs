@@ -1,26 +1,16 @@
-﻿using EasyCaching.Core;
+﻿using System.Text.Json;
+
+using EasyCaching.Core;
+
+using FooCommerce.Infrastructure.JsonCustomization;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
-
-using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.Caching;
 
 public static class CacheHelper
 {
-    private static JsonSerializerSettings Settings
-    {
-        get
-        {
-            var defaultSettings = JsonCustomization.DefaultSettings.Settings;
-            defaultSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-            defaultSettings.NullValueHandling = NullValueHandling.Ignore;
-            defaultSettings.Formatting = Formatting.None;
-            return defaultSettings;
-        }
-    }
-
     public static void Clear(this IMemoryCache cache, string key)
     {
         if (cache.TryGetValue(key, out var value))
@@ -33,7 +23,7 @@ public static class CacheHelper
     {
         var jsonOfResult = value.ToString();
 
-        var result = JsonConvert.DeserializeObject<TModel>(jsonOfResult, Settings);
+        var result = JsonSerializer.Deserialize<TModel>(jsonOfResult, DefaultSettings.Settings);
 
         logger?.LogInformation("Cache hit for key {key}", key);
         return result;
@@ -46,7 +36,7 @@ public static class CacheHelper
         TModel result = null;
         await Task.Factory.StartNew(() =>
         {
-            result = JsonConvert.DeserializeObject<TModel>(jsonOfResult, Settings);
+            result = JsonSerializer.Deserialize<TModel>(jsonOfResult, DefaultSettings.Settings);
         });
 
         logger?.LogInformation("Cache hit for key {key}", key);
@@ -62,7 +52,7 @@ public static class CacheHelper
 
         await Task.Factory.StartNew(() =>
         {
-            jsonOfResult = JsonConvert.SerializeObject(model, Settings);
+            jsonOfResult = JsonSerializer.Serialize(model, DefaultSettings.Settings);
         }, cancellationToken);
 
         logger?.LogInformation("Cache preparing for key {key}", key);
@@ -89,7 +79,7 @@ public static class CacheHelper
 
         await Task.Factory.StartNew(() =>
         {
-            jsonOfResult = JsonConvert.SerializeObject(model, Settings);
+            jsonOfResult = JsonSerializer.Serialize(model, DefaultSettings.Settings);
         }, cancellationToken);
 
         logger?.LogInformation("Cache preparing for key {key}", key);

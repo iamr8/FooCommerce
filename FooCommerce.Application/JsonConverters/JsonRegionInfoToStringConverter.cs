@@ -1,27 +1,26 @@
 ﻿using System.Globalization;
-
-using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FooCommerce.Application.JsonConverters;
 
 public class JsonRegionInfoToStringConverter : JsonConverter<RegionInfo>
 {
-    public override async void WriteJson(JsonWriter writer, RegionInfo value, JsonSerializer serializer)
+    public override RegionInfo Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var twoIso = reader.GetString();
+        if (string.IsNullOrEmpty(twoIso))
+            return null;
+
+        return new RegionInfo(twoIso);
+    }
+
+    public override void Write(Utf8JsonWriter writer, RegionInfo value, JsonSerializerOptions options)
     {
         if (value == null)
             return;
 
         var culture = value.TwoLetterISORegionName;
-        await writer.WriteValueAsync(culture);
-    }
-
-    public override RegionInfo ReadJson(JsonReader reader, Type objectType, RegionInfo existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        var twoIso = reader.Value?.ToString();
-        if (string.IsNullOrEmpty(twoIso))
-            return null;
-
-        return new RegionInfo(twoIso);
+        writer.WriteStringValue(culture);
     }
 }

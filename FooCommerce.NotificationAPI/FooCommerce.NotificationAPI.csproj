@@ -9,9 +9,7 @@
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="MailKit" Version="3.3.0" />
-		<PackageReference Include="MassTransit.Newtonsoft" Version="8.0.6" />
 		<PackageReference Include="WebMarkupMin.Core" Version="2.12.0" />
-		<PackageReference Include="MassTransit.Grpc" Version="8.0.6" />
 	</ItemGroup>
 
 	<ItemGroup>

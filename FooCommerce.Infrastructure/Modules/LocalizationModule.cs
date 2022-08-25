@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using System.Text.Json;
 
 using Autofac;
 
@@ -9,8 +10,6 @@ using FooCommerce.Application.Models.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization;
 using FooCommerce.Infrastructure.Localization.Models;
-
-using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.Modules;
 
@@ -38,7 +37,7 @@ public class LocalizationModule : Module
                         var _value = values[i];
                         var key = (string)_value.Key;
                         var jsonValue = (string)_value.Value;
-                        var __dict = JsonConvert.DeserializeObject<Dictionary<string, string>>(jsonValue);
+                        var __dict = JsonSerializer.Deserialize<Dictionary<string, string>>(jsonValue);
                         if (__dict == null)
                             continue;
 

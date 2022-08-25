@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System.Text.Json;
+
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-
-using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.Membership.Helpers;
 
@@ -16,7 +16,7 @@ public static class EndUserHelper
 
         if (httpContext.Request.Headers.TryGetValue("CF-Visitor", out var cloudFlareVisitor))
         {
-            var json = JsonConvert.DeserializeObject<dynamic>(cloudFlareVisitor);
+            var json = JsonSerializer.Deserialize<dynamic>(cloudFlareVisitor);
             scheme = json.scheme;
         }
         else

@@ -1,13 +1,11 @@
-﻿using System.Globalization;
+﻿using System.Text.Json;
 
 using FooCommerce.Application.Models.Localization;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.Infrastructure.JsonCustomization;
 
 using Microsoft.AspNetCore.Html;
-
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace FooCommerce.Infrastructure.Localization.Helpers;
 
@@ -38,7 +36,7 @@ public static class LocalizerHelper
     /// Returns a <see cref="IHtmlContent"/> object that representing formatted input.
     /// </summary>
     /// <param name="localizer">An instance of <see cref="ILocalizer"/>.</param>
-    /// <param name="key">Name of specific key in <see cref="ILocalizer.Dictionary"/> that containing a localized text.</param>
+    /// <param name="key">Name of specific key in <see cref="Dictionary{TKey,TValue}"/> that containing a localized text.</param>
     /// <param name="args">A collection of arguments that should be replaced in given text.</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <returns>A <see cref="IHtmlContent"/> object that representing a formatted text with given tags.</returns>
@@ -78,7 +76,7 @@ public static class LocalizerHelper
     /// Returns a <see cref="IHtmlContent"/> object that representing formatted input.
     /// </summary>
     /// <param name="localizer">An instance of <see cref="ILocalizer"/>.</param>
-    /// <param name="key">Name of specific key in <see cref="ILocalizer.Dictionary"/> that containing a localized text.</param>
+    /// <param name="key">Name of specific key in <see cref="Dictionary{TKey,TValue}"/> that containing a localized text.</param>
     /// <param name="tags">A collection of html tags that should be replaced in given text.</param>
     /// <exception cref="ArgumentNullException"></exception>
     /// <returns>A <see cref="IHtmlContent"/> object that representing a formatted text with given tags.</returns>
@@ -109,82 +107,10 @@ public static class LocalizerHelper
             json.StartsWith("[") &&
             json.EndsWith("]"))
         {
-            output = JsonConvert.DeserializeObject<LocalizerValueCollection>(json, SerializerSettings);
+            output = JsonSerializer.Deserialize<LocalizerValueCollection>(json, DefaultSettings.Settings);
         }
 
         return output;
-    }
-
-    private static JsonSerializerSettings SerializerSettings
-    {
-        get
-        {
-            var settings = new JsonSerializerSettings
-            {
-                Error = (serializer, err) => err.ErrorContext.Handled = true,
-                DefaultValueHandling = DefaultValueHandling.Ignore,
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                NullValueHandling = NullValueHandling.Ignore,
-                ObjectCreationHandling = ObjectCreationHandling.Replace,
-                Formatting = Formatting.None,
-                PreserveReferencesHandling = PreserveReferencesHandling.None,
-            };
-
-            settings.Converters.Insert(0, new ContainerJsonConverter());
-            return settings;
-        }
-    }
-
-    internal class ContainerJsonConverter : JsonConverter<LocalizerValueCollection>
-    {
-        public override void WriteJson(JsonWriter writer, LocalizerValueCollection value, JsonSerializer serializer)
-        {
-            var jObject = new JObject();
-            if (value.Keys.Any())
-            {
-                var keys = value.Keys
-                    .OrderBy(x => x.TwoLetterISOLanguageName)
-                    .GetEnumerator();
-                var i = 0;
-                keys.MoveNext();
-                var culture = keys.Current;
-                while (culture != null)
-                {
-                    value.TryGetValue(culture, out var s);
-                    jObject.Add(culture.TwoLetterISOLanguageName, s);
-                    i++;
-
-                    if (keys.MoveNext())
-                        culture = keys.Current;
-                }
-            }
-
-            jObject.WriteTo(writer);
-        }
-
-        public override LocalizerValueCollection ReadJson(JsonReader reader, Type objectType, LocalizerValueCollection existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            if (reader.TokenType == JsonToken.Null)
-                return new LocalizerValueCollection();
-
-            var obj = new LocalizerValueCollection();
-            var jToken = JToken.Load(reader);
-            if (jToken == null || !jToken.Any())
-                return new LocalizerValueCollection();
-
-            var token = jToken.First;
-            while (token != null)
-            {
-                var property = token.ToObject<JProperty>();
-                var culture = CultureInfo.GetCultureInfo(property.Name);
-                var localized = property.Value.ToString();
-                obj.Add(culture, localized);
-
-                token = token.Next;
-            }
-
-            return obj;
-        }
     }
 
     /// <summary>
@@ -195,6 +121,6 @@ public static class LocalizerHelper
     {
         return LocalizerValueCollection.Keys.Count <= 0
             ? null
-            : JsonConvert.SerializeObject(LocalizerValueCollection, SerializerSettings);
+            : JsonSerializer.Serialize(LocalizerValueCollection, DefaultSettings.Settings);
     }
 }

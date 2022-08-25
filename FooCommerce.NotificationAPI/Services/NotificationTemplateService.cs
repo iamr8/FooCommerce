@@ -1,5 +1,5 @@
 ﻿using System.Data;
-
+using System.Text.Json.Nodes;
 using Dapper;
 
 using EasyCaching.Core;
@@ -16,8 +16,6 @@ using FooCommerce.Infrastructure.Localization.Helpers;
 using FooCommerce.NotificationAPI.Dtos;
 
 using Microsoft.Extensions.Logging;
-
-using Newtonsoft.Json.Linq;
 
 namespace FooCommerce.NotificationAPI.Services
 {
@@ -61,7 +59,7 @@ namespace FooCommerce.NotificationAPI.Services
                 $"ORDER BY [notification].{nameof(Notification.Created)} DESC",
                 new
                 {
-                    Action = (short) actionName
+                    Action = (short)actionName
                 })).AsList();
             if (notificationIds == null || !notificationIds.Any())
                 throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
@@ -88,7 +86,7 @@ namespace FooCommerce.NotificationAPI.Services
             for (var i = 0; i < _templates.Count; i++)
             {
                 var template = _templates[i];
-                var json = JObject.Parse(template.JsonTemplate);
+                var json = JsonNode.Parse(template.JsonTemplate);
 
                 switch (template.Type)
                 {

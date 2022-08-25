@@ -6,13 +6,11 @@ using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Interfaces.Notifications;
 using FooCommerce.Application.Models.Notifications.Options;
 using FooCommerce.Application.Services.Notifications;
-using FooCommerce.Infrastructure.JsonCustomization;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Publishers;
 
 using MassTransit;
-using MassTransit.Serialization;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -137,21 +135,5 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                     throw new ArgumentOutOfRangeException();
             }
         }
-    }
-}
-
-public class QueueNotificationConsumerDefinition
-    : ConsumerDefinition<QueueNotificationConsumer>
-{
-    protected override void ConfigureConsumer(IReceiveEndpointConfigurator endpointConfigurator,
-        IConsumerConfigurator<QueueNotificationConsumer> consumerConfigurator)
-    {
-        endpointConfigurator.ConfigureConsumeTopology = false;
-        endpointConfigurator.ClearSerialization();
-        endpointConfigurator.UseNewtonsoftJsonSerializer();
-        endpointConfigurator.UseNewtonsoftJsonDeserializer();
-
-        NewtonsoftJsonMessageSerializer.SerializerSettings = DefaultSettings.Settings;
-        NewtonsoftJsonMessageSerializer.DeserializerSettings = DefaultSettings.Settings;
     }
 }

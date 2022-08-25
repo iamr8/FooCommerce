@@ -1,30 +1,30 @@
-﻿using FooCommerce.Infrastructure.Helpers;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+
+using FooCommerce.Infrastructure.Helpers;
 
 using Microsoft.AspNetCore.Html;
-
-using Newtonsoft.Json;
 
 namespace FooCommerce.Infrastructure.JsonCustomization.Converters;
 
 public class JsonHtmlContentToStringConverter : JsonConverter<IHtmlContent>
 {
-    public override void WriteJson(JsonWriter writer, IHtmlContent value, JsonSerializer serializer)
+    public override IHtmlContent Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (value == null)
-            writer.WriteValue("");
-
-        var html = value.GetString();
-        writer.WriteValue(html);
-    }
-
-    public override IHtmlContent ReadJson(JsonReader reader, Type objectType, IHtmlContent existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        var value = reader.Value?.ToString();
+        var value = reader.GetString();
         if (value == null || string.IsNullOrEmpty(value))
             return null;
 
         var html = new HtmlString(value);
         return html;
+    }
+
+    public override void Write(Utf8JsonWriter writer, IHtmlContent value, JsonSerializerOptions options)
+    {
+        if (value == null)
+            writer.WriteNullValue();
+
+        var html = value.GetString();
+        writer.WriteStringValue(html);
     }
 }

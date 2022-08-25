@@ -1,24 +1,24 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace FooCommerce.Application.JsonConverters;
 
 public class JsonGuidToStringConverter : JsonConverter<Guid?>
 {
-    public override void WriteJson(JsonWriter writer, Guid? value, JsonSerializer serializer)
+    public override Guid? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (value == null)
-            writer.WriteValue((string)null);
-        else
-            writer.WriteValue(value.ToString());
-    }
-
-    public override Guid? ReadJson(JsonReader reader, Type objectType, Guid? existingValue, bool hasExistingValue,
-        JsonSerializer serializer)
-    {
-        var s = (string)reader.Value;
+        var s = reader.GetString();
         if (string.IsNullOrEmpty(s))
             return null;
 
         return Guid.Parse(s);
+    }
+
+    public override void Write(Utf8JsonWriter writer, Guid? value, JsonSerializerOptions options)
+    {
+        if (value == null)
+            writer.WriteNullValue();
+        else
+            writer.WriteStringValue(value.ToString());
     }
 }

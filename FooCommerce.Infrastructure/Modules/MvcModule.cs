@@ -1,6 +1,4 @@
-﻿using System.Text.Json;
-
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Infrastructure.JsonCustomization;
@@ -70,26 +68,19 @@ public class MvcModule : Module
 
                 options.Conventions.Add(new LocalizedApplicationModelConvention());
             })
-            .AddJsonOptions(jsonOptions =>
+            .AddJsonOptions(options =>
             {
-                jsonOptions.JsonSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+                options.JsonSerializerOptions.Converters.Clear();
+                foreach (var jsonConverter in DefaultSettings.Settings.Converters)
+                    options.JsonSerializerOptions.Converters.Add(jsonConverter);
+
+                options.JsonSerializerOptions.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
+                options.JsonSerializerOptions.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
+                options.JsonSerializerOptions.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
+                options.JsonSerializerOptions.WriteIndented = true;
             })
-            .AddNewtonsoftJson(
-                options =>
-                {
-                    var defaultSettings = DefaultSettings.Settings;
-                    options.SerializerSettings.Error = defaultSettings.Error;
-                    options.SerializerSettings.DefaultValueHandling = defaultSettings.DefaultValueHandling;
-                    options.SerializerSettings.ReferenceLoopHandling = defaultSettings.ReferenceLoopHandling;
-                    options.SerializerSettings.NullValueHandling = defaultSettings.NullValueHandling;
-                    options.SerializerSettings.ObjectCreationHandling = defaultSettings.ObjectCreationHandling;
-                    options.SerializerSettings.Formatting = defaultSettings.Formatting;
-                    options.SerializerSettings.ContractResolver = defaultSettings.ContractResolver;
-                    options.SerializerSettings.TypeNameHandling = defaultSettings.TypeNameHandling;
-                    options.SerializerSettings.Culture = defaultSettings.Culture;
-                    options.SerializerSettings.Converters = defaultSettings.Converters;
-                    options.ReadJsonWithRequestCulture = false;
-                })
             .AddRazorRuntimeCompilation();
         services.AddControllers(AddMvcOptions);
         var razorBuilder = services
