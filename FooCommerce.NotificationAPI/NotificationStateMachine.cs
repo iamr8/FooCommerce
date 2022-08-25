@@ -2,32 +2,35 @@
 
 using MassTransit;
 
+// ReSharper disable ExpressionIsAlwaysNull
+// ReSharper disable UnassignedGetOnlyAutoProperty
+// ReSharper disable MemberCanBePrivate.Global
 namespace FooCommerce.NotificationAPI;
 
 public class NotificationStateMachine
-    : MassTransitStateMachine<NotificationStateMachineInstance>
+    : MassTransitStateMachine<NotificationState>
 {
     public NotificationStateMachine()
     {
-        InstanceState(x => x.CurrentState, Sent, Delivered, Authorized);
+        InstanceState(x => x.CurrentState,
+            Queued);
 
-        Event(() => SendAnnouncement, x =>
-        {
-            x.OnMissingInstance(m =>
-                m.ExecuteAsync(context => context.RespondAsync<AnnouncementNotFound>(new { context.Message.AnnouncementId })));
+        Event(() => Queue,
+            x =>
+            {
+                x.OnMissingInstance(m =>
+                    m.ExecuteAsync(context =>
+                        context.RespondAsync<NotificationNotFound>(new { context.Message.NotificationId })));
 
-            x.CorrelateById(context => context.Message.AnnouncementId);
-        });
+                x.CorrelateById(context => context.Message.NotificationId);
+            });
 
-
-        Initially(
-            When(SendAnnouncement)
-                .TransitionTo(Sent));
+        Initially(When(Queue)
+            .Then(x => x.Saga.NotificationId = x.Message.NotificationId)
+            .TransitionTo(Queued));
     }
 
-    public State Sent { get; private set; }
-    public State Delivered { get; private set; }
-    public State Authorized { get; private set; }
-    public Event<SendAnnouncement> SendAnnouncement { get; private set; }
-    public Event<AnnouncementSent> AnnouncementSent { get; private set; }
+    public State Queued { get; private set; }
+
+    public Event<QueueNotification> Queue { get; private set; }
 }

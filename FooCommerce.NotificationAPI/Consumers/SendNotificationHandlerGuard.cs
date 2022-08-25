@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.NotificationAPI.CommandsHandlers;
+namespace FooCommerce.NotificationAPI.Consumers;
 
 internal static class SendNotificationHandlerGuard
 {

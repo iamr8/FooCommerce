@@ -10,13 +10,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.Application.Models.Notifications.Receivers;
 
-public record NotificationReceiverByCommunicationId(Guid UserCommunicationId) : INotificationReceiver
+public record NotificationReceiverByCommunicationId(Guid UserCommunicationId) : INotificationReceiver, INotificationDataReceiver
 {
-    public Guid UserId { get; set; }
-    public string Name { get; set; }
-    public List<UserCommunicationModel> UserCommunications { get; set; }
+    public Guid UserId { get; private set; }
+    public string Name { get; private set; }
+    public IEnumerable<UserCommunicationModel> UserCommunications { get; private set; }
 
-    public async Task FetchAsync(IDbContextFactory<AppDbContext> dbConnection, CancellationToken cancellationToken = default)
+    public async Task ResolveReceiverInformationAsync(IDbContextFactory<AppDbContext> dbConnection, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await dbConnection.CreateDbContextAsync(cancellationToken);
 
@@ -45,6 +45,11 @@ public record NotificationReceiverByCommunicationId(Guid UserCommunicationId) : 
             .ToListAsync(cancellationToken: cancellationToken);
 
         Name = name!.Value;
-        communications.ForEach(com => UserCommunications.Add(new UserCommunicationModel(com.Id, com.Type, com.Value)));
+        communications.ForEach(com => UserCommunications = UserCommunications.Concat(new[]{new UserCommunicationModel
+        {
+            Id = com.Id,
+            Value = com.Value,
+            Type = com.Type
+        }}));
     }
 }

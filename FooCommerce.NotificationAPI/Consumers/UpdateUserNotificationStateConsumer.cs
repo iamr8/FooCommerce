@@ -1,28 +1,28 @@
 ﻿using Dapper;
 
-using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Messagings;
 using FooCommerce.Application.Enums.Notifications;
+using FooCommerce.Application.Publishers.Notifications;
 
-using MediatR;
+using MassTransit;
 
-namespace FooCommerce.NotificationAPI.CommandsHandlers;
+namespace FooCommerce.NotificationAPI.Consumers;
 
-public class UpdateUserNotificationStateHandler : INotificationHandler<UpdateUserNotificationState>
+public class UpdateUserNotificationStateConsumer : IConsumer<UpdateUserNotificationState>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
 
-    public UpdateUserNotificationStateHandler(IDbConnectionFactory dbConnectionFactory)
+    public UpdateUserNotificationStateConsumer(IDbConnectionFactory dbConnectionFactory)
     {
         _dbConnectionFactory = dbConnectionFactory;
     }
 
-    public async Task Handle(UpdateUserNotificationState notificationState, CancellationToken cancellationToken)
+    public async Task Consume(ConsumeContext<UpdateUserNotificationState> context)
     {
         using (var dbConnection = _dbConnectionFactory.CreateConnection())
         {
-            var columnName = notificationState.State switch
+            var columnName = context.Message.State switch
             {
                 UserNotificationUpdateState.Sent => nameof(UserNotification.Sent),
                 UserNotificationUpdateState.Delivered => nameof(UserNotification.Delivered),
@@ -34,7 +34,7 @@ public class UpdateUserNotificationStateHandler : INotificationHandler<UpdateUse
                 $"UPDATE [UserNotifications] SET {columnName} = GETUTCDATE() OUTPUT UPDATED.* WHERE Id = @UserNotificationId",
                 new
                 {
-                    notificationState.UserNotificationId
+                    context.Message.UserNotificationId
                 });
         }
     }

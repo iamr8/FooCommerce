@@ -1,10 +1,11 @@
-﻿using FooCommerce.Application.Interfaces.Notifications;
+﻿using FooCommerce.Application.Interfaces;
+using FooCommerce.Application.Interfaces.Notifications;
 
 namespace FooCommerce.Application.Models.Notifications.Options;
 
 public record SendNotificationPushInAppOptions : INotificationSendToCommunicationOptions
 {
-    public EndUser RequestInfo { get; init; }
+    public IEndUser RequestInfo { get; set; }
     public INotificationOptions Options { get; init; }
     public INotificationModelFactory Factory { get; init; }
     public INotificationTemplate Template { get; init; }
