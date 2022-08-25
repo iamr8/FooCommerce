@@ -1,22 +1,22 @@
-﻿using Autofac;
+﻿using System.Net;
+using Autofac;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.Commands.Notifications;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Membership;
 using FooCommerce.Application.Entities.Messagings;
 using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Application.Enums.Notifications;
-using FooCommerce.Application.Models;
+using FooCommerce.Application.Helpers;
+using FooCommerce.Application.Models.Notifications;
 using FooCommerce.Application.Models.Notifications.Receivers;
 using FooCommerce.Application.Services.Notifications;
-using FooCommerce.Infrastructure.MediatRCustomization;
-using FooCommerce.Infrastructure.MediatRCustomization.Enums;
+using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
 
-using MediatR;
+using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -31,8 +31,6 @@ namespace FooCommerce.NotificationAPI.Tests
         public Fixture Fixture { get; }
         public ITestOutputHelper TestConsole { get; }
         public ILifetimeScope Scope { get; }
-        public Publisher Publisher { get; }
-        private IMediator MediatR { get; }
         private INotificationTemplateService NotificationTemplateService { get; }
         private IConfiguration Configuration { get; }
         public ILoggerFactory Logger { get; }
@@ -45,11 +43,11 @@ namespace FooCommerce.NotificationAPI.Tests
 
             var easyCaching = Scope.Resolve<IEasyCachingProvider>();
             easyCaching.Flush();
-            Publisher = Scope.Resolve<Publisher>();
-            MediatR = Scope.Resolve<IMediator>();
             NotificationTemplateService = Scope.Resolve<INotificationTemplateService>();
             Configuration = Scope.Resolve<IConfiguration>();
             Logger = Scope.Resolve<ILoggerFactory>();
+            //var machine = Scope.Resolve<NotificationStateMachine>();
+            //var sagaHarness = Scope.Resolve<ISagaStateMachineTestHarness<NotificationStateMachine, NotificationState>>();
         }
 
         [Fact]
@@ -87,19 +85,33 @@ namespace FooCommerce.NotificationAPI.Tests
 
             var serviceProvider = Scope.Resolve<IServiceProvider>();
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
-            var httpContext = httpContextAccessor.HttpContext;
+            var httpContext = httpContextAccessor.HttpContext!;
 
-            var sendNotification = new SendNotification(options =>
+            var options = new NotificationOptions
             {
-                options.Action = NotificationAction.Verification_Request_Email;
-                options.Receiver = new NotificationReceiverByCommunicationId(userCommunicationId);
-                options.RequestInfo = new EndUser(httpContext);
-            });
+                Action = NotificationAction.Verification_Request_Email,
+                Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
+                RequestInfo = httpContext.GetEndUser()
+            };
 
             // Act
-            await Publisher.Publish(sendNotification, PublishStrategy.Async);
+            var id = NewId.NextGuid();
+            await Fixture.Harness.Bus.Publish<QueueNotification>(new
+            {
+                NotificationId = id,
+                Options = options
+            });
 
-            // Assert
+            await Fixture.Harness.Consumed.Any<QueueNotification>();
+            //var client = Scope.Resolve<IRequestClient<GetNotification>>();
+
+            //var response = await client.GetResponse<Order, OrderNotFound>(new { orderId });
+
+            //// Assert
+            //Assert.IsType<Order>(response.Message);
+            //Assert.Equal("Submitted", ((Order)response.Message).Status);
+
+            //Assert.IsNotType<Order>(response);
         }
     }
 }

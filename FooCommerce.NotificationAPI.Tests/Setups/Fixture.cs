@@ -1,7 +1,6 @@
 ﻿using System.Data;
 
 using Autofac;
-using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Entities.Listings;
@@ -10,23 +9,25 @@ using FooCommerce.Application.Enums.Membership;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
-using FooCommerce.NotificationAPI.Modules;
 using FooCommerce.Tests.Base;
 
 using MassTransit;
+using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
+using NotificationAPIModule = FooCommerce.NotificationAPI.Modules.NotificationAPIModule;
 
 namespace FooCommerce.NotificationAPI.Tests.Setups;
 
 public class Fixture : IAsyncLifetime, IFixture
 {
     public IContainer Container { get; private set; }
-    public IConfigurationRoot Configuration { get; set; }
+    public ITestHarness Harness { get; private set; }
+    private IConfigurationRoot Configuration;
 
     public async Task InitializeAsync()
     {
@@ -39,27 +40,25 @@ public class Fixture : IAsyncLifetime, IFixture
         var connectionString = Configuration.GetConnectionString("Default");
 
         var containerBuilder = new ContainerBuilder();
-        containerBuilder.RegisterModule(new AutoFluentValidationModule());
+        containerBuilder.RegisterModule(new NotificationAPIModule(true));
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new NotificationModule());
-        containerBuilder.RegisterModule(new EventBusModule());
-        containerBuilder.RegisterModule(new DapperModule(connectionString));
-        containerBuilder.RegisterModule(new DbContextModule(config =>
-            //config.UseInMemoryDatabase(Guid.NewGuid().ToString(), b => b.EnableNullChecks(false))));
-            config.UseSqlServer(connectionString, builder =>
-            {
-                builder.EnableRetryOnFailure(3);
-            })));
+        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
+            config.UseSqlServer(connectionString!, builder =>
+                builder.EnableRetryOnFailure(3)
+                    .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
-
-        var services = new ServiceCollection();
-        services.AddSingleton<IConfiguration>(Configuration);
-        containerBuilder.Populate(services);
+        containerBuilder.RegisterInstance(Configuration)
+            .As<IConfiguration>()
+            .SingleInstance();
 
         // Configure
         Container = containerBuilder.Build();
+
+        Harness = Container.Resolve<ITestHarness>();
+
+        await Harness.Start();
 
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
@@ -119,6 +118,7 @@ public class Fixture : IAsyncLifetime, IFixture
 
     public async Task DisposeAsync()
     {
+        await Harness.Stop();
         var connectionString = Configuration.GetConnectionString("Default");
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
         var memoryCache = Container.Resolve<IMemoryCache>();
