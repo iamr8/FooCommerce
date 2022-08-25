@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 
-using FooCommerce.Application.Models.Localization;
+using FooCommerce.Application.Localization.Models;
 
 namespace FooCommerce.Infrastructure.Localization.Models;
 

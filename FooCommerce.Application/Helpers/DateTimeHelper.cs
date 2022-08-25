@@ -1,6 +1,4 @@
-﻿using FooCommerce.Application.Interfaces;
-
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 
 using NodaTime;
 

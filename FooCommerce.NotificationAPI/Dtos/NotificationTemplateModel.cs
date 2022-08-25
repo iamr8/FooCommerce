@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Enums.Membership;
+﻿using FooCommerce.Application.Membership.Enums;
 
 namespace FooCommerce.NotificationAPI.Dtos;
 

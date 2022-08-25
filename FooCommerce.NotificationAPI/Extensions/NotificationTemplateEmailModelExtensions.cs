@@ -1,10 +1,11 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Application.Dtos.Notifications;
-using FooCommerce.Application.Models.Notifications.Options;
+using FooCommerce.Application.Notifications.Dtos;
+using FooCommerce.Application.Notifications.Models.Options;
 using FooCommerce.Infrastructure.Helpers;
 using FooCommerce.Infrastructure.Localization.Helpers;
+
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 

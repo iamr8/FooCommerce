@@ -1,12 +1,11 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Application.Services.Notifications;
-using FooCommerce.Infrastructure.JsonCustomization;
+using FooCommerce.Application.Notifications.Services;
+using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.NotificationAPI.Services;
 
 using MassTransit;
-using MassTransit.Serialization;
 
 using Microsoft.Extensions.DependencyInjection;
 
@@ -28,8 +27,8 @@ public class NotificationAPIModule : Module
         cfg.SetKebabCaseEndpointNameFormatter();
         cfg.SetInMemorySagaRepositoryProvider();
 
-        cfg.AddConsumers(this.GetType().Assembly);
-        cfg.AddSagaStateMachines(this.GetType().Assembly);
+        cfg.AddConsumer<QueueNotificationConsumer>();
+        cfg.AddSagaStateMachine<NotificationStateMachine, NotificationState>();
 
         if (!_test)
         {

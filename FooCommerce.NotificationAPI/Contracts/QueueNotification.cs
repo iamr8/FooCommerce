@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-using FooCommerce.Application.Models.Notifications;
+using FooCommerce.Application.Notifications.Models;
 
 using MassTransit;
 

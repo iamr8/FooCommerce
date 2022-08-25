@@ -1,7 +1,7 @@
-﻿using FooCommerce.Application.Dtos.Notifications;
-using FooCommerce.Application.Entities.Membership;
-using FooCommerce.Application.Enums.Notifications;
-using FooCommerce.Application.Publishers.Membership;
+﻿using FooCommerce.Application.Membership.Entities;
+using FooCommerce.Application.Membership.Publishers;
+using FooCommerce.Application.Notifications.Dtos;
+using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.NotificationAPI.Publishers;
 
 using MassTransit;

@@ -1,10 +1,10 @@
 ﻿using Dapper;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Entities.Messagings;
-using FooCommerce.Application.Enums.Notifications;
-using FooCommerce.Application.Publishers.Membership;
-using FooCommerce.Application.Publishers.Notifications;
+using FooCommerce.Application.Membership.Publishers;
+using FooCommerce.Application.Notifications.Entities;
+using FooCommerce.Application.Notifications.Enums;
+using FooCommerce.Application.Notifications.Publishers;
 
 using MassTransit;
 

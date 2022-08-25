@@ -3,9 +3,9 @@
 using EasyCaching.Core;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Dtos.Listings;
-using FooCommerce.Application.Entities.Listings;
-using FooCommerce.Application.Services.Listings;
+using FooCommerce.Application.Listings.Dtos;
+using FooCommerce.Application.Listings.Entities;
+using FooCommerce.Application.Listings.Services;
 using FooCommerce.Infrastructure.Caching;
 
 using Microsoft.Extensions.Caching.Memory;

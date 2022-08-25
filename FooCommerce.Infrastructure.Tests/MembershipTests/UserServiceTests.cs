@@ -3,10 +3,10 @@
 using EasyCaching.Core;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Application.Models.Membership;
-using FooCommerce.Application.Services.Listings;
-using FooCommerce.Application.Services.Membership;
+using FooCommerce.Application.Listings.Services;
+using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Membership.Models;
+using FooCommerce.Application.Membership.Services;
 using FooCommerce.Domain.Enums;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Membership;

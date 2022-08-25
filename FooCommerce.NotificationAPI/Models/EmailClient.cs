@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-using FooCommerce.Application.Interfaces.Notifications;
+using FooCommerce.Application.Notifications.Interfaces;
 
 using MailKit.Net.Smtp;
 

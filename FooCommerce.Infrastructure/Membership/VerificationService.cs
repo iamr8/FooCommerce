@@ -3,13 +3,13 @@
 using Dapper;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Entities.Membership;
-using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Application.Enums.Notifications;
-using FooCommerce.Application.Models.Notifications.Contents;
-using FooCommerce.Application.Models.Notifications.Receivers;
-using FooCommerce.Application.Publishers.Notifications;
-using FooCommerce.Application.Services.Membership;
+using FooCommerce.Application.Membership.Entities;
+using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Membership.Services;
+using FooCommerce.Application.Notifications.Enums;
+using FooCommerce.Application.Notifications.Models.Contents;
+using FooCommerce.Application.Notifications.Models.Receivers;
+using FooCommerce.Application.Notifications.Publishers;
 using FooCommerce.Domain.Enums;
 
 using MassTransit;

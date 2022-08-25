@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
 
-using FooCommerce.Application.Dtos.Membership;
+using FooCommerce.Application.Membership.Dtos;
 
 namespace FooCommerce.Infrastructure.Membership.Models;
 

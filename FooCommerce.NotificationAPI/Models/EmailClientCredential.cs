@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Interfaces.Notifications;
+﻿using FooCommerce.Application.Notifications.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Models;
 

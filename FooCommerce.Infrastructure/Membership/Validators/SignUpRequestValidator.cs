@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 
-using FooCommerce.Application.Models.Membership;
-using FooCommerce.Application.Services.Listings;
-using FooCommerce.Application.Validators;
+using FooCommerce.Application.Listings.Services;
+using FooCommerce.Application.Membership.Models;
+using FooCommerce.Application.Membership.Validators;
 
 namespace FooCommerce.Infrastructure.Membership.Validators;
 

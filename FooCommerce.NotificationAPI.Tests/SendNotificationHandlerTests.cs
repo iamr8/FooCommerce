@@ -1,17 +1,16 @@
-﻿using System.Net;
-using Autofac;
+﻿using Autofac;
 
 using EasyCaching.Core;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Entities.Membership;
-using FooCommerce.Application.Entities.Messagings;
-using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Application.Enums.Notifications;
 using FooCommerce.Application.Helpers;
-using FooCommerce.Application.Models.Notifications;
-using FooCommerce.Application.Models.Notifications.Receivers;
-using FooCommerce.Application.Services.Notifications;
+using FooCommerce.Application.Membership.Entities;
+using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Notifications.Entities;
+using FooCommerce.Application.Notifications.Enums;
+using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Application.Notifications.Models.Receivers;
+using FooCommerce.Application.Notifications.Services;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
@@ -87,31 +86,23 @@ namespace FooCommerce.NotificationAPI.Tests
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
 
-            var options = new NotificationOptions
+            var notificationOptions = new NotificationOptions
             {
                 Action = NotificationAction.Verification_Request_Email,
                 Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
                 RequestInfo = httpContext.GetEndUser()
             };
+            var notificationId = NewId.NextGuid();
 
             // Act
-            var id = NewId.NextGuid();
             await Fixture.Harness.Bus.Publish<QueueNotification>(new
             {
-                NotificationId = id,
-                Options = options
+                NotificationId = notificationId,
+                Options = notificationOptions
             });
 
-            await Fixture.Harness.Consumed.Any<QueueNotification>();
-            //var client = Scope.Resolve<IRequestClient<GetNotification>>();
-
-            //var response = await client.GetResponse<Order, OrderNotFound>(new { orderId });
-
-            //// Assert
-            //Assert.IsType<Order>(response.Message);
-            //Assert.Equal("Submitted", ((Order)response.Message).Status);
-
-            //Assert.IsNotType<Order>(response);
+            var hasConsumed = await Fixture.Harness.Consumed.Any<QueueNotification>(x => x.Context.Message.NotificationId == notificationId);
+            var client = Scope.Resolve<IRequestClient<GetNotification>>();
         }
     }
 }

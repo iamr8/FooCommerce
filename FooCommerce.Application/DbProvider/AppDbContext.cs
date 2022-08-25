@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Entities.Listings;
+﻿using FooCommerce.Application.Listings.Entities;
 
 using Microsoft.EntityFrameworkCore;
 

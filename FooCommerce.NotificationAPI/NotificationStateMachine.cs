@@ -26,7 +26,7 @@ public class NotificationStateMachine
             });
 
         Initially(When(Queue)
-            .Then(x => x.Saga.NotificationId = x.Message.NotificationId)
+            //.Then(x => x.Saga.NotificationId = x.Message.NotificationId)
             .TransitionTo(Queued));
     }
 

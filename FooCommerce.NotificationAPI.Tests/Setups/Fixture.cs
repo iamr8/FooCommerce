@@ -3,9 +3,9 @@
 using Autofac;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Entities.Listings;
-using FooCommerce.Application.Entities.Membership;
-using FooCommerce.Application.Enums.Membership;
+using FooCommerce.Application.Listings.Entities;
+using FooCommerce.Application.Membership.Entities;
+using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;

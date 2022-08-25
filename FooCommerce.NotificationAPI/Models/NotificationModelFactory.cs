@@ -1,11 +1,11 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Application.Dtos.Notifications;
-using FooCommerce.Application.Interfaces.Notifications;
-using FooCommerce.Application.Models.Notifications.Contents;
-using FooCommerce.Application.Models.Notifications.Options;
-using FooCommerce.Application.Models.Notifications.Types;
+using FooCommerce.Application.Notifications.Dtos;
+using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.Application.Notifications.Models.Contents;
+using FooCommerce.Application.Notifications.Models.Options;
+using FooCommerce.Application.Notifications.Models.Types;
 using FooCommerce.NotificationAPI.Extensions;
 
 using HtmlAgilityPack;

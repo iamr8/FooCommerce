@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Dtos.Notifications;
+﻿using FooCommerce.Application.Notifications.Dtos;
 using FooCommerce.NotificationAPI.Publishers;
 
 using MassTransit;

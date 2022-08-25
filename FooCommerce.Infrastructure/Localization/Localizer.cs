@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Publishers.Localization;
+using FooCommerce.Application.Localization.Publishers;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization.Models;
 

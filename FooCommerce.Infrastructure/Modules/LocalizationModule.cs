@@ -6,7 +6,7 @@ using Autofac;
 using Dapper;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Models.Localization;
+using FooCommerce.Application.Localization.Models;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization;
 using FooCommerce.Infrastructure.Localization.Models;

@@ -3,8 +3,8 @@
 using EasyCaching.Core;
 
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Enums.Membership;
-using FooCommerce.Application.Services.Listings;
+using FooCommerce.Application.Listings.Services;
+using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Tests.Setups;
 using FooCommerce.Tests.Base;

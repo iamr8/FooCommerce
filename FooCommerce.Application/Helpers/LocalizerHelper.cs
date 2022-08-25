@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Attributes;
+﻿using FooCommerce.Application.Localization.Attributes;
 
 namespace FooCommerce.Application.Helpers;
 

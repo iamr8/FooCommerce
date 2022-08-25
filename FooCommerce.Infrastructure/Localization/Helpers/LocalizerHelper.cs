@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-using FooCommerce.Application.Models.Localization;
+using FooCommerce.Application.Localization.Models;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
 using FooCommerce.Infrastructure.JsonCustomization;
