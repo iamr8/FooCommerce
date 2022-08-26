@@ -2,7 +2,7 @@
 
 using Microsoft.Extensions.Logging;
 
-namespace FooCommerce.NotificationAPI.Consumers;
+namespace FooCommerce.NotificationAPI.Consumers.Extensions;
 
 internal static class QueueNotificationHandlerGuard
 {

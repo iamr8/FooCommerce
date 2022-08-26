@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 
-namespace FooCommerce.NotificationAPI;
+namespace FooCommerce.NotificationAPI.Machines;
 
 public class NotificationState : SagaStateMachineInstance
 {

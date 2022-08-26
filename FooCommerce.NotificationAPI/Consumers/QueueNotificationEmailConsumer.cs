@@ -5,6 +5,7 @@ using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.NotificationAPI.Consumers.Extensions;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Enums;

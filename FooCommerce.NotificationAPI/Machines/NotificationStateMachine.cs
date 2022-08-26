@@ -6,7 +6,7 @@ using MassTransit;
 // ReSharper disable ExpressionIsAlwaysNull
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable MemberCanBePrivate.Global
-namespace FooCommerce.NotificationAPI;
+namespace FooCommerce.NotificationAPI.Machines;
 
 public class NotificationStateMachine
     : MassTransitStateMachine<NotificationState>

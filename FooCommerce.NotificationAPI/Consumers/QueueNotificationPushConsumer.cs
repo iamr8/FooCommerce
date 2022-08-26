@@ -1,4 +1,5 @@
-﻿using FooCommerce.NotificationAPI.Contracts;
+﻿using FooCommerce.NotificationAPI.Consumers.Extensions;
+using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Events;
 
