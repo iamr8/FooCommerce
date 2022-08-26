@@ -1,5 +1,5 @@
-﻿using FooCommerce.Application.Notifications.Dtos;
-using FooCommerce.NotificationAPI.Contracts;
+﻿using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Events;
 
 using MassTransit;
@@ -19,15 +19,15 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
 
     public async Task Consume(ConsumeContext<QueueNotificationPush> context)
     {
-        var renderedTemplate = context.Message.Options.Factory.CreatePushModel(
-            (NotificationTemplatePushModel)context.Message.Options.Template,
+        var renderedTemplate = context.Message.Factory.CreatePushModel(
+            (NotificationTemplatePushModel)context.Message.Template,
             options =>
             {
-                options.WebsiteUrl = context.Message.Options.WebsiteUrl;
+                options.WebsiteUrl = context.Message.WebsiteUrl;
             });
-        var receiver = context.Message.Options.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Options.Template.Communication);
+        var receiver = context.Message.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Template.Communication);
 
-        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message.Options, _logger);
+        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message, _logger);
         // send Push Notification using relevant SDK
 
         var pushSent = true;
@@ -36,7 +36,7 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
             await context.RespondAsync<NotificationSent>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Options.Template.Communication
+                Gateway = context.Message.Template.Communication
             });
         }
         else
@@ -44,7 +44,7 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
             await context.RespondAsync<NotificationFailed>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Options.Template.Communication
+                Gateway = context.Message.Template.Communication
             });
         }
     }

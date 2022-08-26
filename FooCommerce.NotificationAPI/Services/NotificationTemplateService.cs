@@ -4,17 +4,15 @@ using System.Text.Json.Nodes;
 using Dapper;
 
 using EasyCaching.Core;
-
-using FooCommerce.Application.DbProvider;
+using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Dtos;
-using FooCommerce.Application.Notifications.Entities;
 using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Localization.Helpers;
 using FooCommerce.NotificationAPI.Dtos;
+using FooCommerce.NotificationAPI.Entities;
 
 using Microsoft.Extensions.Logging;
 

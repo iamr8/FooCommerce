@@ -1,15 +1,15 @@
 ﻿using Autofac;
 
+using FooCommerce.Application;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Models;
 using FooCommerce.Application.Notifications.Models.Receivers;
 using FooCommerce.NotificationAPI.Consumers;
-using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
@@ -72,12 +72,6 @@ namespace FooCommerce.NotificationAPI.Tests
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
             var notificationId = NewId.NextGuid();
-            var notificationOptions = new NotificationOptions
-            {
-                Action = NotificationAction.Verification_Request_Email,
-                Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
-                RequestInfo = httpContext.GetEndUser()
-            };
 
             await this.Fixture.Harness.Start();
             try
@@ -87,7 +81,9 @@ namespace FooCommerce.NotificationAPI.Tests
                 await this.Fixture.Harness.Bus.Publish<QueueNotification>(new
                 {
                     NotificationId = notificationId,
-                    Options = (INotificationOptions)notificationOptions
+                    Action = NotificationAction.Verification_Request_Email,
+                    Receiver = (INotificationReceiver)new NotificationReceiverByCommunicationId(userCommunicationId),
+                    RequestInfo = (IEndUser)httpContext.GetEndUser()
                 });
 
                 // Assert
@@ -143,12 +139,6 @@ namespace FooCommerce.NotificationAPI.Tests
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
             var notificationId = NewId.NextGuid();
-            var notificationOptions = new NotificationOptions
-            {
-                Action = NotificationAction.Verification_Request_Email,
-                Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
-                RequestInfo = httpContext.GetEndUser()
-            };
 
             await this.Fixture.Harness.Start();
             try
@@ -172,7 +162,9 @@ namespace FooCommerce.NotificationAPI.Tests
                 var (acceptedTask, failedTask) = await client.GetResponse<NotificationQueued, NotificationFailed>(new
                 {
                     NotificationId = notificationId,
-                    Options = (INotificationOptions)notificationOptions
+                    Action = NotificationAction.Verification_Request_Email,
+                    Receiver = (INotificationReceiver)new NotificationReceiverByCommunicationId(userCommunicationId),
+                    RequestInfo = (IEndUser)httpContext.GetEndUser()
                 });
 
                 // Assert

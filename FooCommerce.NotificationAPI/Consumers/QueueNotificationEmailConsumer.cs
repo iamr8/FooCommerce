@@ -2,13 +2,12 @@
 
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Entities;
-using FooCommerce.Application.Membership.Publishers;
-using FooCommerce.Application.Notifications.Dtos;
-using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
 using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Dtos;
+using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
 
@@ -42,28 +41,28 @@ namespace FooCommerce.NotificationAPI.Consumers
 
         public async Task Consume(ConsumeContext<QueueNotificationEmail> context)
         {
-            var renderedTemplate = await context.Message.Options.Factory.CreateEmailModelAsync(
-                (NotificationTemplateEmailModel)context.Message.Options.Template,
+            var renderedTemplate = await context.Message.Factory.CreateEmailModelAsync(
+                (NotificationTemplateEmailModel)context.Message.Template,
                 options =>
                 {
-                    options.LocalDateTime = DateTime.UtcNow.ToLocal(context.Message.Options.RequestInfo);
-                    options.WebsiteUrl = context.Message.Options.WebsiteUrl;
+                    options.LocalDateTime = DateTime.UtcNow.ToLocal(context.Message.RequestInfo);
+                    options.WebsiteUrl = context.Message.WebsiteUrl;
                 });
-            var receiver = context.Message.Options.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Options.Template.Communication);
+            var receiver = context.Message.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Template.Communication);
 
-            QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message.Options, _logger);
+            QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message, _logger);
 
             var mailCredential = _clientService.GetAvailableMailboxCredentials();
             var mime = new MimeMessage
             {
-                Subject = _localizer[context.Message.Options.Options.Action.GetLocalizerKey()],
+                Subject = _localizer[context.Message.Options.Action.GetLocalizerKey()],
                 Sender = new MailboxAddress(mailCredential.SenderAlias, mailCredential.SenderAddress),
-                Importance = context.Message.Options.IsImportant ? MessageImportance.High : MessageImportance.Normal,
+                Importance = context.Message.IsImportant ? MessageImportance.High : MessageImportance.Normal,
                 Body = new BodyBuilder { HtmlBody = renderedTemplate.Html.GetString() }.ToMessageBody(),
             };
 
             mime.From.Add(mime.Sender);
-            mime.To.Add(new MailboxAddress(context.Message.Options.Options.Receiver.Name, receiver.Value));
+            mime.To.Add(new MailboxAddress(context.Message.Options.Receiver.Name, receiver.Value));
 
             var emailSent = true;
             if (!_environment.IsStaging())
@@ -72,7 +71,7 @@ namespace FooCommerce.NotificationAPI.Consumers
                 emailSent = await emailClient.SendAsync(mime, context.CancellationToken);
                 if (!emailSent)
                 {
-                    _logger.LogError("Unable to send {0} to User {1}", context.Message.Options.Template.Communication, context.Message.Options.Options.Receiver.UserId);
+                    _logger.LogError("Unable to send {0} to User {1}", context.Message.Template.Communication, context.Message.Options.Receiver.UserId);
                 }
 
                 await emailClient.DisposeAsync();
@@ -83,13 +82,17 @@ namespace FooCommerce.NotificationAPI.Consumers
                 await context.RespondAsync<NotificationSent>(new
                 {
                     NotificationId = context.Message.NotificationId,
-                    Gateway = context.Message.Options.Template.Communication
+                    Gateway = context.Message.Template.Communication
                 });
 
-                var token = context.Message.Options.Options.Bag.OfType<AuthToken>().FirstOrDefault();
+                var token = context.Message.Options.Bag.OfType<AuthToken>().FirstOrDefault();
                 if (token != null)
                 {
-                    await context.Publish(new UpdateAuthTokenState(token.Id, UserNotificationUpdateState.Sent), context.CancellationToken);
+                    await context.Publish<UpdateAuthTokenState>(new
+                    {
+                        AuthTokenId = token.Id,
+                        State = UserNotificationUpdateState.Sent
+                    }, context.CancellationToken);
                 }
             }
             else
@@ -97,7 +100,7 @@ namespace FooCommerce.NotificationAPI.Consumers
                 await context.RespondAsync<NotificationFailed>(new
                 {
                     NotificationId = context.Message.NotificationId,
-                    Gateway = context.Message.Options.Template.Communication
+                    Gateway = context.Message.Template.Communication
                 });
             }
         }

@@ -1,4 +1,4 @@
-﻿using FooCommerce.NotificationAPI.Contracts;
+﻿using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.NotificationAPI.Events;
 
 using MassTransit;

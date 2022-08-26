@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Localization.Publishers;
+﻿using FooCommerce.Application.Localization.Contracts;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Localization.Models;

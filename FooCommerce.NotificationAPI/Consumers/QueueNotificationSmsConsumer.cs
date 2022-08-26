@@ -1,8 +1,7 @@
 ﻿using FooCommerce.Application.Membership.Entities;
-using FooCommerce.Application.Membership.Publishers;
-using FooCommerce.Application.Notifications.Dtos;
-using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Dtos;
+using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Events;
 
 using MassTransit;
@@ -22,15 +21,15 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
 
     public async Task Consume(ConsumeContext<QueueNotificationSms> context)
     {
-        var renderedTemplate = context.Message.Options.Factory.CreateSmsModel(
-            (NotificationTemplateSmsModel)context.Message.Options.Template,
+        var renderedTemplate = context.Message.Factory.CreateSmsModel(
+            (NotificationTemplateSmsModel)context.Message.Template,
             options =>
             {
-                options.WebsiteUrl = context.Message.Options.WebsiteUrl;
+                options.WebsiteUrl = context.Message.WebsiteUrl;
             });
-        var receiver = context.Message.Options.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Options.Template.Communication);
+        var receiver = context.Message.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Template.Communication);
 
-        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message.Options, _logger);
+        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message, _logger);
 
         // TODO: SDK must be implemented
         var smsSent = true;
@@ -39,13 +38,17 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
             await context.RespondAsync<NotificationSent>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Options.Template.Communication
+                Gateway = context.Message.Template.Communication
             });
 
-            var token = context.Message.Options.Options.Bag.OfType<AuthToken>().FirstOrDefault();
+            var token = context.Message.Options.Bag.OfType<AuthToken>().FirstOrDefault();
             if (token != null)
             {
-                await context.Publish(new UpdateAuthTokenState(token.Id, UserNotificationUpdateState.Sent), context.CancellationToken);
+                await context.Publish<UpdateAuthTokenState>(new
+                {
+                    AuthTokenId = token.Id,
+                    State = UserNotificationUpdateState.Sent
+                }, context.CancellationToken);
             }
         }
         else
@@ -53,7 +56,7 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
             await context.RespondAsync<NotificationFailed>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Options.Template.Communication
+                Gateway = context.Message.Template.Communication
             });
         }
     }

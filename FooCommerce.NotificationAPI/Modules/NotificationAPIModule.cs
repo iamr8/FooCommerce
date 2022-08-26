@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System.Net.Mime;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.Notifications.Services;

@@ -1,9 +1,8 @@
 ﻿using Dapper;
-
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Notifications.Entities;
-using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Publishers;
+using FooCommerce.Application.DbProvider.Interfaces;
+using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Entities;
+using FooCommerce.NotificationAPI.Enums;
 
 using MassTransit;
 

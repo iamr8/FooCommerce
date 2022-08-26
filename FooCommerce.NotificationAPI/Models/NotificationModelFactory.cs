@@ -1,12 +1,13 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Application.Notifications.Dtos;
 using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Models.Contents;
-using FooCommerce.Application.Notifications.Models.Options;
 using FooCommerce.Application.Notifications.Models.Types;
+using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Extensions;
+using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
@@ -32,9 +33,9 @@ public record NotificationModelFactory : INotificationModelFactory
         return new NotificationModelFactory(options, loggerFactory);
     }
 
-    public NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template, Action<NotificationPushInAppModelOptions> options)
+    public NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template, Action<NotificationPushInAppModelFactoryOptions> options)
     {
-        var opt = new NotificationPushInAppModelOptions();
+        var opt = new NotificationPushInAppModelFactoryOptions();
         options(opt);
 
         var notificationText = new StringBuilder(template.Message.ToString());
@@ -46,9 +47,9 @@ public record NotificationModelFactory : INotificationModelFactory
         return pushModel;
     }
 
-    public NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template, Action<NotificationSmsModelOptions> options)
+    public NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template, Action<NotificationSmsModelFactoryOptions> options)
     {
-        var opt = new NotificationSmsModelOptions();
+        var opt = new NotificationSmsModelFactoryOptions();
         options(opt);
 
         var sms = new StringBuilder(template.Text.ToString());
@@ -62,9 +63,9 @@ public record NotificationModelFactory : INotificationModelFactory
         return smsModel;
     }
 
-    public async Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template, Action<NotificationEmailModelOptions> options)
+    public async Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template, Action<NotificationEmailModelFactoryOptions> options)
     {
-        var opt = new NotificationEmailModelOptions();
+        var opt = new NotificationEmailModelFactoryOptions();
         options(opt);
 
         var emailHtml = new StringBuilder(template.Html.ToString());
@@ -131,9 +132,9 @@ public record NotificationModelFactory : INotificationModelFactory
             emailHtml = emailHtml.Replace("{{" + formatting.Key + "}}", formatting.Text);
         }
     }
-    public NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, Action<NotificationPushModelOptions> options)
+    public NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, Action<NotificationPushModelFactoryOptions> options)
     {
-        var opt = new NotificationPushModelOptions();
+        var opt = new NotificationPushModelFactoryOptions();
         options(opt);
 
         var notificationText = new StringBuilder(template.Message.ToString());

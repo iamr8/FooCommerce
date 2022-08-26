@@ -1,8 +1,9 @@
-﻿using FooCommerce.Application.Notifications.Models.Options;
+﻿using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.NotificationAPI.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Contracts;
 
-public interface QueueNotificationPushInApp : INotificationId
+public interface QueueNotificationPushInApp
+    : INotificationId, INotificationCommunicationOptions
 {
-    SendNotificationPushInAppOptions Options { get; }
 }

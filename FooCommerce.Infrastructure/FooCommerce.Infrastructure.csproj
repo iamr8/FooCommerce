@@ -26,9 +26,4 @@
     <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="JsonCustomization\Contracts\" />
-	  <Folder Include="Localization\JsonConverters\" />
-	</ItemGroup>
-
 </Project>

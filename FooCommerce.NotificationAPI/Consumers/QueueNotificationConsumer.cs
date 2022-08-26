@@ -2,11 +2,11 @@
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Attributes;
-using FooCommerce.Application.Notifications.Dtos;
+using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Models.Options;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
 
@@ -45,7 +45,7 @@ public class QueueNotificationConsumer
 
     public async Task Consume(ConsumeContext<QueueNotification> context)
     {
-        if (context.Message.Options == null || context.Message.NotificationId == Guid.Empty)
+        if (context.Message.NotificationId == Guid.Empty)
         {
             await context.RespondAsync<NotificationFailed>(new
             {
@@ -54,15 +54,15 @@ public class QueueNotificationConsumer
             return;
         }
 
-        var availableCommunicationTypes = context.Message.Options.Action
+        var availableCommunicationTypes = context.Message.Action
                .GetAttribute<NotificationCommunicationTypeAttribute>()
                .CommunicationTypes;
 
         var websiteUrl = _configuration["WebsiteURL"];
-        var templates = await _templateService.GetTemplateAsync(context.Message.Options.Action, context.CancellationToken);
-        var factory = NotificationModelFactory.CreateFactory(context.Message.Options, _loggerFactory);
+        var templates = await _templateService.GetTemplateAsync(context.Message.Action, context.CancellationToken);
+        var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory);
 
-        await ((INotificationDataReceiver)context.Message.Options.Receiver).ResolveReceiverInformationAsync(_dbContextFactory, context.CancellationToken);
+        await ((INotificationDataReceiver)context.Message.Receiver).ResolveReceiverInformationAsync(_dbContextFactory, context.CancellationToken);
 
         foreach (var communicationType in availableCommunicationTypes)
         {
@@ -73,24 +73,19 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplateEmailModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Options.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
                             continue;
                         }
-
-                        var options = new SendNotificationEmailOptions
-                        {
-                            Options = context.Message.Options,
-                            WebsiteUrl = websiteUrl,
-                            Template = template,
-                            Factory = factory,
-                            RequestInfo = context.Message.Options.RequestInfo,
-                            IsImportant = true
-                        };
 
                         await context.Publish<QueueNotificationEmail>(new
                         {
                             NotificationId = context.Message.NotificationId,
-                            Options = options
+                            Options = (INotificationOptions)context.Message,
+                            WebsiteUrl = websiteUrl,
+                            Template = (INotificationTemplate)template,
+                            Factory = factory,
+                            RequestInfo = context.Message.RequestInfo,
+                            IsImportant = true
                         }, context.CancellationToken);
                         break;
                     }
@@ -99,23 +94,18 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplatePushModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Options.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
                             continue;
                         }
-
-                        var options = new SendNotificationPushOptions
-                        {
-                            Options = context.Message.Options,
-                            WebsiteUrl = websiteUrl,
-                            Template = template,
-                            Factory = factory,
-                            RequestInfo = context.Message.Options.RequestInfo,
-                        };
 
                         await context.Publish<QueueNotificationPush>(new
                         {
                             NotificationId = context.Message.NotificationId,
-                            Options = options
+                            Options = (INotificationOptions)context.Message,
+                            WebsiteUrl = websiteUrl,
+                            Template = (INotificationTemplate)template,
+                            Factory = factory,
+                            RequestInfo = context.Message.RequestInfo,
                         }, context.CancellationToken);
                         break;
                     }
@@ -124,23 +114,18 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplateSmsModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Options.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
                             continue;
                         }
-
-                        var options = new SendNotificationSmsOptions
-                        {
-                            Options = context.Message.Options,
-                            WebsiteUrl = websiteUrl,
-                            Template = template,
-                            Factory = factory,
-                            RequestInfo = context.Message.Options.RequestInfo,
-                        };
 
                         await context.Publish<QueueNotificationSms>(new
                         {
                             NotificationId = context.Message.NotificationId,
-                            Options = options
+                            Options = (INotificationOptions)context.Message,
+                            WebsiteUrl = websiteUrl,
+                            Template = (INotificationTemplate)template,
+                            Factory = factory,
+                            RequestInfo = context.Message.RequestInfo,
                         }, context.CancellationToken);
                         break;
                     }
@@ -149,23 +134,18 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplatePushInAppModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Options.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
                             continue;
                         }
-
-                        var options = new SendNotificationPushInAppOptions
-                        {
-                            Options = context.Message.Options,
-                            WebsiteUrl = websiteUrl,
-                            Template = template,
-                            Factory = factory,
-                            RequestInfo = context.Message.Options.RequestInfo,
-                        };
 
                         await context.Publish<QueueNotificationPushInApp>(new
                         {
                             NotificationId = context.Message.NotificationId,
-                            Options = options
+                            Options = (INotificationOptions)context.Message,
+                            WebsiteUrl = websiteUrl,
+                            Template = (INotificationTemplate)template,
+                            Factory = factory,
+                            RequestInfo = context.Message.RequestInfo,
                         }, context.CancellationToken);
                         break;
                     }
@@ -175,6 +155,7 @@ public class QueueNotificationConsumer
         }
 
         await context.RespondAsync<NotificationQueued>(new
+
         {
             NotificationId = context.Message.NotificationId
         });

@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Notifications.Interfaces;
+﻿using FooCommerce.NotificationAPI.Interfaces;
 
 using Microsoft.Extensions.Logging;
 
@@ -6,7 +6,7 @@ namespace FooCommerce.NotificationAPI.Consumers;
 
 internal static class QueueNotificationHandlerGuard
 {
-    public static void Check<TModel, TOptions, TLogger>(TModel model, TOptions options, ILogger<TLogger> _logger) where TOptions : INotificationSendToCommunicationOptions
+    public static void Check<TModel, TOptions, TLogger>(TModel model, TOptions options, ILogger<TLogger> _logger) where TOptions : INotificationCommunicationOptions
     {
         if (model == null)
         {

@@ -4,8 +4,7 @@ using System.Text.Json;
 using Autofac;
 
 using Dapper;
-
-using FooCommerce.Application.DbProvider;
+using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Localization.Models;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization;

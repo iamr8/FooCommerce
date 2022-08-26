@@ -1,10 +1,10 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Application.Notifications.Dtos;
-using FooCommerce.Application.Notifications.Models.Options;
 using FooCommerce.Infrastructure.Helpers;
 using FooCommerce.Infrastructure.Localization.Helpers;
+using FooCommerce.NotificationAPI.Dtos;
+using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
 using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
@@ -13,7 +13,7 @@ namespace FooCommerce.NotificationAPI.Extensions;
 
 public static class NotificationTemplateEmailModelExtensions
 {
-    public static async Task ApplyRequestReplacementsAsync<T>(StringBuilder emailHtml, NotificationEmailModelOptions options, ILogger<T> logger)
+    public static async Task ApplyRequestReplacementsAsync<T>(StringBuilder emailHtml, NotificationEmailModelFactoryOptions options, ILogger<T> logger)
     {
         var requestHtml = await NotificationTemplateEmailModel.GetRequestLayoutAsync(logger);
         if (string.IsNullOrEmpty(requestHtml))

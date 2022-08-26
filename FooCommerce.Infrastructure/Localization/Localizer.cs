@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Localization.Publishers;
+using FooCommerce.Application.Localization.Contracts;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization.Models;
 
@@ -31,7 +31,7 @@ namespace FooCommerce.Infrastructure.Localization
 
         public async Task RefreshAsync()
         {
-            await _bus.Publish(new RefreshLocalizer());
+            await _bus.Publish<RefreshLocalizer>(new { });
         }
     }
 }
