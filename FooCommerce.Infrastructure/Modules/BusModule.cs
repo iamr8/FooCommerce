@@ -12,18 +12,13 @@ public class BusModule : Autofac.Module
     private readonly bool _test;
     private readonly IEnumerable<Assembly> _assemblies;
 
-    public BusModule(params Assembly[] assemblies)
-    {
-        _assemblies = assemblies;
-    }
-
-    public BusModule(bool test, params Assembly[] assemblies) : this(assemblies)
+    public BusModule(bool test = false, params Assembly[] assemblies)
     {
         _test = test;
         _assemblies = assemblies;
     }
 
-    private static void ApplyConfigurator(IContainerBuilderBusConfigurator cfg, params Assembly[] assemblies)
+    private static void ApplyConfigurator(IRegistrationConfigurator cfg, params Assembly[] assemblies)
     {
         cfg.SetKebabCaseEndpointNameFormatter();
         cfg.SetInMemorySagaRepositoryProvider();

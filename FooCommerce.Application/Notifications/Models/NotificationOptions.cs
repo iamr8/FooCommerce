@@ -10,7 +10,7 @@ public class NotificationOptions : INotificationOptions
 
     public INotificationReceiver Receiver { get; set; }
 
-    public IEnumerable<INotificationContent> Content { get; set; } = new List<INotificationContent>();
+    public IEnumerable<INotificationContent> Content { get; set; }
 
-    public IEnumerable<object> Bag { get; set; } = new List<object>();
+    public IEnumerable<object> Bag { get; set; }
 }

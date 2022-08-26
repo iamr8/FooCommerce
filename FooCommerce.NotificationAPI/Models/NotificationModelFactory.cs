@@ -16,7 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Models;
 
-internal record NotificationModelFactory : INotificationModelFactory
+public record NotificationModelFactory : INotificationModelFactory
 {
     private readonly INotificationOptions _notificationOptions;
     private readonly ILogger<INotificationModelFactory> _logger;

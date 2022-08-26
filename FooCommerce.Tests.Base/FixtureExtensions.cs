@@ -3,8 +3,10 @@ using Autofac.Extensions.DependencyInjection;
 
 using MassTransit;
 
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Configuration;
 
 using Xunit.Abstractions;
 
@@ -23,13 +25,14 @@ public static class FixtureExtensions
                 loggingBuilder.AddDebug();
                 loggingBuilder.AddConsole();
                 loggingBuilder.AddEventLog();
+                loggingBuilder.AddConfiguration(fixture.Container.Resolve<IConfiguration>());
+                loggingBuilder.AddConfiguration();
             });
             containerBuilder.Populate(services);
         });
 
         var loggerFactory = scope.Resolve<ILoggerFactory>();
         LogContext.ConfigureCurrentLogContext(loggerFactory);
-
         return scope;
     }
 }

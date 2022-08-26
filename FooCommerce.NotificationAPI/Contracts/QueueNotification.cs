@@ -1,19 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-
-using FooCommerce.Application.Notifications.Models;
-
-using MassTransit;
+﻿using FooCommerce.Application.Notifications.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Contracts;
 
-public record QueueNotification : INotificationQueued
+public interface QueueNotification : INotificationId
 {
-    public Guid NotificationId { get; init; }
-    public NotificationOptions Options { get; set; }
-
-    [ModuleInitializer]
-    internal static void Init()
-    {
-        GlobalTopology.Send.UseCorrelationId<QueueNotification>(x => x.NotificationId);
-    }
+    INotificationOptions Options { get; }
 }

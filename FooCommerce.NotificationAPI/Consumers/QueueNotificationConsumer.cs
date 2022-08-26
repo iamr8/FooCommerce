@@ -7,8 +7,8 @@ using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Models.Options;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
-using FooCommerce.NotificationAPI.Publishers;
 
 using MassTransit;
 
@@ -18,7 +18,8 @@ using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Consumers;
 
-public class QueueNotificationConsumer : IConsumer<QueueNotification>
+public class QueueNotificationConsumer
+    : IConsumer<QueueNotification>
 {
     private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     private readonly INotificationTemplateService _templateService;
@@ -38,8 +39,21 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
         _configuration = configuration;
     }
 
+    public QueueNotificationConsumer()
+    {
+    }
+
     public async Task Consume(ConsumeContext<QueueNotification> context)
     {
+        if (context.Message.Options == null || context.Message.NotificationId == Guid.Empty)
+        {
+            await context.RespondAsync<NotificationFailed>(new
+            {
+                NotificationId = context.Message.NotificationId,
+            });
+            return;
+        }
+
         var availableCommunicationTypes = context.Message.Options.Action
                .GetAttribute<NotificationCommunicationTypeAttribute>()
                .CommunicationTypes;
@@ -63,7 +77,7 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                             continue;
                         }
 
-                        await context.Publish(new SendNotificationEmail(new SendNotificationEmailOptions
+                        var options = new SendNotificationEmailOptions
                         {
                             Options = context.Message.Options,
                             WebsiteUrl = websiteUrl,
@@ -71,7 +85,13 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                             Factory = factory,
                             RequestInfo = context.Message.Options.RequestInfo,
                             IsImportant = true
-                        }), context.CancellationToken);
+                        };
+
+                        await context.Publish<QueueNotificationEmail>(new
+                        {
+                            NotificationId = context.Message.NotificationId,
+                            Options = options
+                        }, context.CancellationToken);
                         break;
                     }
                 case CommunicationType.Push_Notification:
@@ -83,14 +103,20 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                             continue;
                         }
 
-                        await context.Publish(new SendNotificationPush(new SendNotificationPushOptions
+                        var options = new SendNotificationPushOptions
                         {
                             Options = context.Message.Options,
                             WebsiteUrl = websiteUrl,
                             Template = template,
                             Factory = factory,
                             RequestInfo = context.Message.Options.RequestInfo,
-                        }), context.CancellationToken);
+                        };
+
+                        await context.Publish<QueueNotificationPush>(new
+                        {
+                            NotificationId = context.Message.NotificationId,
+                            Options = options
+                        }, context.CancellationToken);
                         break;
                     }
                 case CommunicationType.Mobile_Sms:
@@ -102,14 +128,20 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                             continue;
                         }
 
-                        await context.Publish(new SendNotificationSms(new SendNotificationSmsOptions
+                        var options = new SendNotificationSmsOptions
                         {
                             Options = context.Message.Options,
                             WebsiteUrl = websiteUrl,
                             Template = template,
                             Factory = factory,
                             RequestInfo = context.Message.Options.RequestInfo,
-                        }), context.CancellationToken);
+                        };
+
+                        await context.Publish<QueueNotificationSms>(new
+                        {
+                            NotificationId = context.Message.NotificationId,
+                            Options = options
+                        }, context.CancellationToken);
                         break;
                     }
                 case CommunicationType.Push_InApp:
@@ -121,19 +153,30 @@ public class QueueNotificationConsumer : IConsumer<QueueNotification>
                             continue;
                         }
 
-                        await context.Publish(new SendNotificationPushInApp(new SendNotificationPushInAppOptions
+                        var options = new SendNotificationPushInAppOptions
                         {
                             Options = context.Message.Options,
                             WebsiteUrl = websiteUrl,
                             Template = template,
                             Factory = factory,
                             RequestInfo = context.Message.Options.RequestInfo,
-                        }), context.CancellationToken);
+                        };
+
+                        await context.Publish<QueueNotificationPushInApp>(new
+                        {
+                            NotificationId = context.Message.NotificationId,
+                            Options = options
+                        }, context.CancellationToken);
                         break;
                     }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        await context.RespondAsync<NotificationQueued>(new
+        {
+            NotificationId = context.Message.NotificationId
+        });
     }
 }

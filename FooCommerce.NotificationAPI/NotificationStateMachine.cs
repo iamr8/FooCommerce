@@ -1,4 +1,5 @@
 ﻿using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Events;
 
 using MassTransit;
 
@@ -20,7 +21,7 @@ public class NotificationStateMachine
             {
                 x.OnMissingInstance(m =>
                     m.ExecuteAsync(context =>
-                        context.RespondAsync<NotificationNotFound>(new { context.Message.NotificationId })));
+                        context.RespondAsync<NotificationFailed>(new { context.Message.NotificationId })));
 
                 x.CorrelateById(context => context.Message.NotificationId);
             });

@@ -4,9 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Consumers;
 
-internal static class SendNotificationHandlerGuard
+internal static class QueueNotificationHandlerGuard
 {
-    public static void Check<T1, T2, T3>(T1 model, T2 options, ILogger<T3> _logger) where T2 : INotificationSendToCommunicationOptions
+    public static void Check<TModel, TOptions, TLogger>(TModel model, TOptions options, ILogger<TLogger> _logger) where TOptions : INotificationSendToCommunicationOptions
     {
         if (model == null)
         {

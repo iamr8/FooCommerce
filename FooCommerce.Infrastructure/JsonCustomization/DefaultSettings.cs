@@ -17,16 +17,19 @@ public static class DefaultSettings
         {
             var settings = new JsonSerializerOptions
             {
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
                 WriteIndented = false,
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 PropertyNameCaseInsensitive = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.Never,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
                 DictionaryKeyPolicy = JsonNamingPolicy.CamelCase,
+                UnknownTypeHandling = JsonUnknownTypeHandling.JsonNode,
             };
 
             settings.Converters.Add(new JsonCultureToStringConverter());
             settings.Converters.Add(new JsonGuidToStringConverter());
             settings.Converters.Add(new JsonIPAddressToStringConverter());
+            settings.Converters.Add(new JsonIPEndPointConverter());
             settings.Converters.Add(new JsonRegionInfoToStringConverter());
             settings.Converters.Add(new JsonDateTimeZoneToStringConverter());
             settings.Converters.Add(new JsonHtmlContentToStringConverter());

@@ -4,19 +4,18 @@ using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Membership.Models;
-using FooCommerce.Application.Notifications.Interfaces;
 
 using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.Application.Notifications.Models.Receivers;
 
-public record NotificationReceiverByUserId(Guid UserId) : INotificationReceiver, INotificationDataReceiver
+public record NotificationReceiverByUserId : NotificationReceiver
 {
-    public string Name { get; private set; }
-
-    public IEnumerable<UserCommunicationModel> UserCommunications { get; private set; }
-
-    public async Task ResolveReceiverInformationAsync(IDbContextFactory<AppDbContext> dbConnection, CancellationToken cancellationToken = default)
+    public NotificationReceiverByUserId(Guid userId) : base()
+    {
+        this.UserId = userId;
+    }
+    public override async Task ResolveReceiverInformationAsync(IDbContextFactory<AppDbContext> dbConnection, CancellationToken cancellationToken = default)
     {
         await using var dbContext = await dbConnection.CreateDbContextAsync(cancellationToken);
         var name = await dbContext.Set<UserInformation>()

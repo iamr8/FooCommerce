@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.NotificationAPI.Contracts;
 
-public interface INotificationQueued
+public interface INotificationId
 {
     Guid NotificationId { get; }
 }

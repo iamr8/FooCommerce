@@ -1,25 +1,23 @@
 ﻿using Autofac;
 
-using EasyCaching.Core;
-
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Entities;
 using FooCommerce.Application.Notifications.Enums;
+using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Models;
 using FooCommerce.Application.Notifications.Models.Receivers;
-using FooCommerce.Application.Notifications.Services;
+using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Tests.Setups;
 using FooCommerce.Tests.Base;
 
 using MassTransit;
+using MassTransit.Testing;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;
 
@@ -30,9 +28,9 @@ namespace FooCommerce.NotificationAPI.Tests
         public Fixture Fixture { get; }
         public ITestOutputHelper TestConsole { get; }
         public ILifetimeScope Scope { get; }
-        private INotificationTemplateService NotificationTemplateService { get; }
-        private IConfiguration Configuration { get; }
-        public ILoggerFactory Logger { get; }
+
+        // private IConfiguration Configuration { get; }
+        // private ILoggerFactory Logger { get; }
 
         public SendNotificationHandlerTests(Fixture fixture, ITestOutputHelper outputHelper)
         {
@@ -40,17 +38,17 @@ namespace FooCommerce.NotificationAPI.Tests
             TestConsole = outputHelper;
             Scope = fixture.ConfigureLogging(outputHelper);
 
-            var easyCaching = Scope.Resolve<IEasyCachingProvider>();
-            easyCaching.Flush();
-            NotificationTemplateService = Scope.Resolve<INotificationTemplateService>();
-            Configuration = Scope.Resolve<IConfiguration>();
-            Logger = Scope.Resolve<ILoggerFactory>();
+            // var easyCaching = Scope.Resolve<IEasyCachingProvider>();
+            // easyCaching.Flush();
+            // var NotificationTemplateService = Scope.Resolve<INotificationTemplateService>();
+            // Configuration = Scope.Resolve<IConfiguration>();
+            // Logger = Scope.Resolve<ILoggerFactory>();
             //var machine = Scope.Resolve<NotificationStateMachine>();
             //var sagaHarness = Scope.Resolve<ISagaStateMachineTestHarness<NotificationStateMachine, NotificationState>>();
         }
 
         [Fact]
-        public async Task Should_Send_Notification()
+        public async Task Should_Fail_Message_Is_Null()
         {
             // Arrange
             Guid userCommunicationId;
@@ -66,18 +64,6 @@ namespace FooCommerce.NotificationAPI.Tests
                     IsVerified = true,
                     UserId = user.Id,
                 }).Entity;
-                var notification = dbContext.Set<Notification>().Add(new Notification
-                {
-                    Action = NotificationAction.Verification_Request_Email,
-                }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
-                {
-                    NotificationId = notification.Id,
-                    IncludeRequest = true,
-                    JsonTemplate = "{\"h\":\"<p>123</p>\"}",
-                    Type = CommunicationType.Email_Message
-                }).Entity;
                 saved = await dbContext.SaveChangesAsync() > 0;
                 userCommunicationId = userCommunication.Id;
             }
@@ -85,24 +71,129 @@ namespace FooCommerce.NotificationAPI.Tests
             var serviceProvider = Scope.Resolve<IServiceProvider>();
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
-
+            var notificationId = NewId.NextGuid();
             var notificationOptions = new NotificationOptions
             {
                 Action = NotificationAction.Verification_Request_Email,
                 Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
                 RequestInfo = httpContext.GetEndUser()
             };
-            var notificationId = NewId.NextGuid();
 
-            // Act
-            await Fixture.Harness.Bus.Publish<QueueNotification>(new
+            await this.Fixture.Harness.Start();
+            try
             {
-                NotificationId = notificationId,
-                Options = notificationOptions
-            });
+                // Act
+                var consumer = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+                await this.Fixture.Harness.Bus.Publish<QueueNotification>(new
+                {
+                    NotificationId = notificationId,
+                    Options = (INotificationOptions)notificationOptions
+                });
 
-            var hasConsumed = await Fixture.Harness.Consumed.Any<QueueNotification>(x => x.Context.Message.NotificationId == notificationId);
-            var client = Scope.Resolve<IRequestClient<GetNotification>>();
+                // Assert
+                var published = await this.Fixture.Harness.Published.Any<QueueNotification>();
+                Assert.True(published);
+
+                var consumed = await consumer.Consumed.Any<QueueNotification>();
+                Assert.True(consumed);
+
+                var publishedFailure = await this.Fixture.Harness.Published.Any<NotificationFailed>();
+                Assert.True(publishedFailure);
+            }
+            finally
+            {
+                await this.Fixture.Harness.Stop();
+            }
+        }
+
+        [Fact]
+        public async Task Should_Success()
+        {
+            // Arrange
+            Guid userCommunicationId;
+            var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+            await using (var dbContext = await dbContextFactory.CreateDbContextAsync())
+            {
+                var user = dbContext.Set<User>().Add(new User()).Entity;
+                var saved = await dbContext.SaveChangesAsync() > 0;
+                var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
+                {
+                    Type = CommunicationType.Email_Message,
+                    Value = "arash.shabbeh@gmail.com",
+                    IsVerified = true,
+                    UserId = user.Id,
+                }).Entity;
+                //var notification = dbContext.Set<Notification>().Add(new Notification
+                //{
+                //    Action = NotificationAction.Verification_Request_Email,
+                //}).Entity;
+                //saved = await dbContext.SaveChangesAsync() > 0;
+                //var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+                //{
+                //    NotificationId = notification.Id,
+                //    IncludeRequest = true,
+                //    JsonTemplate = "{\"h\":\"<p>123</p>\"}",
+                //    Type = CommunicationType.Email_Message
+                //}).Entity;
+                saved = await dbContext.SaveChangesAsync() > 0;
+                userCommunicationId = userCommunication.Id;
+            }
+
+            var serviceProvider = Scope.Resolve<IServiceProvider>();
+            var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
+            var httpContext = httpContextAccessor.HttpContext!;
+            var notificationId = NewId.NextGuid();
+            var notificationOptions = new NotificationOptions
+            {
+                Action = NotificationAction.Verification_Request_Email,
+                Receiver = new NotificationReceiverByCommunicationId(userCommunicationId),
+                RequestInfo = httpContext.GetEndUser()
+            };
+
+            await this.Fixture.Harness.Start();
+            try
+            {
+                // Act
+                var consumer = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+                //await this.Fixture.Harness.Bus.Publish<QueueNotification>(new
+                //{
+                //    NotificationId = notificationId,
+                //    Options = (INotificationOptions)notificationOptions
+                //});
+
+                //var endpoint = await this.Fixture.Harness.Bus.GetSendEndpoint(new Uri("queue:queue-notification"));
+                //await endpoint.Send<QueueNotification>(new
+                //{
+                //    NotificationId = notificationId,
+                //    //Options = (INotificationOptions)notificationOptions
+                //});
+
+                var client = this.Fixture.Harness.GetRequestClient<QueueNotification>();
+                var (acceptedTask, failedTask) = await client.GetResponse<NotificationQueued, NotificationFailed>(new
+                {
+                    NotificationId = notificationId,
+                    Options = (INotificationOptions)notificationOptions
+                });
+
+                // Assert
+                Assert.True(acceptedTask.IsCompletedSuccessfully);
+
+                var accepted = await acceptedTask;
+                Assert.NotEqual(Guid.Empty, accepted.Message.NotificationId);
+
+                var published = await this.Fixture.Harness.Published.Any<QueueNotification>();
+                Assert.True(published);
+
+                var consumed = await consumer.Consumed.Any<QueueNotification>();
+                Assert.True(consumed);
+
+                var publishedSubmitted = await this.Fixture.Harness.Published.Any<NotificationQueued>();
+                Assert.True(publishedSubmitted);
+            }
+            finally
+            {
+                await this.Fixture.Harness.Stop();
+            }
         }
     }
 }

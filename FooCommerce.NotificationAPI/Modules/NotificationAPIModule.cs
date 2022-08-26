@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.Notifications.Services;
+using FooCommerce.Infrastructure.JsonCustomization;
 using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.NotificationAPI.Services;
 
@@ -24,37 +25,66 @@ public class NotificationAPIModule : Module
 
     private void Apply(IBusRegistrationConfigurator cfg)
     {
+        var entryAssembly = typeof(QueueNotificationConsumer).Assembly;
         cfg.SetKebabCaseEndpointNameFormatter();
         cfg.SetInMemorySagaRepositoryProvider();
 
-        cfg.AddConsumer<QueueNotificationConsumer>();
-        cfg.AddSagaStateMachine<NotificationStateMachine, NotificationState>();
+        cfg.AddMediator();
+
+        cfg.AddConsumers(entryAssembly);
+        //cfg.AddSagaStateMachines(entryAssembly);
+        cfg.AddSagas(entryAssembly);
+        cfg.AddActivities(entryAssembly);
+        //cfg.AddRequestClient<QueueNotification>(new Uri($"queue:{KebabCaseEndpointNameFormatter.Instance.Consumer<QueueNotificationConsumer>()}"));
 
         if (!_test)
         {
-            //cfg.UsingGrpc((context, config) =>
-            //{
-            //    config.ConfigureNewtonsoftJsonDeserializer(s => DefaultSettings.Settings);
-            //    config.ConfigureNewtonsoftJsonSerializer(s => DefaultSettings.Settings);
+            cfg.UsingRabbitMq((context, config) =>
+            {
+                config.AutoStart = true;
+                config.Host("localhost", h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
 
-            //    config.AutoStart = true;
-            //    config.Host(h =>
-            //    {
-            //        h.Host = "127.0.0.1";
-            //        h.Port = 19796;
+                config.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.Converters.Clear();
+                    foreach (var jsonConverter in DefaultSettings.Settings.Converters)
+                        options.Converters.Add(jsonConverter);
 
-            //        h.AddServer(new Uri("http://127.0.0.1:19797"));
-            //        h.AddServer(new Uri("http://127.0.0.1:19798"));
-            //    });
+                    options.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
+                    options.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
+                    options.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
+                    options.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
+                    options.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
+                    options.WriteIndented = true;
+                    return options;
+                });
 
-            //    config.ConfigureEndpoints(context);
-            //});
+                config.ConfigureEndpoints(context);
+            });
         }
         else
         {
             cfg.UsingInMemory((context, config) =>
             {
-                config.AutoStart = true;
+                config.ConfigureJsonSerializerOptions(options =>
+                {
+                    options.Converters.Clear();
+                    foreach (var jsonConverter in DefaultSettings.Settings.Converters)
+                        options.Converters.Add(jsonConverter);
+
+                    options.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
+                    options.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
+                    options.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
+                    options.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
+                    options.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
+                    options.ReferenceHandler = DefaultSettings.Settings.ReferenceHandler;
+                    options.WriteIndented = true;
+                    return options;
+                });
                 config.ConfigureEndpoints(context);
             });
         }

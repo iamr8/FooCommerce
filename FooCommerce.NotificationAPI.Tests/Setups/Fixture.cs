@@ -57,8 +57,7 @@ public class Fixture : IAsyncLifetime, IFixture
         Container = containerBuilder.Build();
 
         Harness = Container.Resolve<ITestHarness>();
-
-        await Harness.Start();
+        Harness.TestTimeout = TimeSpan.FromSeconds(2);
 
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
@@ -118,7 +117,6 @@ public class Fixture : IAsyncLifetime, IFixture
 
     public async Task DisposeAsync()
     {
-        await Harness.Stop();
         var connectionString = Configuration.GetConnectionString("Default");
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
         var memoryCache = Container.Resolve<IMemoryCache>();

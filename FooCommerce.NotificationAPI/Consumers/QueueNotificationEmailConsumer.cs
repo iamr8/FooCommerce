@@ -8,8 +8,9 @@ using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
-using FooCommerce.NotificationAPI.Publishers;
 
 using MassTransit;
 
@@ -21,14 +22,14 @@ using MimeKit;
 
 namespace FooCommerce.NotificationAPI.Consumers
 {
-    public class SendNotificationEmailConsumer : IConsumer<SendNotificationEmail>
+    public class QueueNotificationEmailConsumer : IConsumer<QueueNotificationEmail>
     {
-        private readonly ILogger<SendNotificationEmailConsumer> _logger;
+        private readonly ILogger<QueueNotificationEmailConsumer> _logger;
         private readonly INotificationClientService _clientService;
         private readonly ILocalizer _localizer;
         private readonly IWebHostEnvironment _environment;
 
-        public SendNotificationEmailConsumer(ILogger<SendNotificationEmailConsumer> logger,
+        public QueueNotificationEmailConsumer(ILogger<QueueNotificationEmailConsumer> logger,
             INotificationClientService clientService,
             ILocalizer localizer,
             IWebHostEnvironment environment)
@@ -39,7 +40,7 @@ namespace FooCommerce.NotificationAPI.Consumers
             _environment = environment;
         }
 
-        public async Task Consume(ConsumeContext<SendNotificationEmail> context)
+        public async Task Consume(ConsumeContext<QueueNotificationEmail> context)
         {
             var renderedTemplate = await context.Message.Options.Factory.CreateEmailModelAsync(
                 (NotificationTemplateEmailModel)context.Message.Options.Template,
@@ -50,7 +51,7 @@ namespace FooCommerce.NotificationAPI.Consumers
                 });
             var receiver = context.Message.Options.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Options.Template.Communication);
 
-            SendNotificationHandlerGuard.Check(renderedTemplate, context.Message.Options, _logger);
+            QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message.Options, _logger);
 
             var mailCredential = _clientService.GetAvailableMailboxCredentials();
             var mime = new MimeMessage
@@ -67,21 +68,37 @@ namespace FooCommerce.NotificationAPI.Consumers
             var emailSent = true;
             if (!_environment.IsStaging())
             {
-                await using (var emailClient = await EmailClient.GetInstanceAsync(mailCredential.SenderAddress, mailCredential.Password, mailCredential.Server, mailCredential.SenderAlias, mailCredential.SmtpPort, context.CancellationToken))
+                await using var emailClient = await EmailClient.GetInstanceAsync(mailCredential.SenderAddress, mailCredential.Password, mailCredential.Server, mailCredential.SenderAlias, mailCredential.SmtpPort, context.CancellationToken);
+                emailSent = await emailClient.SendAsync(mime, context.CancellationToken);
+                if (!emailSent)
                 {
-                    emailSent = await emailClient.SendAsync(mime, context.CancellationToken);
-                    if (!emailSent)
-                        _logger.LogError("Unable to send {0} to User {1}", context.Message.Options.Template.Communication, context.Message.Options.Options.Receiver.UserId);
+                    _logger.LogError("Unable to send {0} to User {1}", context.Message.Options.Template.Communication, context.Message.Options.Options.Receiver.UserId);
                 }
+
+                await emailClient.DisposeAsync();
             }
 
             if (emailSent)
             {
+                await context.RespondAsync<NotificationSent>(new
+                {
+                    NotificationId = context.Message.NotificationId,
+                    Gateway = context.Message.Options.Template.Communication
+                });
+
                 var token = context.Message.Options.Options.Bag.OfType<AuthToken>().FirstOrDefault();
                 if (token != null)
                 {
                     await context.Publish(new UpdateAuthTokenState(token.Id, UserNotificationUpdateState.Sent), context.CancellationToken);
                 }
+            }
+            else
+            {
+                await context.RespondAsync<NotificationFailed>(new
+                {
+                    NotificationId = context.Message.NotificationId,
+                    Gateway = context.Message.Options.Template.Communication
+                });
             }
         }
     }
