@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Providers;
 
 /// <summary>
 /// A default implementation of <see cref="IBindingMetadataProvider"/>.

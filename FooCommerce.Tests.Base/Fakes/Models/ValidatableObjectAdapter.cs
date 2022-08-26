@@ -2,7 +2,7 @@
 
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Models;
 
 internal class ValidatableObjectAdapter : IModelValidator
 {

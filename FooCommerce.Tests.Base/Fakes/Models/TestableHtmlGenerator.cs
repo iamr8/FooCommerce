@@ -15,7 +15,7 @@ using Microsoft.Extensions.WebEncoders.Testing;
 
 using Moq;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Models;
 
 public class TestableHtmlGenerator : DefaultHtmlGenerator
 {

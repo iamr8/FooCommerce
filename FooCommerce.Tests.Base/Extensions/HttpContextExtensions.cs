@@ -4,7 +4,10 @@ using System.Reflection;
 using System.Text.Encodings.Web;
 
 using FooCommerce.Application.Helpers;
-using FooCommerce.Tests.Base.BaseClasses;
+using FooCommerce.Tests.Fakes;
+using FooCommerce.Tests.Fakes.Models;
+using FooCommerce.Tests.Fakes.Providers;
+using FooCommerce.Tests.Helpers;
 
 using MassTransit.Internals;
 
@@ -20,7 +23,7 @@ using Microsoft.Extensions.Primitives;
 
 using Moq;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests.Extensions;
 
 public static class HttpContextExtensions
 {

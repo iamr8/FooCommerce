@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging.Configuration;
 
 using Xunit.Abstractions;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests.Extensions;
 
 public static class FixtureExtensions
 {

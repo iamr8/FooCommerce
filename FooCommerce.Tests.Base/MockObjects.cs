@@ -10,7 +10,7 @@ using Microsoft.Net.Http.Headers;
 
 using Moq;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests;
 
 public static class MockObjects
 {
@@ -26,7 +26,7 @@ public static class MockObjects
 
     public static IHttpContextAccessor GetHttpContextAccessor(this IServiceProvider serviceProvider)
     {
-        return GetHttpContextAccessor(serviceProvider, "/", new RouteValueDictionary());
+        return serviceProvider.GetHttpContextAccessor("/", new RouteValueDictionary());
     }
 
     public static IHttpContextAccessor GetHttpContextAccessor(this IServiceProvider serviceProvider, string reqPath, RouteValueDictionary routeValueDic)

@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI.Tests", "FooCommerce.NotificationAPI.Tests\FooCommerce.NotificationAPI.Tests.csproj", "{D999BA5B-2A9B-4C44-969B-11F0F2AAEA9A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Tests.Base", "FooCommerce.Tests.Base\FooCommerce.Tests.Base.csproj", "{6049B6BB-00AB-4E4D-BD70-349135563B0C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Tests", "FooCommerce.Tests.Base\FooCommerce.Tests.csproj", "{6049B6BB-00AB-4E4D-BD70-349135563B0C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

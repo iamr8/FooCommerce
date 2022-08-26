@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 
+using FooCommerce.Tests.Fakes.Models;
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -7,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Providers;
 
 public class TestModelMetadataProvider : DefaultModelMetadataProvider
 {

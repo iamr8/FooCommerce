@@ -11,9 +11,8 @@ using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Models.Receivers;
 using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.NotificationAPI.Events;
-using FooCommerce.NotificationAPI.Tests.Setups;
-using FooCommerce.Tests.Base;
-
+using FooCommerce.Tests;
+using FooCommerce.Tests.Extensions;
 using MassTransit;
 using MassTransit.Testing;
 

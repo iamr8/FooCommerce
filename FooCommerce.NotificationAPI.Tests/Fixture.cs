@@ -9,7 +9,7 @@ using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Tests.Base;
+using FooCommerce.Tests;
 
 using MassTransit;
 using MassTransit.Testing;
@@ -21,7 +21,7 @@ using Microsoft.Extensions.Configuration;
 
 using NotificationAPIModule = FooCommerce.NotificationAPI.Modules.NotificationAPIModule;
 
-namespace FooCommerce.NotificationAPI.Tests.Setups;
+namespace FooCommerce.NotificationAPI.Tests;
 
 public class Fixture : IAsyncLifetime, IFixture
 {

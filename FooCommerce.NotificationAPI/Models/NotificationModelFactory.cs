@@ -3,11 +3,11 @@ using System.Text;
 
 using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Models.Contents;
-using FooCommerce.Application.Notifications.Models.Types;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Extensions;
 using FooCommerce.NotificationAPI.Interfaces;
 using FooCommerce.NotificationAPI.Models.FactoryOptions;
+using FooCommerce.NotificationAPI.Models.Types;
 
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;

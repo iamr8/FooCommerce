@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests;
 
 public interface IFixture
 {

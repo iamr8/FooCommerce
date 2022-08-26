@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
 
-namespace FooCommerce.Application.Notifications.Models.Types;
+namespace FooCommerce.NotificationAPI.Models.Types;
 
 public record NotificationEmailModel(IHtmlContent Html);

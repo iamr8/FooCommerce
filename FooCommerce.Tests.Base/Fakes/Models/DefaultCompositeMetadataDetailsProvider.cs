@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Models;
 
 /// <summary>
 /// A default implementation of <see cref="ICompositeMetadataDetailsProvider"/>.

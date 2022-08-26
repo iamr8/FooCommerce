@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests.Helpers;
 
 public static class AnonymousReflection
 {

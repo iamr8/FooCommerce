@@ -10,7 +10,7 @@ using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Infrastructure.Shopping.StateMachines;
-using FooCommerce.Tests.Base;
+using FooCommerce.Tests;
 
 using MassTransit;
 using MassTransit.Testing;

@@ -1,6 +1,6 @@
-﻿using FooCommerce.Application.Notifications.Models.Types;
-using FooCommerce.NotificationAPI.Dtos;
+﻿using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Models.FactoryOptions;
+using FooCommerce.NotificationAPI.Models.Types;
 
 namespace FooCommerce.NotificationAPI.Interfaces;
 

@@ -3,7 +3,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Providers;
 
 internal class DefaultValidationMetadataProvider : IValidationMetadataProvider
 {

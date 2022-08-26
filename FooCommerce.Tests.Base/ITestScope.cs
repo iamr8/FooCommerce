@@ -2,7 +2,7 @@
 
 using Xunit.Abstractions;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests;
 
 public interface ITestScope<out T> where T : class
 {

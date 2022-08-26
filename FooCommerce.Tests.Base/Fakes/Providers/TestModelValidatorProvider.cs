@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Providers;
 
 public class TestModelValidatorProvider : CompositeModelValidatorProvider
 {

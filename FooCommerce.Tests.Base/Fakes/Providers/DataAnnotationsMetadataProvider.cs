@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.ModelBinding.Metadata;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 
-namespace FooCommerce.Tests.Base.BaseClasses;
+namespace FooCommerce.Tests.Fakes.Providers;
 
 internal class DataAnnotationsMetadataProvider :
     IBindingMetadataProvider,

@@ -34,7 +34,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\FooCommerce.Infrastructure\FooCommerce.Infrastructure.csproj" />
-	  <ProjectReference Include="..\FooCommerce.Tests.Base\FooCommerce.Tests.Base.csproj" />
+	  <ProjectReference Include="..\FooCommerce.Tests.Base\FooCommerce.Tests.csproj" />
 	</ItemGroup>
 
 </Project>

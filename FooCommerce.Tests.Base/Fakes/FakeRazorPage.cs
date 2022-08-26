@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace FooCommerce.Tests.Base;
+namespace FooCommerce.Tests.Fakes;
 
 public class FakeRazorPage<TModel> : Page
 {
