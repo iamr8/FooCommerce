@@ -1,4 +1,5 @@
-﻿using FooCommerce.Application.Listings.Entities;
+﻿using FooCommerce.Application.Helpers;
+using FooCommerce.Application.Listings.Entities;
 
 using Microsoft.EntityFrameworkCore;
 
@@ -18,7 +19,9 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(this.GetType().Assembly);
+        var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies();
+        foreach (var assembly in assemblies)
+            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
 
         if (TestMode)
         {

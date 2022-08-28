@@ -2,7 +2,8 @@
 using System.Text;
 
 using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Models.Contents;
+using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Domain.Interfaces;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Extensions;
 using FooCommerce.NotificationAPI.Interfaces;
@@ -12,7 +13,6 @@ using FooCommerce.NotificationAPI.Models.Types;
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
 
-using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Models;
@@ -20,24 +20,23 @@ namespace FooCommerce.NotificationAPI.Models;
 public record NotificationModelFactory : INotificationModelFactory
 {
     private readonly INotificationOptions _notificationOptions;
+    private readonly ILocalizer _localizer;
     private readonly ILogger<INotificationModelFactory> _logger;
 
-    private NotificationModelFactory(INotificationOptions notificationOptions, ILoggerFactory loggerFactory)
+    private NotificationModelFactory(INotificationOptions notificationOptions, ILoggerFactory loggerFactory, ILocalizer localizer)
     {
         _notificationOptions = notificationOptions;
+        _localizer = localizer;
         _logger = loggerFactory.CreateLogger<INotificationModelFactory>();
     }
 
-    public static INotificationModelFactory CreateFactory(INotificationOptions options, ILoggerFactory loggerFactory)
+    public static INotificationModelFactory CreateFactory(INotificationOptions options, ILoggerFactory loggerFactory, ILocalizer localizer)
     {
-        return new NotificationModelFactory(options, loggerFactory);
+        return new NotificationModelFactory(options, loggerFactory, localizer);
     }
 
-    public NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template, Action<NotificationPushInAppModelFactoryOptions> options)
+    public NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template, NotificationPushInAppModelFactoryOptions options)
     {
-        var opt = new NotificationPushInAppModelFactoryOptions();
-        options(opt);
-
         var notificationText = new StringBuilder(template.Message.ToString());
         var notificationSubject = template.Subject.ToString();
 
@@ -47,27 +46,21 @@ public record NotificationModelFactory : INotificationModelFactory
         return pushModel;
     }
 
-    public NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template, Action<NotificationSmsModelFactoryOptions> options)
+    public NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template, NotificationSmsModelFactoryOptions options)
     {
-        var opt = new NotificationSmsModelFactoryOptions();
-        options(opt);
-
         var sms = new StringBuilder(template.Text.ToString());
 
         ApplyFormatting(ref sms);
         ApplyLinks(sms,
             smsLink =>
-                $"\r\n{smsLink.Name}\r\n{opt.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{smsLink.Url}");
+                $"\r\n{smsLink.Name}\r\n{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{smsLink.Url}");
 
         var smsModel = new NotificationSmsModel(sms.ToString());
         return smsModel;
     }
 
-    public async Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template, Action<NotificationEmailModelFactoryOptions> options)
+    public async Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template, NotificationEmailModelFactoryOptions options)
     {
-        var opt = new NotificationEmailModelFactoryOptions();
-        options(opt);
-
         var emailHtml = new StringBuilder(template.Html.ToString());
         var emailShowRequestData = template.ShowRequestData;
 
@@ -77,11 +70,12 @@ public record NotificationModelFactory : INotificationModelFactory
 
         var doc = new HtmlDocument();
         doc.LoadHtml(htmlLayout);
+        var dict = new Dictionary<string, string>();
 
-        var footerSocialNetwork = doc.QuerySelector(".js-social-network");
-        var footerSocial = footerSocialNetwork.ParentNode;
-        footerSocialNetwork = footerSocialNetwork.CloneNode(true);
-        footerSocial.ChildNodes.Clear();
+        //var footerSocialNetwork = doc.QuerySelector(".js-social-network");
+        //var footerSocial = footerSocialNetwork.ParentNode;
+        //footerSocialNetwork = footerSocialNetwork.CloneNode(true);
+        //footerSocial.ChildNodes.Clear();
         //foreach (var socialMedia in _appSettings.SocialMedias.GetValues())
         //{
         //    var node = footerSocialNetwork.CloneNode(true);
@@ -93,25 +87,30 @@ public record NotificationModelFactory : INotificationModelFactory
 
         ApplyLinks(emailHtml,
             emailButton =>
-                $"<p><a href='{opt.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{emailButton.Url}' class='e-button'>{emailButton.Name}</a></p>");
+                $"<p><a href='{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{emailButton.Url}' class='e-button'>{emailButton.Name}</a></p>");
 
-        if (emailShowRequestData)
-            await NotificationTemplateEmailModelExtensions.ApplyRequestReplacementsAsync(emailHtml, opt, _logger);
+        var requestHtml = await NotificationTemplateEmailModel.GetRequestLayoutAsync(_logger);
+        if (string.IsNullOrEmpty(requestHtml))
+            throw new Exception("Unable to find Request Html Layout.");
 
         ApplyFormatting(ref emailHtml);
 
         doc.QuerySelector(".js-content").InnerHtml = emailHtml.ToString();
-
         htmlLayout = doc.DocumentNode.OuterHtml;
 
-        NotificationTemplateEmailModel.ApplyLayoutReplacements(ref htmlLayout, _notificationOptions.Receiver.Name, opt);
+        NotificationTemplateEmailModel.GetLayoutDictionary(dict, _notificationOptions.Receiver.Name, options, _localizer);
+        if (emailShowRequestData)
+            NotificationTemplateEmailModel.GetRequestDictionary(dict, options, _notificationOptions.RequestInfo, _localizer);
+
         NotificationModelFactoryExtensions.ApplyMinification(ref htmlLayout);
 
-        var emailModel = new NotificationEmailModel(new HtmlString(htmlLayout));
-        return emailModel;
+        return NotificationEmailModel.GetInstance(htmlLayout, dict);
     }
     private void ApplyLinks(StringBuilder emailHtml, Func<NotificationLink, string> s)
     {
+        if (_notificationOptions.Content == null || !_notificationOptions.Content.Any())
+            return;
+
         var links = _notificationOptions.Content.OfType<NotificationLink>();
         if (!links.Any())
             return;
@@ -123,6 +122,9 @@ public record NotificationModelFactory : INotificationModelFactory
     }
     private void ApplyFormatting(ref StringBuilder emailHtml)
     {
+        if (_notificationOptions.Content == null || !_notificationOptions.Content.Any())
+            return;
+
         var formattings = _notificationOptions.Content.OfType<NotificationFormatting>();
         if (!formattings.Any())
             return;
@@ -132,11 +134,8 @@ public record NotificationModelFactory : INotificationModelFactory
             emailHtml = emailHtml.Replace("{{" + formatting.Key + "}}", formatting.Text);
         }
     }
-    public NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, Action<NotificationPushModelFactoryOptions> options)
+    public NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, NotificationPushModelFactoryOptions options)
     {
-        var opt = new NotificationPushModelFactoryOptions();
-        options(opt);
-
         var notificationText = new StringBuilder(template.Message.ToString());
         var notificationSubject = template.Subject.ToString();
 

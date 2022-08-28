@@ -1,6 +1,8 @@
-﻿namespace FooCommerce.Application.Notifications.Interfaces;
+﻿using FooCommerce.Application.HttpContextRequest;
+
+namespace FooCommerce.Application.Notifications.Interfaces;
 
 public interface INotificationRequestInfo
 {
-    IEndUser RequestInfo { get; set; }
+    HttpRequestInfo RequestInfo { get; }
 }

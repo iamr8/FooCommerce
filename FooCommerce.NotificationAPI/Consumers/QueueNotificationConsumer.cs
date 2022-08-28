@@ -3,12 +3,13 @@ using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Attributes;
 using FooCommerce.Application.Notifications.Contracts;
-using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Services;
+using FooCommerce.Domain.Interfaces;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
+using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
 using MassTransit;
 
@@ -26,21 +27,24 @@ public class QueueNotificationConsumer
     private readonly ILogger<QueueNotificationConsumer> _logger;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _configuration;
+    private readonly ILocalizer _localizer;
 
     public QueueNotificationConsumer(INotificationTemplateService templateService,
         IDbContextFactory<AppDbContext> dbContextFactory,
         IConfiguration configuration,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory, ILocalizer localizer)
     {
         _templateService = templateService;
         _loggerFactory = loggerFactory;
+        _localizer = localizer;
         _dbContextFactory = dbContextFactory;
         _logger = _loggerFactory.CreateLogger<QueueNotificationConsumer>();
         _configuration = configuration;
     }
 
-    public QueueNotificationConsumer()
+    public QueueNotificationConsumer(ILocalizer localizer)
     {
+        _localizer = localizer;
     }
 
     public async Task Consume(ConsumeContext<QueueNotification> context)
@@ -60,9 +64,12 @@ public class QueueNotificationConsumer
 
         var websiteUrl = _configuration["WebsiteURL"];
         var templates = await _templateService.GetTemplateAsync(context.Message.Action, context.CancellationToken);
-        var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory);
+        if (templates == null || !templates.Any())
+            throw new NullReferenceException("Unable to find any corresponding templates.");
 
-        await ((INotificationDataReceiver)context.Message.Receiver).ResolveReceiverInformationAsync(_dbContextFactory, context.CancellationToken);
+        var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory, _localizer);
+
+        await context.Message.Receiver.ResolveInformationAsync(_dbContextFactory, context.CancellationToken);
 
         foreach (var communicationType in availableCommunicationTypes)
         {
@@ -77,15 +84,24 @@ public class QueueNotificationConsumer
                             continue;
                         }
 
+                        var model = await factory.CreateEmailModelAsync(
+                            template,
+                            new NotificationEmailModelFactoryOptions
+                            {
+                                LocalDateTime = DateTime.UtcNow.ToLocal(context.Message.RequestInfo),
+                                WebsiteUrl = websiteUrl,
+                            });
+
                         await context.Publish<QueueNotificationEmail>(new
                         {
-                            NotificationId = context.Message.NotificationId,
-                            Options = (INotificationOptions)context.Message,
-                            WebsiteUrl = websiteUrl,
-                            Template = (INotificationTemplate)template,
-                            Factory = factory,
-                            RequestInfo = context.Message.RequestInfo,
-                            IsImportant = true
+                            Model = model,
+                            IsImportant = true,
+                            context.Message.NotificationId,
+                            context.Message.Action,
+                            context.Message.RequestInfo,
+                            context.Message.Receiver,
+                            context.Message.Bag,
+                            context.Message.Content
                         }, context.CancellationToken);
                         break;
                     }
@@ -98,14 +114,22 @@ public class QueueNotificationConsumer
                             continue;
                         }
 
+                        var model = factory.CreatePushModel(
+                            template,
+                            new NotificationPushModelFactoryOptions
+                            {
+                                WebsiteUrl = websiteUrl
+                            });
+
                         await context.Publish<QueueNotificationPush>(new
                         {
-                            NotificationId = context.Message.NotificationId,
-                            Options = (INotificationOptions)context.Message,
-                            WebsiteUrl = websiteUrl,
-                            Template = (INotificationTemplate)template,
-                            Factory = factory,
-                            RequestInfo = context.Message.RequestInfo,
+                            Model = model,
+                            context.Message.NotificationId,
+                            context.Message.Action,
+                            context.Message.RequestInfo,
+                            context.Message.Receiver,
+                            context.Message.Bag,
+                            context.Message.Content
                         }, context.CancellationToken);
                         break;
                     }
@@ -118,14 +142,22 @@ public class QueueNotificationConsumer
                             continue;
                         }
 
+                        var model = factory.CreateSmsModel(
+                            template,
+                            new NotificationSmsModelFactoryOptions
+                            {
+                                WebsiteUrl = websiteUrl
+                            });
+
                         await context.Publish<QueueNotificationSms>(new
                         {
-                            NotificationId = context.Message.NotificationId,
-                            Options = (INotificationOptions)context.Message,
-                            WebsiteUrl = websiteUrl,
-                            Template = (INotificationTemplate)template,
-                            Factory = factory,
-                            RequestInfo = context.Message.RequestInfo,
+                            Model = model,
+                            context.Message.NotificationId,
+                            context.Message.Action,
+                            context.Message.RequestInfo,
+                            context.Message.Receiver,
+                            context.Message.Bag,
+                            context.Message.Content
                         }, context.CancellationToken);
                         break;
                     }
@@ -138,14 +170,22 @@ public class QueueNotificationConsumer
                             continue;
                         }
 
+                        var model = factory.CreatePushInAppModel(
+                            template,
+                            new NotificationPushInAppModelFactoryOptions
+                            {
+                                WebsiteUrl = websiteUrl
+                            });
+
                         await context.Publish<QueueNotificationPushInApp>(new
                         {
-                            NotificationId = context.Message.NotificationId,
-                            Options = (INotificationOptions)context.Message,
-                            WebsiteUrl = websiteUrl,
-                            Template = (INotificationTemplate)template,
-                            Factory = factory,
-                            RequestInfo = context.Message.RequestInfo,
+                            Model = model,
+                            context.Message.NotificationId,
+                            context.Message.Action,
+                            context.Message.RequestInfo,
+                            context.Message.Receiver,
+                            context.Message.Bag,
+                            context.Message.Content
                         }, context.CancellationToken);
                         break;
                     }
@@ -155,7 +195,6 @@ public class QueueNotificationConsumer
         }
 
         await context.RespondAsync<NotificationQueued>(new
-
         {
             NotificationId = context.Message.NotificationId
         });

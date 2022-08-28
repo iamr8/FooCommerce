@@ -4,6 +4,7 @@ using System.Text.Json.Nodes;
 using Dapper;
 
 using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Enums;
@@ -46,100 +47,104 @@ namespace FooCommerce.NotificationAPI.Services
         {
             var cacheKey = $"{CacheKey}.{actionName.ToString().ToLowerInvariant()}";
             return await _easyCaching.GetOrCreateAsync(cacheKey,
-                async () => await GetTemplateNonCachedAsync(actionName, dbConnection), _logger, cancellationToken);
+                async () => await GetTemplateNonCachedAsync(actionName, dbConnection, cancellationToken), _logger, cancellationToken);
         }
 
-        private static async Task<IEnumerable<INotificationTemplate>> GetTemplateNonCachedAsync(NotificationAction actionName, IDbConnection dbConnection)
+        private static async Task<IEnumerable<INotificationTemplate>> GetTemplateNonCachedAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
         {
-            var notificationIds = (await dbConnection.QueryAsync<Guid?>(
-                $"SELECT TOP(1) [notification].{nameof(Notification.Id)} " +
-                $"FROM [Notifications] AS [notification] " +
-                $"WHERE [notification].{nameof(Notification.Action)} = @Action " +
-                $"ORDER BY [notification].{nameof(Notification.Created)} DESC",
-                new
-                {
-                    Action = (short)actionName
-                })).AsList();
-            if (notificationIds == null || !notificationIds.Any())
-                throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
-
-            var notificationId = notificationIds[0];
-            if (notificationId is not { })
-                throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
-
-            // Must be grouped by gateway
-            var __templates = await dbConnection.QueryAsync<NotificationTemplateModel>(
-                $"SELECT [template].{nameof(NotificationTemplate.Id)}, [template].{nameof(NotificationTemplate.Type)}, [template].{nameof(NotificationTemplate.JsonTemplate)}, [template].{nameof(NotificationTemplate.IncludeRequest)} " +
-                $"FROM [NotificationTemplates] AS [template] " +
-                $"WHERE [template].{nameof(NotificationTemplate.NotificationId)} = @NotificationId " +
-                $"ORDER BY [template].{nameof(NotificationTemplate.Created)}",
-                new
-                {
-                    NotificationId = notificationId.Value
-                });
-            if (!__templates.Any())
-                throw new NullReferenceException($"Unable to find a template related to the '{actionName.ToString()}' action.");
-
-            var _templates = __templates.AsList();
-            var output = new List<INotificationTemplate>();
-            for (var i = 0; i < _templates.Count; i++)
+            while (true)
             {
-                var template = _templates[i];
-                var json = JsonNode.Parse(template.JsonTemplate);
+                if (cancellationToken.IsCancellationRequested)
+                    throw new OperationCanceledException(cancellationToken);
 
-                switch (template.Type)
+                var templates = new List<NotificationTemplateModel>();
+                var notificationIds = (await dbConnection.QueryAsync<Guid?>(
+                    $"SELECT TOP(1) [notification].{nameof(Notification.Id)} " +
+                    $"FROM [Notifications] AS [notification] " +
+                    $"WHERE [notification].{nameof(Notification.Action)} = @Action " +
+                    $"ORDER BY [notification].{nameof(Notification.Created)} DESC",
+                    new
+                    {
+                        Action = (short)actionName
+                    })).AsList();
+                if (notificationIds == null || !notificationIds.Any())
+                    throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
+
+                var notificationId = notificationIds[0];
+                if (notificationId is not { })
+                    throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
+
+                // Must be grouped by gateway
+                var __templates = await dbConnection.QueryAsync<NotificationTemplateModel>(
+                    $"SELECT [template].{nameof(NotificationTemplate.Id)}, [template].{nameof(NotificationTemplate.Type)}, [template].{nameof(NotificationTemplate.JsonTemplate)}, [template].{nameof(NotificationTemplate.IncludeRequest)} " +
+                    $"FROM [NotificationTemplates] AS [template] " +
+                    $"WHERE [template].{nameof(NotificationTemplate.NotificationId)} = @NotificationId " +
+                    $"ORDER BY [template].{nameof(NotificationTemplate.Created)}",
+                    new
+                    {
+                        NotificationId = notificationId.Value
+                    });
+                if (!__templates.Any())
+                    throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
+
+                templates = __templates.AsList();
+                var output = new List<INotificationTemplate>();
+                for (var i = 0; i < templates.Count; i++)
                 {
-                    case CommunicationType.Email_Message:
-                        {
-                            var html = json["h"].ToString();
+                    var template = templates[i];
+                    var json = JsonNode.Parse(template.JsonTemplate);
 
-                            var localizerHtml = LocalizerHelper.Deserialize(html);
-
-                            output.Add(new NotificationTemplateEmailModel(template.Id)
+                    switch (template.Type)
+                    {
+                        case CommunicationType.Email_Message:
                             {
-                                Id = template.Id,
-                                ShowRequestData = template.IncludeRequest,
-                                Html = localizerHtml
-                            });
-                            break;
-                        }
-                    case CommunicationType.Push_Notification:
-                        {
-                            var subject = json["s"].ToString();
-                            var message = json["m"].ToString();
+                                var html = json["h"];
 
-                            var localizerSubject = LocalizerHelper.Deserialize(subject);
-                            var localizerMessage = LocalizerHelper.Deserialize(message);
+                                var localizerHtml = LocalizerHelper.Deserialize(html);
 
-                            output.Add(new NotificationTemplatePushModel(template.Id)
+                                output.Add(new NotificationTemplateEmailModel(template.Id)
+                                {
+                                    ShowRequestData = template.IncludeRequest,
+                                    Html = localizerHtml
+                                });
+                                break;
+                            }
+                        case CommunicationType.Push_Notification:
                             {
-                                Id = template.Id,
-                                Subject = localizerSubject,
-                                Message = localizerMessage
-                            });
-                            break;
-                        }
+                                var subject = json["s"];
+                                var message = json["m"];
 
-                    case CommunicationType.Mobile_Sms:
-                        {
-                            var text = json["t"].ToString();
+                                var localizerSubject = LocalizerHelper.Deserialize(subject);
+                                var localizerMessage = LocalizerHelper.Deserialize(message);
 
-                            var localizerText = LocalizerHelper.Deserialize(text);
+                                output.Add(new NotificationTemplatePushModel(template.Id)
+                                {
+                                    Subject = localizerSubject,
+                                    Message = localizerMessage
+                                });
+                                break;
+                            }
 
-                            output.Add(new NotificationTemplateSmsModel(template.Id)
+                        case CommunicationType.Mobile_Sms:
                             {
-                                Id = template.Id,
-                                Text = localizerText
-                            });
-                            break;
-                        }
+                                var text = json["t"];
 
-                    default:
-                        throw new ArgumentOutOfRangeException();
+                                var localizerText = LocalizerHelper.Deserialize(text);
+
+                                output.Add(new NotificationTemplateSmsModel(template.Id)
+                                {
+                                    Text = localizerText
+                                });
+                                break;
+                            }
+
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
                 }
-            }
 
-            return output;
+                return output;
+            }
         }
     }
 }

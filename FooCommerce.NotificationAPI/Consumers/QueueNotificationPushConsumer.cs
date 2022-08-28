@@ -1,6 +1,5 @@
-﻿using FooCommerce.NotificationAPI.Consumers.Extensions;
+﻿using FooCommerce.Application.Membership.Enums;
 using FooCommerce.NotificationAPI.Contracts;
-using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Events;
 
 using MassTransit;
@@ -20,15 +19,8 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
 
     public async Task Consume(ConsumeContext<QueueNotificationPush> context)
     {
-        var renderedTemplate = context.Message.Factory.CreatePushModel(
-            (NotificationTemplatePushModel)context.Message.Template,
-            options =>
-            {
-                options.WebsiteUrl = context.Message.WebsiteUrl;
-            });
-        var receiver = context.Message.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Template.Communication);
+        var receiver = context.Message.Receiver.UserCommunications.Single(x => x.Type == CommunicationType.Push_Notification);
 
-        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message, _logger);
         // send Push Notification using relevant SDK
 
         var pushSent = true;
@@ -37,7 +29,7 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
             await context.RespondAsync<NotificationSent>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Template.Communication
+                Gateway = CommunicationType.Push_Notification
             });
         }
         else
@@ -45,7 +37,7 @@ public class QueueNotificationPushConsumer : IConsumer<QueueNotificationPush>
             await context.RespondAsync<NotificationFailed>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Template.Communication
+                Gateway = CommunicationType.Push_Notification
             });
         }
     }

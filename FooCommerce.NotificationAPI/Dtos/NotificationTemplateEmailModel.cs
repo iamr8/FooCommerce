@@ -1,97 +1,123 @@
 ﻿using System.Globalization;
 using System.Reflection;
-using System.Text.RegularExpressions;
 
+using FooCommerce.Application.HttpContextRequest;
 using FooCommerce.Application.Localization.Models;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.Domain.Interfaces;
+using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.Infrastructure.Localization.Helpers;
 using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
+using Microsoft.AspNetCore.Html;
 using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Dtos;
 
-public record NotificationTemplateEmailModel(Guid Id) : INotificationTemplate
+public record NotificationTemplateEmailModel : INotificationTemplate
 {
+    internal NotificationTemplateEmailModel(Guid id)
+    {
+        this.Id = id;
+    }
+    public Guid Id { get; }
     public CommunicationType Communication => CommunicationType.Email_Message;
     public LocalizerValueCollection Html { get; init; }
     public bool ShowRequestData { get; init; }
+    public IDictionary<string, string> Values { get; }
 
-    public static void ApplyLayoutReplacements(ref string htmlLayout, string receiverName, NotificationEmailModelFactoryOptions options)
+    public static void GetRequestDictionary(IDictionary<string, string> dict, NotificationEmailModelFactoryOptions options, IHttpRequestInfo requestInfo, ILocalizer localizer)
+    {
+        var ipAddress = requestInfo.IPAddress;
+        var country = requestInfo.Country;
+        var platform = $"{requestInfo.Platform.Name} {requestInfo.Platform.Version}";
+        var browser = $"{requestInfo.Browser.Name} {requestInfo.Browser.Version}";
+
+        dict.Add("{{request_ip}}", ipAddress?.ToString());
+        dict.Add("{{request_location}}", country != null ? $"({country.EnglishName})" : "");
+        dict.Add("{{request_platform}}", platform);
+        dict.Add("{{request_browser}}", browser);
+
+        dict.Add("{{translation_ip}}", localizer["IPAddress"]);
+        dict.Add("{{translation_platform}}", localizer["OperatingSystem"]);
+        dict.Add("{{translation_browser}}", localizer["WebBrowser"]);
+
+        var resetPasswordUrl = $"{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}/account/password/reset";
+        dict.Add("{{translation_caution}}", localizer.Html("Account_Email_IfYouDoNotRecognizeThisActivity", c => new HtmlString($"<a href=\"{resetPasswordUrl}\" class=\"e-link js-mail-link\">{localizer["Account_ResetPassword"]}</a>")).GetString());
+    }
+
+    public static void GetLayoutDictionary(Dictionary<string, string> dict, string receiverName, NotificationEmailModelFactoryOptions options, ILocalizer localizer)
     {
         var culture = CultureInfo.CurrentCulture.Equals(CultureInfo.GetCultureInfo("tr"))
             ? CultureInfo.CurrentCulture
             : CultureInfo.GetCultureInfo("en");
 
-        htmlLayout = Regex.Replace(htmlLayout, @"( |\t|\r?\n)\1+", "$1");
+        dict.Add("{{baseUrl}}", $"{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}");
+        dict.Add("{{app_logo}}", $"{options.WebsiteUrl}/img/email/logo.png");
 
-        htmlLayout = htmlLayout.Replace("{{baseUrl}}", $"{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}");
-        htmlLayout = htmlLayout.Replace("{{app_logo}}", $"{options.WebsiteUrl}/img/email/logo.png");
+        dict.Add("{{header_pageTitle}}", localizer["AppName"]);
+        dict.Add("{{html_lang}}", culture.TwoLetterISOLanguageName);
+        dict.Add("{{html_lang_dir}}", culture.TextInfo.IsRightToLeft ? "rtl" : "ltr");
 
-        htmlLayout = htmlLayout.Replace("{{header_pageTitle}}", options.Localizer["AppName"]);
-        htmlLayout = htmlLayout.Replace("{{html_lang}}", culture.TwoLetterISOLanguageName);
-        htmlLayout = htmlLayout.Replace("{{html_lang_dir}}", culture.TextInfo.IsRightToLeft ? "rtl" : "ltr");
+        dict.Add("{{translation_hello}}", localizer["Hi"]);
 
-        htmlLayout = htmlLayout.Replace("{{translation_hello}}", options.Localizer["Hi"]);
+        dict.Add("{{user_receiverName}}", receiverName);
 
-        htmlLayout = htmlLayout.Replace("{{user_receiverName}}", receiverName);
+        dict.Add("{{app_copyright_companyName}}", localizer["ECOHOSCorporation"]);
+        dict.Add("{{app_copyright_year}}", options.LocalDateTime.Year.ToString());
+        //dict.Add("{{app_copyright_address}}", _appSettings.CompanyInformation.Address);
 
-        htmlLayout = htmlLayout.Replace("{{app_copyright_companyName}}", options.Localizer["ECOHOSCorporation"]);
-        htmlLayout = htmlLayout.Replace("{{app_copyright_year}}", options.LocalDateTime.Year.ToString());
-        //htmlLayout = htmlLayout.Replace("{{app_copyright_address}}", _appSettings.CompanyInformation.Address);
-
-        htmlLayout = htmlLayout.Replace("{{footer_homepage}}", options.Localizer["Menu_HomePage"]);
-        htmlLayout = htmlLayout.Replace("{{footer_unsubscribe}}", options.Localizer["Unsubscribe"]);
+        dict.Add("{{footer_homepage}}", localizer["Menu_HomePage"]);
+        dict.Add("{{footer_unsubscribe}}", localizer["Unsubscribe"]);
         //html = html.Replace("{{footer_unsubscribe_callback}}", unsubscribeToken);
-        htmlLayout = htmlLayout.Replace("{{footer_contact}}", options.Localizer["Contact"]);
+        dict.Add("{{footer_contact}}", localizer["Contact"]);
     }
 
-    public static async Task<string> GetRequestLayoutAsync<T>(ILogger<T> logger)
+    public static Task<string> GetRequestLayoutAsync<T>(ILogger<T> logger)
     {
-        var requestDataPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Messaging/Templates/Email/_RequestData.html";
-        string requestHtml;
+        var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Templates/_RequestData.html";
+        var output = ReadFile(path, logger);
+        return output;
+    }
+
+    private static async Task<string> ReadFile<TLogger>(string path, ILogger<TLogger> logger)
+    {
+        string output;
         try
         {
-            await using (var fileStream = new FileStream(requestDataPath, FileMode.Open))
+            await using var fileStream = new FileStream(path, FileMode.Open);
+            try
             {
+                fileStream.Seek(0, SeekOrigin.Begin);
                 fileStream.Lock(0, fileStream.Length);
-                using (var streamReader = new StreamReader(fileStream))
-                {
-                    requestHtml = await streamReader.ReadToEndAsync();
-                }
-                fileStream.Unlock(0, fileStream.Length);
+                using var streamReader = new StreamReader(fileStream);
+                output = await streamReader.ReadToEndAsync();
+                streamReader.Dispose();
             }
-        }
-        catch (Exception e)
-        {
-            logger.LogError("Unable to access request data file at path: {0}", requestDataPath);
-            return null;
-        }
-
-        return requestHtml;
-    }
-    public static async Task<string> GetLayout<T>(ILogger<T> logger)
-    {
-        var layoutPath = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Messaging/Templates/Email/_Layout.html";
-        string htmlLayout;
-        try
-        {
-            await using (var fileStreamLayout = new FileStream(layoutPath, FileMode.Open))
+            finally
             {
-                fileStreamLayout.Lock(0, fileStreamLayout.Length);
-                using (var streamReader = new StreamReader(fileStreamLayout))
+                if (fileStream.CanRead || fileStream.CanSeek)
                 {
-                    htmlLayout = await streamReader.ReadToEndAsync();
+                    fileStream.Seek(0, SeekOrigin.Begin);
+                    fileStream.Unlock(0, fileStream.Length);
                 }
-                fileStreamLayout.Unlock(0, fileStreamLayout.Length);
+
+                await fileStream.DisposeAsync();
             }
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            logger.LogError("Unable to access layout file at path: {0}", layoutPath);
+            logger.LogError("Unable to access layout file at path: {0}", path);
             return null;
         }
 
-        return htmlLayout;
+        return output;
+    }
+    public static Task<string> GetLayout<TLogger>(ILogger<TLogger> logger)
+    {
+        var path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "/Templates/_Layout.html";
+        var output = ReadFile(path, logger);
+        return output;
     }
 }

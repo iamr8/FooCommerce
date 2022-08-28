@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Autofac;
+﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Application.Notifications.Services;
@@ -71,6 +70,9 @@ public class NotificationAPIModule : Module
         {
             cfg.UsingInMemory((context, config) =>
             {
+                config.UseRawJsonDeserializer();
+                config.UseRawJsonSerializer();
+
                 config.ConfigureJsonSerializerOptions(options =>
                 {
                     options.Converters.Clear();
@@ -105,6 +107,10 @@ public class NotificationAPIModule : Module
         }
 
         builder.Populate(services);
+
+        builder.RegisterType<NotificationClientService>()
+            .As<INotificationClientService>()
+            .InstancePerLifetimeScope();
 
         builder.RegisterType<NotificationTemplateService>()
             .As<INotificationTemplateService>()

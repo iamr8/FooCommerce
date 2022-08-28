@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using FooCommerce.Application.HttpContextRequest;
+
+using Microsoft.AspNetCore.Http;
 
 using NodaTime;
 
@@ -10,22 +12,22 @@ public static class DateTimeHelper
     /// Returns a localized datetime according to the given Timezone.
     /// </summary>
     /// <param name="utcDateTime"></param>
-    /// <param name="endUser"></param>
+    /// <param name="httpRequestInfo"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public static DateTime ToLocal(this DateTime utcDateTime, IEndUser endUser)
+    public static DateTime ToLocal(this DateTime utcDateTime, IHttpRequestInfo httpRequestInfo)
     {
-        if (endUser == null)
-            throw new ArgumentNullException(nameof(endUser));
+        if (httpRequestInfo == null)
+            throw new ArgumentNullException(nameof(httpRequestInfo));
         if (utcDateTime.Kind != DateTimeKind.Utc)
             throw new ArgumentException($"{nameof(utcDateTime)} must be in kind of UTC.");
 
         var instant = Instant.FromDateTimeUtc(utcDateTime);
-        if (endUser.Timezone == null)
+        if (httpRequestInfo.Timezone == null)
             throw new NullReferenceException("Unable to get user's timezone.");
 
-        var result = instant.InZone(endUser.Timezone).ToDateTimeUnspecified();
+        var result = instant.InZone(httpRequestInfo.Timezone).ToDateTimeUnspecified();
         return result;
     }
 
@@ -44,7 +46,7 @@ public static class DateTimeHelper
         if (utcDateTime.Kind != DateTimeKind.Utc)
             throw new ArgumentException($"{nameof(utcDateTime)} must be in kind of UTC.");
 
-        var endUser = httpContext.GetEndUser() ?? throw new ArgumentNullException("httpContext.GetEndUser()");
+        var endUser = httpContext.GetRequestInfo() ?? throw new ArgumentNullException("httpContext.GetEndUser()");
         return utcDateTime.ToLocal(endUser);
     }
 }

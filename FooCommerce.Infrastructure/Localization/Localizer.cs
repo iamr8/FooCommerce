@@ -1,37 +1,46 @@
-﻿using Autofac;
-
+﻿using FooCommerce.Application.Helpers;
+using FooCommerce.Application.Localization.Attributes;
 using FooCommerce.Application.Localization.Contracts;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization.Models;
 
 using MassTransit;
 
-namespace FooCommerce.Infrastructure.Localization
+namespace FooCommerce.Infrastructure.Localization;
+
+public class Localizer : ILocalizer
 {
-    public class Localizer : ILocalizer
+    private readonly IBus _bus;
+
+    public Localizer(IBus bus)
     {
-        private readonly IBus _bus;
+        _bus = bus;
+    }
 
-        public Localizer(IContainer container, IBus bus)
+    public static LocalizerDictionary Dictionary { get; set; } = null!;
+
+    public string this[string key]
+    {
+        get
         {
-            _bus = bus;
-            Container = container;
+            if (Dictionary == null || !Dictionary.Any())
+                return key;
+
+            return (string)Dictionary[key];
         }
+    }
 
-        private static IContainer Container = null!;
-
-        public static ILocalizer GetInstance()
+    public string this[Enum key]
+    {
+        get
         {
-            return Container.Resolve<ILocalizer>();
+            var _key = key.GetAttribute<LocalizerAttribute>()?.Key ?? key.ToString();
+            return this[_key];
         }
+    }
 
-        public static LocalizerDictionary Dictionary { get; set; } = null!;
-
-        public string this[string key] => (string)Dictionary[key];
-
-        public async Task RefreshAsync()
-        {
-            await _bus.Publish<RefreshLocalizer>(new { });
-        }
+    public async Task RefreshAsync()
+    {
+        await _bus.Publish<RefreshLocalizer>(new { });
     }
 }

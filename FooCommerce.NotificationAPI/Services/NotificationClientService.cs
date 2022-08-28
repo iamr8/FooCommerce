@@ -15,9 +15,8 @@ public class NotificationClientService : INotificationClientService
         _configuration = configuration;
     }
 
-    public IEmailClientCredential GetAvailableMailboxCredentials()
+    public IEnumerable<IEmailClientCredential> GetAvailableMailboxCredentials()
     {
-        var client = _configuration.GetSection("Emails:NoReply").Get<EmailClientCredential>();
-        return client;
+        return _configuration.GetSection("Emails").Get<List<EmailClientCredential>>();
     }
 }

@@ -2,4 +2,11 @@
 
 namespace FooCommerce.NotificationAPI.Models;
 
-public record EmailClientCredential(string SenderAlias, string SenderAddress, string Password, string Server, int SmtpPort, string Domain) : IEmailClientCredential;
+public record EmailClientCredential : IEmailClientCredential
+{
+    public string SenderAlias { get; init; }
+    public string SenderAddress { get; init; }
+    public string Password { get; init; }
+    public string Server { get; init; }
+    public int SmtpPort { get; init; }
+}

@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Nodes;
 
 using FooCommerce.Application.Localization.Models;
 using FooCommerce.Domain.Interfaces;
@@ -91,7 +92,19 @@ public static class LocalizerHelper
     }
 
     /// <summary>
-    /// Deserializes already-serialized JSON to new <see cref="LocalizerValueCollection"/> instance.
+    /// Deserializes a <see cref="JsonNode"/> object to a new <see cref="LocalizerValueCollection"/> instance.
+    /// </summary>
+    /// <param name="node">A <see cref="JsonNode"/> json.</param>
+    /// <returns>A <see cref="LocalizerValueCollection"/> instance.</returns>
+    public static LocalizerValueCollection Deserialize(JsonNode node)
+    {
+        var output = node.Deserialize<LocalizerValueCollection>(DefaultSettings.Settings);
+
+        return output;
+    }
+
+    /// <summary>
+    /// Deserializes already-serialized JSON to a new <see cref="LocalizerValueCollection"/> instance.
     /// </summary>
     /// <param name="json">A <see cref="string"/> json.</param>
     /// <returns>A <see cref="LocalizerValueCollection"/> instance.</returns>

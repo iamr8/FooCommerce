@@ -6,17 +6,6 @@ namespace FooCommerce.Application.Membership.Entities;
 public record UserInformation
     : IEntity
 {
-    public UserInformation()
-    {
-    }
-
-    public UserInformation(UserInformationType type, string value, Guid userId)
-    {
-        Type = type;
-        Value = value;
-        UserId = userId;
-    }
-
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }

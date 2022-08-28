@@ -607,7 +607,6 @@ public static class HtmlHelper
             {
                 var @enum = Enum.Parse(underlyingType, enumKey.ToString()) as Enum;
                 var enumName = @enum.ToString();
-                var localizerKey = @enum.GetLocalizerKey();
 
                 var selected = false;
                 if (value != null)
@@ -629,7 +628,7 @@ public static class HtmlHelper
                 var item = new SelectListItem
                 {
                     Value = enumKey.ToString(),
-                    Text = localizer[localizerKey] ?? @enum.ToString(),
+                    Text = localizer[@enum],
                     Selected = selected,
                 };
                 items.Add(item);

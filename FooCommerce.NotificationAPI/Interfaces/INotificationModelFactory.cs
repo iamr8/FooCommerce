@@ -6,11 +6,15 @@ namespace FooCommerce.NotificationAPI.Interfaces;
 
 public interface INotificationModelFactory
 {
-    Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template, Action<NotificationEmailModelFactoryOptions> options);
+    Task<NotificationEmailModel> CreateEmailModelAsync(NotificationTemplateEmailModel template,
+        NotificationEmailModelFactoryOptions options);
 
-    NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, Action<NotificationPushModelFactoryOptions> options);
+    NotificationPushModel CreatePushModel(NotificationTemplatePushModel template,
+        NotificationPushModelFactoryOptions options);
 
-    NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template, Action<NotificationPushInAppModelFactoryOptions> options);
+    NotificationPushInAppModel CreatePushInAppModel(NotificationTemplatePushInAppModel template,
+        NotificationPushInAppModelFactoryOptions options);
 
-    NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template, Action<NotificationSmsModelFactoryOptions> options);
+    NotificationSmsModel CreateSmsModel(NotificationTemplateSmsModel template,
+        NotificationSmsModelFactoryOptions options);
 }

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Security.Claims;
 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
@@ -21,6 +22,13 @@ public static class MockObjects
             .Setup(x => x.Action(It.IsAny<UrlActionContext>()))
             .Returns(returnUrl)
             .Verifiable();
+        return mock.Object;
+    }
+
+    public static IWebHostEnvironment GetWebHostEnvironment()
+    {
+        var mock = new Mock<IWebHostEnvironment>();
+        mock.SetupGet(x => x.EnvironmentName).Returns(Microsoft.Extensions.Hosting.Environments.Staging);
         return mock.Object;
     }
 

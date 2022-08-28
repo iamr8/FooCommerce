@@ -2,12 +2,12 @@
 
 using Autofac;
 
+using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Infrastructure.Caching;
-using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Infrastructure.Shopping.StateMachines;
 using FooCommerce.Tests;
@@ -17,7 +17,6 @@ using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 
 namespace FooCommerce.Infrastructure.Tests.Setups;
@@ -121,8 +120,8 @@ public class Fixture : IAsyncLifetime, IFixture
     {
         var connectionString = Configuration.GetConnectionString("Default");
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
-        var memoryCache = Container.Resolve<IMemoryCache>();
-        memoryCache.Clear(LocationService.CacheKey);
+        var cachingProvider = Container.Resolve<IEasyCachingProvider>();
+        await cachingProvider.FlushAsync();
         await Container.DisposeAsync();
     }
 }

@@ -8,6 +8,11 @@
 		<IsPackable>false</IsPackable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Templates\_Layout.html" />
+    <None Remove="Templates\_RequestData.html" />
+  </ItemGroup>
+
 	<ItemGroup>
 	  <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.0-preview.7.22376.2" />
@@ -28,6 +33,12 @@
 	<ItemGroup>
 		<Content Include="appsettings.json">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\_Layout.html">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Templates\_RequestData.html">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
 	</ItemGroup>

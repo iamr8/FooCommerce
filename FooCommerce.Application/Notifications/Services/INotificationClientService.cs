@@ -4,5 +4,5 @@ namespace FooCommerce.Application.Notifications.Services;
 
 public interface INotificationClientService
 {
-    IEmailClientCredential GetAvailableMailboxCredentials();
+    IEnumerable<IEmailClientCredential> GetAvailableMailboxCredentials();
 }

@@ -2,13 +2,15 @@
 
 using Autofac;
 
+using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Infrastructure.Caching;
-using FooCommerce.Infrastructure.Locations;
+using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Infrastructure.Modules;
+using FooCommerce.NotificationAPI.Entities;
 using FooCommerce.Tests;
 
 using MassTransit;
@@ -21,6 +23,8 @@ using Microsoft.Extensions.Configuration;
 
 using NotificationAPIModule = FooCommerce.NotificationAPI.Modules.NotificationAPIModule;
 
+[assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
+
 namespace FooCommerce.NotificationAPI.Tests;
 
 public class Fixture : IAsyncLifetime, IFixture
@@ -28,6 +32,8 @@ public class Fixture : IAsyncLifetime, IFixture
     public IContainer Container { get; private set; }
     public ITestHarness Harness { get; private set; }
     private IConfigurationRoot Configuration;
+    private string connectionString;
+    public Guid UserCommunicationId;
 
     public async Task InitializeAsync()
     {
@@ -37,9 +43,11 @@ public class Fixture : IAsyncLifetime, IFixture
             .AddJsonFile("appsettings.json", false, true)
             .AddEnvironmentVariables()
             .Build();
-        var connectionString = Configuration.GetConnectionString("Default");
+        connectionString = Configuration.GetConnectionString("Default");
 
         var containerBuilder = new ContainerBuilder();
+        containerBuilder.Register(_ => MockObjects.GetWebHostEnvironment());
+        containerBuilder.RegisterModule(new LocalizationModule());
         containerBuilder.RegisterModule(new NotificationAPIModule(true));
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
@@ -66,6 +74,40 @@ public class Fixture : IAsyncLifetime, IFixture
         AppDbContext.TestMode = true;
         SeedLocationsData(dbContext);
         SeedMembershipData(dbContext);
+        UserCommunicationId = await SeedCommunicationAsync(dbContext);
+    }
+
+    private async Task<Guid> SeedCommunicationAsync(DbContext dbContext)
+    {
+        var user = dbContext.Set<User>().Add(new User()).Entity;
+        var saved = await dbContext.SaveChangesAsync() > 0;
+        var userInformation = dbContext.Set<UserInformation>().Add(new UserInformation
+        {
+            UserId = user.Id,
+            Type = UserInformationType.Name,
+            Value = "Arash"
+        }).Entity;
+        var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
+        {
+            Type = CommunicationType.Email_Message,
+            Value = "arash.shabbeh@gmail.com",
+            IsVerified = true,
+            UserId = user.Id,
+        }).Entity;
+        var notification = dbContext.Set<Notification>().Add(new Notification
+        {
+            Action = NotificationAction.Verification_Request_Email,
+        }).Entity;
+        saved = await dbContext.SaveChangesAsync() > 0;
+        var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+        {
+            NotificationId = notification.Id,
+            IncludeRequest = true,
+            JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
+            Type = CommunicationType.Email_Message
+        }).Entity;
+        saved = await dbContext.SaveChangesAsync() > 0;
+        return userCommunication.Id;
     }
 
     private void SeedLocationsData(DbContext dbContext)
@@ -117,10 +159,9 @@ public class Fixture : IAsyncLifetime, IFixture
 
     public async Task DisposeAsync()
     {
-        var connectionString = Configuration.GetConnectionString("Default");
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
-        var memoryCache = Container.Resolve<IMemoryCache>();
-        memoryCache.Clear(LocationService.CacheKey);
-        await Container.DisposeAsync();
+        var cachingProvider = Container.Resolve<IEasyCachingProvider>();
+        await cachingProvider.FlushAsync();
+        GC.SuppressFinalize(this);
     }
 }

@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Models;
+﻿using FooCommerce.Application.HttpContextRequest;
 
 using Microsoft.AspNetCore.Http;
 
@@ -6,5 +6,5 @@ namespace FooCommerce.Application.Helpers;
 
 public static class HttpContextHelper
 {
-    public static EndUser GetEndUser(this HttpContext context) => new(context);
+    public static HttpRequestInfo GetRequestInfo(this HttpContext context) => new(context);
 }

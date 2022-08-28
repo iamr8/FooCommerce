@@ -6,11 +6,24 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="Templates\_Layout.html" />
+    <None Remove="Templates\_RequestData.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Templates\_Layout.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Templates\_RequestData.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="MailKit" Version="3.3.0" />
 		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
 		<PackageReference Include="RabbitMQ.Client" Version="6.4.0" />
 		<PackageReference Include="WebMarkupMin.Core" Version="2.12.0" />
 	</ItemGroup>

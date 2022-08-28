@@ -1,10 +1,11 @@
 ﻿using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.NotificationAPI.Models.Types;
 
 namespace FooCommerce.NotificationAPI.Contracts;
 
 public interface QueueNotificationEmail
-    : INotificationId, INotificationCommunicationOptions
+    : INotificationId, INotificationOptions
 {
-    public bool IsImportant { get; }
+    bool IsImportant { get; }
+    NotificationEmailModel Model { get; }
 }

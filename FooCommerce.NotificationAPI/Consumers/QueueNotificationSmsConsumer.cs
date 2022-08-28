@@ -1,7 +1,6 @@
 ﻿using FooCommerce.Application.Membership.Entities;
-using FooCommerce.NotificationAPI.Consumers.Extensions;
+using FooCommerce.Application.Membership.Enums;
 using FooCommerce.NotificationAPI.Contracts;
-using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Events;
 
@@ -22,15 +21,7 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
 
     public async Task Consume(ConsumeContext<QueueNotificationSms> context)
     {
-        var renderedTemplate = context.Message.Factory.CreateSmsModel(
-            (NotificationTemplateSmsModel)context.Message.Template,
-            options =>
-            {
-                options.WebsiteUrl = context.Message.WebsiteUrl;
-            });
-        var receiver = context.Message.Options.Receiver.UserCommunications.Single(x => x.Type == context.Message.Template.Communication);
-
-        QueueNotificationHandlerGuard.Check(renderedTemplate, context.Message, _logger);
+        var receiver = context.Message.Receiver.UserCommunications.Single(x => x.Type == CommunicationType.Mobile_Sms);
 
         // TODO: SDK must be implemented
         var smsSent = true;
@@ -39,10 +30,10 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
             await context.RespondAsync<NotificationSent>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Template.Communication
+                Gateway = CommunicationType.Mobile_Sms
             });
 
-            var token = context.Message.Options.Bag.OfType<AuthToken>().FirstOrDefault();
+            var token = context.Message.Bag.OfType<AuthToken>().FirstOrDefault();
             if (token != null)
             {
                 await context.Publish<UpdateAuthTokenState>(new
@@ -57,7 +48,7 @@ public class QueueNotificationSmsConsumer : IConsumer<QueueNotificationSms>
             await context.RespondAsync<NotificationFailed>(new
             {
                 NotificationId = context.Message.NotificationId,
-                Gateway = context.Message.Template.Communication
+                Gateway = CommunicationType.Mobile_Sms
             });
         }
     }

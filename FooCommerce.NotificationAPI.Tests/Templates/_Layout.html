@@ -1,0 +1,182 @@
+﻿<!DOCTYPE html>
+
+<html lang="{{html_lang}}" dir="{{html_lang_dir}}">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Flag" content="text/html; charset=utf-8">
+    <title>{{header_pageTitle}}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Inter', -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+        }
+
+        a {
+            color: #747474 !important;
+            text-decoration: none;
+        }
+
+        div {
+            display: block;
+        }
+
+        @media screen and (min-width: 768px) {
+            .e-body {
+                text-align: center;
+            }
+        }
+
+        .e-button {
+            background-color: #cd0000;
+            margin-top: 20px;
+            display: inline-block;
+            border-radius: 20px;
+            padding: 12px 50px;
+            color: white !important;
+            font-weight: 700;
+            text-align: center;
+            font-size: 13px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .e-button {
+                display: block;
+            }
+        }
+
+        .e-footer-profile {
+            margin-top: 40px;
+            padding: 0 15px;
+            text-align: center;
+            font-weight: 700;
+            color: #abadae;
+            padding: 0 30px;
+        }
+
+        .e-footer-profile-item {
+            font-size: 10px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .e-footer-profile-item {
+                font-size: 12px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .e-footer-profile-address {
+                font-size: 12px;
+            }
+        }
+
+        .e-footer-social-network {
+            width: 40px;
+            height: 40px;
+            display: inline-block;
+        }
+
+            .e-footer-social-network img {
+                width: 40px;
+                height: 40px;
+                display: block;
+                object-fit: none;
+            }
+
+            .e-footer-social-network:not(:first-child) {
+                margin-left: 10px;
+            }
+
+        .e-title {
+            font-weight: 900;
+            margin-bottom: 20px;
+        }
+
+        .e-caution {
+            margin-top: 50px;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .e-hint + .e-caution {
+            margin-top: 20px;
+        }
+
+        .e-caution + .e-caution {
+            margin-top: 10px;
+        }
+
+        .e-link {
+            display: inline-block;
+            border-radius: 20px;
+            color: #cd0000 !important;
+            font-weight: 900;
+            text-align: center;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 100%;text-align: center;padding: 40px 0;">
+        <img src="{{app_logo}}" alt="Logo" />
+    </div>
+    <div class="e-body" style="padding: 0 40px; font-size: 16px; color: #333333 !important;">
+        <div style="font-weight: bold">{{translation_hello}} {{user_receiverName}},</div>
+        <div class="js-content" style="line-height: 1.5; margin-top: 20px;"></div>
+    </div>
+    <table class="" style="margin-top: 40px; width: 100%">
+        <tbody>
+            <tr>
+                <td width="30px"></td>
+                <td>
+                    <table style="text-align: center; width: 100%; border-collapse: collapse; color: #747474 !important ">
+                        <tbody>
+                            <tr>
+                                <td class="e-footer-profile-item js-company-name">© {{app_copyright_year}}, {{app_copyright_companyName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="e-footer-profile-item js-company-address">{{app_copyright_address}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="30px"></td>
+            </tr>
+        </tbody>
+    </table>
+    <table style="text-align: center; width: 100%; border-collapse: collapse;">
+        <tbody>
+            <tr class="js-footer-social" style="height: 50px; display: table-row; width: 100%;">
+                <td style="text-align: center; padding-top: 5px">
+                    <a href="https://www.facebook.com/ecohos/" target="_blank" class="e-footer-social-network js-social-network"><img src="" alt="Facebook" /></a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table style="margin-top: 10px; text-align: center; width: 100%; border-collapse: collapse;">
+        <tbody>
+            <tr style="margin-top: 20px; text-align: center; font-size: 11px; font-weight: 900;">
+                <td>
+                    <a href="{{baseUrl}}/" target="_blank" class="js-home-page">{{footer_homepage}}</a>
+                    &nbsp;
+                    <!--<span style="color: #747474">|</span>
+                    &nbsp;
+                    <a href="{{baseUrl}}/unsubscribe?auth={{footer_unsubscribe_callback}}" target="_blank" class="js-unsubscribe">{{footer_unsubscribe}}</a>-->
+                    &nbsp;
+                    <span style="color: #747474">|</span>
+                    &nbsp;
+                    <a href="{{baseUrl}}/contact" target="_blank" class="js-contact">{{footer_contact}}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
