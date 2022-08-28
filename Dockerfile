@@ -25,10 +25,19 @@ COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooComm
 RUN dotnet restore "FooCommerce.Web/FooCommerce.Web.csproj"
 COPY . .
 WORKDIR "/src/FooCommerce.Web"
-RUN dotnet build "FooCommerce.Web.csproj" -c Release -o /app/build
+RUN dotnet build "FooCommerce.Web.csproj" -c Debug -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "FooCommerce.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+WORKDIR /app/publish
+
+RUN mkdir logs
+RUN mkdir bin
+
+RUN chmod 775 bin
+RUN chmod 775 logs
+# RUN chmod 775 wwwroot/uploads
 
 FROM base AS final
 WORKDIR /app

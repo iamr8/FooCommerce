@@ -12,6 +12,7 @@
 	  <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 	  <UserSecretsId>c5d47f90-db96-4958-8669-d08b97e62b78</UserSecretsId>
 	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileFile>./../Dockerfile</DockerfileFile>
 	</PropertyGroup>
 
 	<ItemGroup>

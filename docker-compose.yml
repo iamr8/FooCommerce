@@ -1,6 +1,6 @@
 version: "3.4"
 services:
-  nopcommerce_web:
+  foocommerce_web:
     build: .
     container_name: foocommerce
     ports:
@@ -20,7 +20,7 @@ services:
     networks:
       - rabbitmq_go_net
 
-  nopcommerce_database:
+  foocommerce_database:
     image: "mcr.microsoft.com/mssql/server:2019-latest"
     container_name: foocommerce_mssql_server
     environment:
