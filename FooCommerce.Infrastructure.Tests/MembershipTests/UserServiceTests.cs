@@ -91,31 +91,31 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope<Fixture>
         Assert.Null(response.Errors);
     }
 
-    [Fact]
-    public async Task Should_Return_True_SignIn()
-    {
-        // Arrange
-        var signUpInput = new SignUpRequest
-        {
-            Country = 0,
-            Email = "arash.shabbeh@gmail.com",
-            FirstName = "Arash",
-            LastName = "Shabbeh",
-            Password = "12345678"
-        };
-        var signInInput = new SignInRequest
-        {
-            Remember = true,
-            Username = "arash.shabbeh@gmail.com",
-            Password = "12345678"
-        };
+    //[Fact]
+    //public async Task Should_Return_True_SignIn()
+    //{
+    //    // Arrange
+    //    var signUpInput = new SignUpRequest
+    //    {
+    //        Country = 0,
+    //        Email = "arash.shabbeh@gmail.com",
+    //        FirstName = "Arash",
+    //        LastName = "Shabbeh",
+    //        Password = "12345678"
+    //    };
+    //    var signInInput = new SignInRequest
+    //    {
+    //        Remember = true,
+    //        Username = "arash.shabbeh@gmail.com",
+    //        Password = "12345678"
+    //    };
 
-        // Act
-        await UserService.SignUpAsync(signUpInput);
-        var response = await UserService.SignInAsync(signInInput);
+    //    // Act
+    //    await UserService.SignUpAsync(signUpInput);
+    //    var response = await UserService.SignInAsync(signInInput);
 
-        // Assert
-        Assert.Equal(JobStatus.Success, response.Status);
-        Assert.Null(response.Errors);
-    }
+    //    // Assert
+    //    Assert.Equal(JobStatus.Success, response.Status);
+    //    Assert.Null(response.Errors);
+    //}
 }

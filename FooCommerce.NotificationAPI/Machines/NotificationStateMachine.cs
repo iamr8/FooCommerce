@@ -21,7 +21,7 @@ public class NotificationStateMachine
             {
                 x.OnMissingInstance(m =>
                     m.ExecuteAsync(context =>
-                        context.RespondAsync<NotificationFailed>(new { context.Message.NotificationId })));
+                        context.RespondAsync<NotificationSendFailed>(new { context.Message.NotificationId })));
 
                 x.CorrelateById(context => context.Message.NotificationId);
             });

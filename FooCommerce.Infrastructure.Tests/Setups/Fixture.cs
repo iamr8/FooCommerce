@@ -9,11 +9,9 @@ using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Infrastructure.Shopping.StateMachines;
 using FooCommerce.Tests;
 
 using MassTransit;
-using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -24,23 +22,29 @@ namespace FooCommerce.Infrastructure.Tests.Setups;
 public class Fixture : IAsyncLifetime, IFixture
 {
     public IContainer Container { get; private set; }
-    public InMemoryTestHarness Harness;
-    public IStateMachineSagaTestHarness<OrderState, OrderStateMachine> SagaHarness;
-    public OrderStateMachine Machine;
-    public IConfigurationRoot Configuration { get; set; }
+
+    // public ITestHarness Harness;
+    // public ISagaStateMachineTestHarness<OrderStateMachine, OrderState> SagaHarness;
+    // public OrderStateMachine Machine;
+    private IConfigurationRoot Configuration;
+
+    private string connectionString;
 
     public async Task InitializeAsync()
     {
         // ConfigureServices
         Configuration = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json", true, true)
+            .SetBasePath(Directory.GetCurrentDirectory())
+            .AddJsonFile("appsettings.json", false, true)
             .AddEnvironmentVariables()
             .Build();
-        var connectionString = Configuration.GetConnectionString("Default");
+        connectionString = Configuration.GetConnectionString("Default");
 
         var containerBuilder = new ContainerBuilder();
+        containerBuilder.Register(_ => MockObjects.GetWebHostEnvironment());
         containerBuilder.RegisterModule(new AutoFluentValidationModule());
-        containerBuilder.RegisterModule(new OrderAPIEventBusTestModule());
+        // containerBuilder.RegisterModule(new OrderAPIEventBusTestModule());
+        containerBuilder.RegisterModule(new LocalizationModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>
@@ -49,16 +53,15 @@ public class Fixture : IAsyncLifetime, IFixture
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
+        containerBuilder.RegisterInstance(Configuration)
+            .As<IConfiguration>()
+            .SingleInstance();
 
         // Configure
         Container = containerBuilder.Build();
 
-        Harness = Container.Resolve<InMemoryTestHarness>();
-        Harness.OnConfigureInMemoryBus += configurator => configurator.UseDelayedMessageScheduler();
-
-        await Harness.Start();
-        SagaHarness = Container.Resolve<IStateMachineSagaTestHarness<OrderState, OrderStateMachine>>();
-        Machine = Container.Resolve<OrderStateMachine>();
+        // Harness = Container.Resolve<ITestHarness>();
+        // Harness.TestTimeout = TimeSpan.FromSeconds(2);
 
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
@@ -67,6 +70,8 @@ public class Fixture : IAsyncLifetime, IFixture
         AppDbContext.TestMode = true;
         SeedLocationsData(dbContext);
         SeedMembershipData(dbContext);
+        // SagaHarness = Container.Resolve<ISagaStateMachineTestHarness<OrderStateMachine, OrderState>>();
+        // Machine = Container.Resolve<OrderStateMachine>();
     }
 
     private void SeedLocationsData(DbContext dbContext)
@@ -118,10 +123,9 @@ public class Fixture : IAsyncLifetime, IFixture
 
     public async Task DisposeAsync()
     {
-        var connectionString = Configuration.GetConnectionString("Default");
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
         var cachingProvider = Container.Resolve<IEasyCachingProvider>();
         await cachingProvider.FlushAsync();
-        await Container.DisposeAsync();
+        GC.SuppressFinalize(this);
     }
 }

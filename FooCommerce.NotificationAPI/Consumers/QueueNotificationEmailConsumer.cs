@@ -95,7 +95,7 @@ public class QueueNotificationEmailConsumer : IConsumer<QueueNotificationEmail>
         }
         else
         {
-            await context.RespondAsync<NotificationFailed>(new
+            await context.RespondAsync<NotificationSendFailed>(new
             {
                 NotificationId = context.Message.NotificationId,
                 Gateway = CommunicationType.Email_Message

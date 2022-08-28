@@ -7,7 +7,6 @@ using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;
-using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
@@ -49,15 +48,6 @@ public class QueueNotificationConsumer
 
     public async Task Consume(ConsumeContext<QueueNotification> context)
     {
-        if (context.Message.NotificationId == Guid.Empty)
-        {
-            await context.RespondAsync<NotificationFailed>(new
-            {
-                NotificationId = context.Message.NotificationId,
-            });
-            return;
-        }
-
         var availableCommunicationTypes = context.Message.Action
                .GetAttribute<NotificationCommunicationTypeAttribute>()
                .CommunicationTypes;
@@ -193,10 +183,5 @@ public class QueueNotificationConsumer
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        await context.RespondAsync<NotificationQueued>(new
-        {
-            NotificationId = context.Message.NotificationId
-        });
     }
 }

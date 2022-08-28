@@ -3,7 +3,7 @@ using FooCommerce.Application.Notifications.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Events;
 
-public interface NotificationFailed
+public interface NotificationSendFailed
     : INotificationId
 {
     CommunicationType? Gateway { get; }
