@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.Core.Notifications.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Events;
 

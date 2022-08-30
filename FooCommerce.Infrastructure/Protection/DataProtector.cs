@@ -7,10 +7,10 @@ public static class DataProtector
     public const int SaltSize = 16; // 128 bit
     public const int KeySize = 32; // 256 bit
 
-    public static string Hash(string password, int saltSize = 16, int keySize = 32, int iterations = 10_000)
+    public static string Hash(string text, int saltSize = 16, int keySize = 32, int iterations = 10_000)
     {
         using var algorithm = new Rfc2898DeriveBytes(
-            password,
+            text,
             saltSize,
             iterations,
             HashAlgorithmName.SHA256);
@@ -20,7 +20,7 @@ public static class DataProtector
         return $"{iterations}.{salt}.{key}";
     }
 
-    public static (bool Verified, bool NeedsUpgrade) Check(string hash, string password, int keySize = 32, int iteration = 10_000)
+    public static (bool Verified, bool NeedsUpgrade) Check(string hash, string text, int keySize = 32, int iteration = 10_000)
     {
         var parts = hash.Split('.', 3);
 
@@ -37,7 +37,7 @@ public static class DataProtector
         var needsUpgrade = iterations != iteration;
 
         using var algorithm = new Rfc2898DeriveBytes(
-            password,
+            text,
             salt,
             iterations,
             HashAlgorithmName.SHA256);

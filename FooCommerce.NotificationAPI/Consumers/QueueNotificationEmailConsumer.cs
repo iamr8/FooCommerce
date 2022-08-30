@@ -3,8 +3,8 @@
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Services;
+using FooCommerce.Core.Helpers;
 using FooCommerce.Domain.Interfaces;
-using FooCommerce.Infrastructure.Helpers;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Events;

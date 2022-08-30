@@ -1,5 +1,6 @@
 ﻿using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Services;
+using FooCommerce.Core.Notifications.Interfaces;
 using FooCommerce.NotificationAPI.Models;
 
 using Microsoft.Extensions.Configuration;

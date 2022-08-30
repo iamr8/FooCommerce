@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 using System.Reflection;
 
-using FooCommerce.Application.HttpContextRequest;
 using FooCommerce.Application.Localization.Models;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.Core.Helpers;
+using FooCommerce.Core.HttpContextRequest;
+using FooCommerce.Core.Localization.Helpers;
 using FooCommerce.Domain.Interfaces;
-using FooCommerce.Infrastructure.Helpers;
-using FooCommerce.Infrastructure.Localization.Helpers;
 using FooCommerce.NotificationAPI.Models.FactoryOptions;
 
 using Microsoft.AspNetCore.Html;

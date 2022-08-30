@@ -2,13 +2,14 @@
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Listings.Services;
 using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Core.DbProvider.Interfaces;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Tests.Setups;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
+
 using Microsoft.Extensions.Logging;
 
 using Xunit.Abstractions;

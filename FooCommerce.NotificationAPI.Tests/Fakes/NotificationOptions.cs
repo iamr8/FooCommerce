@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Application;
-using FooCommerce.Application.HttpContextRequest;
 using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Core.HttpContextRequest;
+using FooCommerce.Core.Notifications.Interfaces;
+using FooCommerce.Core.Notifications.Models;
 
 namespace FooCommerce.NotificationAPI.Tests.Fakes;
 

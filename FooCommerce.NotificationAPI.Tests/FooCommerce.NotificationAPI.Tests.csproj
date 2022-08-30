@@ -44,6 +44,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FooCommerce.Infrastructure\FooCommerce.Infrastructure.csproj" />
     <ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />
     <ProjectReference Include="..\FooCommerce.Tests.Base\FooCommerce.Tests.csproj" />
   </ItemGroup>

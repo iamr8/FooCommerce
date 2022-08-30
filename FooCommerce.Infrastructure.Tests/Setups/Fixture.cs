@@ -4,10 +4,10 @@ using Autofac;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Core.DbProvider.DbContextProvider;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Tests;
 

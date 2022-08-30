@@ -2,13 +2,15 @@
 
 using Dapper;
 
-using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Membership.Services;
-using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.Notifications.Contracts;
+using FooCommerce.Core.Notifications.Enums;
+using FooCommerce.Core.Notifications.Interfaces;
+using FooCommerce.Core.Notifications.Models;
 using FooCommerce.Domain.Enums;
 
 using MassTransit;
@@ -90,7 +92,7 @@ public class VerificationService : IVerificationService
                 _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
             },
             Receiver = new NotificationReceiverProvider(NotificationReceiverStrategy.ByUserCommunicationId, communicationId.Value),
-            Content = Enumerable.Range(0, 1).Select(_ => new NotificationFormatting("authToken", authToken.Token))
+            Content = (IEnumerable<INotificationContent>)Enumerable.Range(0, 1).Select(_ => new NotificationFormatting("authToken", authToken.Token))
         }, cancellationToken);
         return JobStatus.Success;
     }

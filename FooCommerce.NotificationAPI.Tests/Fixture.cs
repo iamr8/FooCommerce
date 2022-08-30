@@ -4,24 +4,20 @@ using Autofac;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Enums;
+using FooCommerce.Core.DbProvider.DbContextProvider;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.NotificationAPI.Entities;
 using FooCommerce.Tests;
 
-using MassTransit;
 using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
-
-using NotificationAPIModule = FooCommerce.NotificationAPI.Modules.NotificationAPIModule;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
 
@@ -48,7 +44,7 @@ public class Fixture : IAsyncLifetime, IFixture
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Register(_ => MockObjects.GetWebHostEnvironment());
         containerBuilder.RegisterModule(new LocalizationModule());
-        containerBuilder.RegisterModule(new NotificationAPIModule(true));
+        containerBuilder.RegisterModule(new ExternalModule(true));
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>

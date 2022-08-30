@@ -1,8 +1,8 @@
 ﻿using EasyCaching.Core;
 
-using FooCommerce.Application.Localization.Contracts;
+using FooCommerce.Core.Caching;
+using FooCommerce.Core.Localization.Contracts;
 using FooCommerce.Domain.Interfaces;
-using FooCommerce.Infrastructure.Caching;
 using FooCommerce.Infrastructure.Localization.Models;
 
 using MassTransit;

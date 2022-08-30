@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.Listings.Services;
 using FooCommerce.Application.Membership.Models;
-using FooCommerce.Application.Membership.Validators;
+using FooCommerce.Infrastructure.FluentValidators;
 
 namespace FooCommerce.Infrastructure.Membership.Validators;
 

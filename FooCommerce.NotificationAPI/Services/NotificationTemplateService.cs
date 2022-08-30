@@ -5,13 +5,13 @@ using Dapper;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Enums;
 using FooCommerce.Application.Notifications.Interfaces;
 using FooCommerce.Application.Notifications.Services;
-using FooCommerce.Infrastructure.Caching;
-using FooCommerce.Infrastructure.Localization.Helpers;
+using FooCommerce.Core.Caching;
+using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.Localization.Helpers;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Entities;
 
@@ -100,7 +100,7 @@ namespace FooCommerce.NotificationAPI.Services
                             {
                                 var html = json["h"];
 
-                                var localizerHtml = LocalizerHelper.Deserialize(html);
+                                var localizerHtml = LocalizerSerializationHelper.Deserialize(html);
 
                                 output.Add(new NotificationTemplateEmailModel(template.Id)
                                 {
@@ -114,8 +114,8 @@ namespace FooCommerce.NotificationAPI.Services
                                 var subject = json["s"];
                                 var message = json["m"];
 
-                                var localizerSubject = LocalizerHelper.Deserialize(subject);
-                                var localizerMessage = LocalizerHelper.Deserialize(message);
+                                var localizerSubject = LocalizerSerializationHelper.Deserialize(subject);
+                                var localizerMessage = LocalizerSerializationHelper.Deserialize(message);
 
                                 output.Add(new NotificationTemplatePushModel(template.Id)
                                 {
@@ -129,7 +129,7 @@ namespace FooCommerce.NotificationAPI.Services
                             {
                                 var text = json["t"];
 
-                                var localizerText = LocalizerHelper.Deserialize(text);
+                                var localizerText = LocalizerSerializationHelper.Deserialize(text);
 
                                 output.Add(new NotificationTemplateSmsModel(template.Id)
                                 {

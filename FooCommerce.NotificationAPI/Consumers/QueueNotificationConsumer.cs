@@ -1,9 +1,10 @@
-﻿using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Helpers;
+﻿using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Notifications.Attributes;
-using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.Application.Notifications.Services;
+using FooCommerce.Core.DbProvider.DbContextProvider;
+using FooCommerce.Core.Helpers;
+using FooCommerce.Core.Notifications.Contracts;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;

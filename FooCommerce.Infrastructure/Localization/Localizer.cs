@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Localization.Attributes;
-using FooCommerce.Application.Localization.Contracts;
+using FooCommerce.Core.Localization.Contracts;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.Infrastructure.Localization.Models;
 

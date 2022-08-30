@@ -1,8 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Core.Notifications.Interfaces;
+using FooCommerce.Core.Notifications.Models;
 using FooCommerce.Domain.Interfaces;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Extensions;
@@ -53,7 +53,7 @@ public record NotificationModelFactory : INotificationModelFactory
         ApplyFormatting(ref sms);
         ApplyLinks(sms,
             smsLink =>
-                $"\r\n{smsLink.Name}\r\n{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{smsLink.Url}");
+                $"\r\n{smsLink.Key}\r\n{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{smsLink.Value}");
 
         var smsModel = new NotificationSmsModel(sms.ToString());
         return smsModel;
@@ -87,7 +87,7 @@ public record NotificationModelFactory : INotificationModelFactory
 
         ApplyLinks(emailHtml,
             emailButton =>
-                $"<p><a href='{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{emailButton.Url}' class='e-button'>{emailButton.Name}</a></p>");
+                $"<p><a href='{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{emailButton.Value}' class='e-button'>{emailButton.Key}</a></p>");
 
         var requestHtml = await NotificationTemplateEmailModel.GetRequestLayoutAsync(_logger);
         if (string.IsNullOrEmpty(requestHtml))
@@ -131,7 +131,7 @@ public record NotificationModelFactory : INotificationModelFactory
 
         foreach (var formatting in formattings)
         {
-            emailHtml = emailHtml.Replace("{{" + formatting.Key + "}}", formatting.Text);
+            emailHtml = emailHtml.Replace("{{" + formatting.Key + "}}", formatting.Value);
         }
     }
     public NotificationPushModel CreatePushModel(NotificationTemplatePushModel template, NotificationPushModelFactoryOptions options)

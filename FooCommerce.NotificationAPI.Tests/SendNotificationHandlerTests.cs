@@ -2,10 +2,11 @@
 
 using Autofac;
 
-using FooCommerce.Application.Helpers;
-using FooCommerce.Application.Notifications.Contracts;
 using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Models;
+using FooCommerce.Core.Helpers;
+using FooCommerce.Core.Notifications.Contracts;
+using FooCommerce.Core.Notifications.Enums;
+using FooCommerce.Core.Notifications.Models;
 using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;

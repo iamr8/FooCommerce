@@ -2,11 +2,11 @@
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider.Interfaces;
 using FooCommerce.Application.Listings.Dtos;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Listings.Services;
-using FooCommerce.Infrastructure.Caching;
+using FooCommerce.Core.Caching;
+using FooCommerce.Core.DbProvider.Interfaces;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;

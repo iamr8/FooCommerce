@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Infrastructure.JsonCustomization;
+using FooCommerce.Core.JsonCustomization;
 using FooCommerce.Infrastructure.Mvc;
 using FooCommerce.Infrastructure.Mvc.Localization;
 using FooCommerce.Infrastructure.Mvc.ModelBinders;

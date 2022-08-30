@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Tests", "FooCommerce.Tests.Base\FooCommerce.Tests.csproj", "{6049B6BB-00AB-4E4D-BD70-349135563B0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.Core", "FooCommerce.Core\FooCommerce.Core.csproj", "{8571981F-2F8D-4D0C-8147-942D56FEA4CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,6 +69,10 @@ Global
 		{6049B6BB-00AB-4E4D-BD70-349135563B0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6049B6BB-00AB-4E4D-BD70-349135563B0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6049B6BB-00AB-4E4D-BD70-349135563B0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8571981F-2F8D-4D0C-8147-942D56FEA4CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8571981F-2F8D-4D0C-8147-942D56FEA4CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8571981F-2F8D-4D0C-8147-942D56FEA4CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8571981F-2F8D-4D0C-8147-942D56FEA4CB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,37 +1,36 @@
 ﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Infrastructure.JsonCustomization;
+using FooCommerce.Application.Helpers;
+using FooCommerce.Core.JsonCustomization;
+using FooCommerce.Core.Modules;
 
 using MassTransit;
 
-using Microsoft.Extensions.DependencyInjection;
-
 namespace FooCommerce.Infrastructure.Modules;
 
-public class BusModule : Autofac.Module
+public class BusModule : Module
 {
-    private readonly bool _test;
-
-    public BusModule(bool test = false)
+    protected override void Load(ContainerBuilder builder)
     {
-        _test = test;
-    }
+        var moduleAssemblies = AppDomain.CurrentDomain.GetSolutionAssemblies().ToArray();
+        var moduleConfigurations = moduleAssemblies
+            .SelectMany(x => x.DefinedTypes)
+            .Where(t => t.GetInterfaces().Any(c => c == typeof(IModuleConfiguration)))
+            .Select(x => (IModuleConfiguration)Activator.CreateInstance(x))
+            .ToList();
 
-    private void Apply(IBusRegistrationConfigurator cfg)
-    {
-        var entryAssembly = this.GetType().Assembly;
-        cfg.SetKebabCaseEndpointNameFormatter();
-        cfg.SetInMemorySagaRepositoryProvider();
-
-        cfg.AddMediator();
-
-        cfg.AddConsumers(entryAssembly);
-        cfg.AddSagas(entryAssembly);
-        cfg.AddActivities(entryAssembly);
-
-        if (!_test)
+        builder.AddMassTransit(cfg =>
         {
+            var entryAssembly = this.GetType().Assembly;
+            cfg.SetKebabCaseEndpointNameFormatter();
+            cfg.SetInMemorySagaRepositoryProvider();
+            cfg.AddMediator();
+
+            foreach (var config in moduleConfigurations)
+                config.AddConsumers(cfg);
+
+            cfg.AddConsumers(this.GetType().Assembly);
+
             cfg.UsingRabbitMq((context, config) =>
             {
                 config.AutoStart = true;
@@ -58,46 +57,9 @@ public class BusModule : Autofac.Module
 
                 config.ConfigureEndpoints(context);
             });
-        }
-        else
-        {
-            cfg.UsingInMemory((context, config) =>
-            {
-                config.UseRawJsonDeserializer();
-                config.UseRawJsonSerializer();
+        });
 
-                config.ConfigureJsonSerializerOptions(options =>
-                {
-                    options.Converters.Clear();
-                    foreach (var jsonConverter in DefaultSettings.Settings.Converters)
-                        options.Converters.Add(jsonConverter);
-
-                    options.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
-                    options.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
-                    options.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
-                    options.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
-                    options.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
-                    options.ReferenceHandler = DefaultSettings.Settings.ReferenceHandler;
-                    options.WriteIndented = true;
-                    return options;
-                });
-                config.ConfigureEndpoints(context);
-            });
-        }
-    }
-
-    protected override void Load(ContainerBuilder builder)
-    {
-        var services = new ServiceCollection();
-
-        if (_test)
-        {
-            services.AddMassTransitTestHarness(Apply);
-        }
-        else
-        {
-            services.AddMassTransit(Apply);
-        }
-        builder.Populate(services);
+        foreach (var config in moduleConfigurations)
+            config.RegisterServices(builder);
     }
 }

@@ -24,7 +24,7 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
+    <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
   </ItemGroup>
 
 </Project>

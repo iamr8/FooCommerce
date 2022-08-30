@@ -1,15 +1,14 @@
-﻿namespace FooCommerce.Application.Attributes
+﻿namespace FooCommerce.Application.Attributes;
+
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Enum | AttributeTargets.Field)]
+public class OrderAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Enum | AttributeTargets.Field)]
-    public class OrderAttribute : Attribute
+    private readonly int _priority;
+
+    public OrderAttribute(int priority)
     {
-        private readonly int _priority;
-
-        public OrderAttribute(int priority)
-        {
-            _priority = priority;
-        }
-
-        public int Priority => _priority;
+        _priority = priority;
     }
+
+    public int Priority => _priority;
 }
