@@ -7,9 +7,9 @@ using EasyCaching.Core;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Core.DbProvider.DbContextProvider;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Infrastructure.Modules;
+using FooCommerce.NotificationAPI.Bridge.Enums;
 using FooCommerce.NotificationAPI.Entities;
 using FooCommerce.Tests;
 

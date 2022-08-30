@@ -1,7 +1,7 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Core.Modules;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.NotificationAPI.Consumers;
 using FooCommerce.NotificationAPI.Services;
 

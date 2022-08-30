@@ -4,13 +4,12 @@ using Autofac;
 
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Services;
-using FooCommerce.Core.DbProvider.DbContextProvider;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Core.Helpers;
-using FooCommerce.Core.Notifications.Enums;
-using FooCommerce.Core.Notifications.Models;
 using FooCommerce.Domain.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Enums;
+using FooCommerce.NotificationAPI.Bridge.Models;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Entities;
 using FooCommerce.NotificationAPI.Models;

@@ -21,11 +21,7 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
-    <ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />
+    <ProjectReference Include="..\FooCommerce.NotificationAPI.Bridge\FooCommerce.NotificationAPI.Bridge.csproj" />
   </ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Modules\Interfaces\" />
-	</ItemGroup>
 
 </Project>

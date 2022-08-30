@@ -1,6 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
+	<PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
@@ -22,17 +22,20 @@
 
 	<ItemGroup>
 		<PackageReference Include="Autofac" Version="6.4.0" />
+		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 		<PackageReference Include="MailKit" Version="3.3.0" />
 		<PackageReference Include="MassTransit" Version="8.0.6" />
+		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
 		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
+		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
 		<PackageReference Include="WebMarkupMin.Core" Version="2.12.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
 		<PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.2.1" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
+	  <ProjectReference Include="..\FooCommerce.NotificationAPI.Bridge\FooCommerce.NotificationAPI.Bridge.csproj" />
 	</ItemGroup>
 
 </Project>

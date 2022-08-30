@@ -6,16 +6,14 @@ using Dapper;
 using EasyCaching.Core;
 
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Application.Notifications.Interfaces;
-using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Core.Caching;
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Core.Localization.Helpers;
+using FooCommerce.NotificationAPI.Bridge.Enums;
+using FooCommerce.NotificationAPI.Bridge.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Entities;
-
-using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Services
 {

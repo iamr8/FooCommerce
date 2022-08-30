@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Application.Localization.Models;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Dtos;
 

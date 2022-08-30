@@ -1,6 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Notifications.Services;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
 

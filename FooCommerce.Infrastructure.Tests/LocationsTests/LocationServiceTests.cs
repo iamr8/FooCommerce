@@ -4,7 +4,7 @@ using EasyCaching.Core;
 
 using FooCommerce.Application.Listings.Services;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Tests.Setups;
 using FooCommerce.Tests;

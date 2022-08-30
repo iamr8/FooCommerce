@@ -6,7 +6,7 @@ using FooCommerce.Application.Listings.Services;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Membership.Models;
 using FooCommerce.Application.Membership.Services;
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Domain.Enums;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Membership;

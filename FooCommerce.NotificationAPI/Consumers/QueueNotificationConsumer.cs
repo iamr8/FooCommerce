@@ -1,11 +1,11 @@
 ﻿using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Attributes;
-using FooCommerce.Application.Notifications.Services;
-using FooCommerce.Core.DbProvider.DbContextProvider;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Core.Helpers;
-using FooCommerce.Core.Notifications.Contracts;
 using FooCommerce.Domain.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Attributes;
+using FooCommerce.NotificationAPI.Bridge.Contracts;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Models;
@@ -14,8 +14,6 @@ using FooCommerce.NotificationAPI.Models.FactoryOptions;
 using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Consumers;
 
@@ -40,11 +38,6 @@ public class QueueNotificationConsumer
         _dbContextFactory = dbContextFactory;
         _logger = _loggerFactory.CreateLogger<QueueNotificationConsumer>();
         _configuration = configuration;
-    }
-
-    public QueueNotificationConsumer(ILocalizer localizer)
-    {
-        _localizer = localizer;
     }
 
     public async Task Consume(ConsumeContext<QueueNotification> context)

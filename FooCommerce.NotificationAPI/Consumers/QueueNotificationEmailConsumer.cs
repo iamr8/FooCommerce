@@ -2,19 +2,15 @@
 
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Application.Notifications.Services;
 using FooCommerce.Core.Helpers;
 using FooCommerce.Domain.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Services;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Events;
 using FooCommerce.NotificationAPI.Models;
 
 using MassTransit;
-
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 using MimeKit;
 

@@ -12,7 +12,7 @@ public class BusModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        var moduleAssemblies = AppDomain.CurrentDomain.GetSolutionAssemblies().ToArray();
+        var moduleAssemblies = AppDomain.CurrentDomain.GetSolutionAssemblies();
         var moduleConfigurations = moduleAssemblies
             .SelectMany(x => x.DefinedTypes)
             .Where(t => t.GetInterfaces().Any(c => c == typeof(IModuleConfiguration)))

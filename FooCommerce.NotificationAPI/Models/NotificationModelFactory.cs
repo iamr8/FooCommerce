@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Core.Notifications.Interfaces;
-using FooCommerce.Core.Notifications.Models;
 using FooCommerce.Domain.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Interfaces;
+using FooCommerce.NotificationAPI.Bridge.Models;
 using FooCommerce.NotificationAPI.Dtos;
 using FooCommerce.NotificationAPI.Extensions;
 using FooCommerce.NotificationAPI.Interfaces;
@@ -12,8 +12,6 @@ using FooCommerce.NotificationAPI.Models.Types;
 
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
-
-using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.NotificationAPI.Models;
 

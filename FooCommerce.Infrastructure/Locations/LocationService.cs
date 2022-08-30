@@ -6,7 +6,7 @@ using FooCommerce.Application.Listings.Dtos;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Listings.Services;
 using FooCommerce.Core.Caching;
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;

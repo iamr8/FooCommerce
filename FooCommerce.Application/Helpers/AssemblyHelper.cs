@@ -16,10 +16,14 @@ public static class AssemblyHelper
     {
         var assemblies = Directory.EnumerateFiles(domain.BaseDirectory)
             .Where(assemblyFile => Path.GetExtension(assemblyFile).Equals(".dll", StringComparison.InvariantCultureIgnoreCase))
-            .Select(Path.GetFileNameWithoutExtension)
-            .Where(assemblyFile => assemblyFile.StartsWith(nameof(FooCommerce)))
-            .Where(assemblyFile => !assemblyFile.EndsWith(".Tests"))
-            .Select(assemblyFile => Assembly.LoadFile(Path.Combine(domain.BaseDirectory, $"{assemblyFile}.dll")));
+            .Distinct()
+            .Select(AssemblyName.GetAssemblyName)
+            .Where(assemblyName => assemblyName.FullName.StartsWith(nameof(FooCommerce)) && !assemblyName.FullName.EndsWith(".Tests"))
+            .Select(Assembly.Load);
+
+        var referenced = assemblies.SelectMany(x => x.GetReferencedAssemblies())
+            .Where(assemblyName => assemblyName.FullName.StartsWith(nameof(FooCommerce)) &&
+                                   !assemblyName.FullName.EndsWith(".Tests"));
         return assemblies;
     }
 }

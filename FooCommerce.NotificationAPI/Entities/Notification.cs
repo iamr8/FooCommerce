@@ -1,5 +1,5 @@
-﻿using FooCommerce.Application.Notifications.Enums;
-using FooCommerce.Domain.Interfaces.Database;
+﻿using FooCommerce.Domain.Interfaces.Database;
+using FooCommerce.NotificationAPI.Bridge.Enums;
 
 namespace FooCommerce.NotificationAPI.Entities;
 

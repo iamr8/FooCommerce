@@ -13,7 +13,7 @@ using FooCommerce.Application.Membership.Models;
 using FooCommerce.Application.Membership.Services;
 using FooCommerce.Application.Models;
 using FooCommerce.Core.Caching;
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.Domain.Enums;
 using FooCommerce.Infrastructure.Membership.Models;
 using FooCommerce.Infrastructure.Membership.Validators;

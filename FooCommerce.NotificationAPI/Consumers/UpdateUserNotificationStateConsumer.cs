@@ -1,6 +1,5 @@
 ﻿using Dapper;
-
-using FooCommerce.Core.DbProvider.Interfaces;
+using FooCommerce.Core.DbProvider;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Entities;
 using FooCommerce.NotificationAPI.Enums;
