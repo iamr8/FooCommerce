@@ -20,10 +20,6 @@ public static class AssemblyHelper
             .Select(AssemblyName.GetAssemblyName)
             .Where(assemblyName => assemblyName.FullName.StartsWith(nameof(FooCommerce)) && !assemblyName.FullName.EndsWith(".Tests"))
             .Select(Assembly.Load);
-
-        var referenced = assemblies.SelectMany(x => x.GetReferencedAssemblies())
-            .Where(assemblyName => assemblyName.FullName.StartsWith(nameof(FooCommerce)) &&
-                                   !assemblyName.FullName.EndsWith(".Tests"));
         return assemblies;
     }
 }

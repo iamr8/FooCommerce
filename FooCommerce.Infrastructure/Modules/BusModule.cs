@@ -1,8 +1,6 @@
 ﻿using Autofac;
 
-using FooCommerce.Application.Helpers;
 using FooCommerce.Core.JsonCustomization;
-using FooCommerce.Core.Modules;
 
 using MassTransit;
 
@@ -12,22 +10,12 @@ public class BusModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        var moduleAssemblies = AppDomain.CurrentDomain.GetSolutionAssemblies();
-        var moduleConfigurations = moduleAssemblies
-            .SelectMany(x => x.DefinedTypes)
-            .Where(t => t.GetInterfaces().Any(c => c == typeof(IModuleConfiguration)))
-            .Select(x => (IModuleConfiguration)Activator.CreateInstance(x))
-            .ToList();
-
         builder.AddMassTransit(cfg =>
         {
             var entryAssembly = this.GetType().Assembly;
             cfg.SetKebabCaseEndpointNameFormatter();
             cfg.SetInMemorySagaRepositoryProvider();
             cfg.AddMediator();
-
-            foreach (var config in moduleConfigurations)
-                config.AddConsumers(cfg);
 
             cfg.AddConsumers(this.GetType().Assembly);
 
@@ -58,8 +46,5 @@ public class BusModule : Module
                 config.ConfigureEndpoints(context);
             });
         });
-
-        foreach (var config in moduleConfigurations)
-            config.RegisterServices(builder);
     }
 }
