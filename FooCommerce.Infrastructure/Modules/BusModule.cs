@@ -1,8 +1,11 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Core.JsonCustomization;
 
 using MassTransit;
+
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.Infrastructure.Modules;
 
@@ -10,7 +13,8 @@ public class BusModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        builder.AddMassTransit(cfg =>
+        var services = new ServiceCollection();
+        services.AddMassTransit(cfg =>
         {
             var entryAssembly = this.GetType().Assembly;
             cfg.SetKebabCaseEndpointNameFormatter();
@@ -46,5 +50,6 @@ public class BusModule : Module
                 config.ConfigureEndpoints(context);
             });
         });
+        builder.Populate(services);
     }
 }

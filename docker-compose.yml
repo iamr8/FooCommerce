@@ -1,12 +1,11 @@
-version: "3.4"
+version: "3.8"
 services:
-  foocommerce_web:
-    build: .
-    container_name: foocommerce
-    ports:
-      - "80:80"
-    depends_on:
-      - foocommerce_database
+  sqlserver:
+    image: "mcr.microsoft.com/mssql/server:2019-latest"
+    environment:
+      SA_PASSWORD: "client_db_password"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -20,17 +19,31 @@ services:
     networks:
       - rabbitmq_go_net
 
-  foocommerce_database:
-    image: "mcr.microsoft.com/mssql/server:2019-latest"
-    container_name: foocommerce_mssql_server
-    environment:
-      SA_PASSWORD: "foocommerce_db_password"
-      ACCEPT_EULA: "Y"
-      MSSQL_PID: "Express"
+  worker_notification:
+    build:
+      context: .
+      dockerfile: ./FooCommerce.NotificationAPI/Dockerfile
+    ports:
+      - "81:81"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+  client:
+    build:
+      context: .
+      dockerfile: ./FooCommerce.Web/Dockerfile
+    cpus: 1.5
+    mem_limit: 2048m
+    ports:
+      - "80:80"
+    depends_on:
+      - sqlserver
+      - rabbitmq
+      - worker_notification
 
 networks:
   rabbitmq_go_net:
     driver: bridge
 
 volumes:
-  foocommerce_data:
+  client_data:

@@ -28,6 +28,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 config =>
                 {
                     config.EnableRetryOnFailure(3);
+                    config.CommandTimeout(3);
                     config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 });
         }));

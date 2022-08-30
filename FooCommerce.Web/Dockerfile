@@ -17,24 +17,22 @@ RUN apt-get install -y libpng-dev libjpeg-dev curl libxi6 build-essential libgl1
 RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
 RUN apt-get install -y nodejs
 WORKDIR /src
-COPY ["FooCommerce.Web/FooCommerce.Web.csproj", "FooCommerce.Web/"]
-COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
+COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
+COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
 COPY ["FooCommerce.Infrastructure/FooCommerce.Infrastructure.csproj", "FooCommerce.Infrastructure/"]
-COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooCommerce.NotificationAPI/"]
+COPY ["FooCommerce.NotificationAPI.Bridge/FooCommerce.NotificationAPI.Bridge.csproj", "FooCommerce.NotificationAPI.Bridge/"]
+COPY ["FooCommerce.Web/FooCommerce.Web.csproj", "FooCommerce.Web/"]
 RUN dotnet restore "FooCommerce.Web/FooCommerce.Web.csproj"
 COPY . .
 WORKDIR "/src/FooCommerce.Web"
-RUN dotnet build "FooCommerce.Web.csproj" -c Debug -o /app/build
+RUN dotnet build "FooCommerce.Web.csproj" -c Release -o /app/build
 
 FROM build AS publish
 RUN dotnet publish "FooCommerce.Web.csproj" -c Release -o /app/publish /p:UseAppHost=false
-
 WORKDIR /app/publish
-
 RUN mkdir logs
 RUN mkdir bin
-
 RUN chmod 775 bin
 RUN chmod 775 logs
 # RUN chmod 775 wwwroot/uploads

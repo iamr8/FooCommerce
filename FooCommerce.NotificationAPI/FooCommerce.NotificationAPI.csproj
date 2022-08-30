@@ -4,6 +4,8 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<UserSecretsId>ce133196-c61f-4eed-b226-6007dc76d593</UserSecretsId>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 	</PropertyGroup>
 
   <ItemGroup>
@@ -29,6 +31,7 @@
 		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
 		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 		<PackageReference Include="WebMarkupMin.Core" Version="2.12.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
 		<PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.2.1" />

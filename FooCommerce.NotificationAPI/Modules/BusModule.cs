@@ -1,7 +1,7 @@
 ﻿using Autofac;
+using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Core.JsonCustomization;
-using FooCommerce.NotificationAPI;
 
 using MassTransit;
 
@@ -13,7 +13,8 @@ public class BusModule : Module
     {
         var moduleConfiguration = new ModuleConfiguration();
 
-        builder.AddMassTransit(cfg =>
+        var services = new ServiceCollection();
+        services.AddMassTransit(cfg =>
         {
             var entryAssembly = GetType().Assembly;
             cfg.SetKebabCaseEndpointNameFormatter();
@@ -24,8 +25,8 @@ public class BusModule : Module
 
             cfg.UsingRabbitMq((context, config) =>
             {
-                config.AutoStart = true;
-                config.Host("localhost", h =>
+                //config.AutoStart = true;
+                config.Host("localhost", "/", h =>
                 {
                     h.Username("guest");
                     h.Password("guest");
@@ -50,6 +51,7 @@ public class BusModule : Module
             });
         });
 
+        builder.Populate(services);
         moduleConfiguration.RegisterServices(builder);
     }
 }

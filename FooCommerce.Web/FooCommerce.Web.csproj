@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<ImplicitUsings>enable</ImplicitUsings>
-	  <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
-	  <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+		<TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+		<TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
 		<SpaRoot>ClientApp\</SpaRoot>
 		<DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
 		<SpaProxyServerUrl>https://localhost:44490</SpaProxyServerUrl>
-	  <SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
-	  <UserSecretsId>c5d47f90-db96-4958-8669-d08b97e62b78</UserSecretsId>
-	  <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileFile>./../Dockerfile</DockerfileFile>
+		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
+		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileFile>./Dockerfile</DockerfileFile>
+		<UserSecretsId>894ffc3b-aba7-4214-a642-cf9453305932</UserSecretsId> 
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -21,7 +21,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
 		<ProjectReference Include="..\FooCommerce.Infrastructure\FooCommerce.Infrastructure.csproj" />
 	</ItemGroup>
 
@@ -33,11 +32,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Remove="Controllers\OrderController.cs" />
+		<Compile Remove="Controllers\OrderController.cs" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
+		<Folder Include="Controllers\" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
