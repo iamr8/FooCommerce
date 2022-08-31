@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Application.Entities.Shoppings;
+namespace FooCommerce.Application.DbProvider.Entities.Shoppings;
 
-public record ShoppingBasket
+public record ShoppingCart
     : IEntity, IEntitySoftDeletable, IEntityPublicId
 {
     public Guid Id { get; init; }
@@ -10,6 +10,7 @@ public record ShoppingBasket
     public byte[] RowVersion { get; init; }
     public bool IsDeleted { get; init; }
     public uint PublicId { get; init; }
-    public Guid TopCategoryId { get; init; }
-    public Guid UserSubscriptionId { get; init; }
+    public ushort Quantity { get; init; }
+    public decimal Amount { get; init; }
+    public Guid PurchasePriceId { get; init; }
 }

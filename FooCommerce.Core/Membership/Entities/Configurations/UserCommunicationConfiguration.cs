@@ -1,13 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FooCommerce.Application.Membership.Entities;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Application.Membership.Entities.Configurations;
+namespace FooCommerce.Core.Membership.Entities.Configurations;
 
-public class RoleConfiguration : IEntityTypeConfiguration<Role>
+public class UserCommunicationConfiguration : IEntityTypeConfiguration<UserCommunication>
 {
-    public void Configure(EntityTypeBuilder<Role> builder)
+    public void Configure(EntityTypeBuilder<UserCommunication> builder)
     {
-        builder.ToTable("Roles");
+        builder.ToTable("UserCommunications");
         builder.Property(x => x.Id)
             .HasColumnType("UNIQUEIDENTIFIER ROWGUIDCOL");
         builder.HasIndex(x => x.Id)
@@ -21,10 +23,6 @@ public class RoleConfiguration : IEntityTypeConfiguration<Role>
             .IsRequired()
             .IsRowVersion()
             .IsConcurrencyToken();
-        builder.Property(x => x.IsDeleted)
-            .HasColumnType("BIT");
-        builder.Property(x => x.IsHidden)
-            .HasColumnType("BIT");
         builder.Property(x => x.Type)
             .HasColumnType("TINYINT");
     }

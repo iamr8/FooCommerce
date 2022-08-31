@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Application.Entities.Configurations;
+namespace FooCommerce.Application.DbProvider.Entities.Configurations;
 
-public record Setting
+public record Translation
     : IEntity
 {
     public Guid Id { get; init; }

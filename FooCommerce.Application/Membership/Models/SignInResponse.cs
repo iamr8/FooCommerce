@@ -4,30 +4,21 @@ using FooCommerce.Application.Models;
 
 using FooCommerce.Domain.Enums;
 
-using Microsoft.AspNetCore.Authentication;
-
 namespace FooCommerce.Application.Membership.Models;
 
 public record SignInResponse : JobTaskResponse
 {
-    private SignInResponse(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authenticationProperties)
-    {
-        ClaimsPrincipal = claimsPrincipal;
-        AuthenticationProperties = authenticationProperties;
-        Status = JobStatus.Success;
-    }
-
-    public static SignInResponse CreateInstance(ClaimsPrincipal claimsPrincipal, AuthenticationProperties authenticationProperties)
-    {
-        return new SignInResponse(claimsPrincipal, authenticationProperties);
-    }
-
     public SignInResponse()
     {
     }
 
-    public ClaimsPrincipal ClaimsPrincipal { get; } = null!;
-    public AuthenticationProperties AuthenticationProperties { get; } = null!;
+    public SignInResponse(ClaimsPrincipal principal, params object[] properties)
+    {
+        ClaimsPrincipal = principal;
+        Properties = properties;
+    }
+    public ClaimsPrincipal ClaimsPrincipal { get; }
+    public IEnumerable<object> Properties { get; } = new List<object>(1);
 
     public static implicit operator SignInResponse(JobStatus sts)
     {

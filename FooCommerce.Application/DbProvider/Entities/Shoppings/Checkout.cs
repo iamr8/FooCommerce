@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Application.Entities.Shoppings;
+namespace FooCommerce.Application.DbProvider.Entities.Shoppings;
 
 public record Checkout
     : IEntity

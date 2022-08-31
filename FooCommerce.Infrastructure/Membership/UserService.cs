@@ -242,7 +242,7 @@ public class UserService : IUserService
             ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
         };
 
-        var output = SignInResponse.CreateInstance(claimsPrincipal, authenticationProps);
+        var output = new SignInResponse(claimsPrincipal, authenticationProps);
         // await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProps);
         return output;
     }

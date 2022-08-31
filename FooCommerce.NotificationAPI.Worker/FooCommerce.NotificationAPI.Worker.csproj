@@ -4,11 +4,11 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<UserSecretsId>ce133196-c61f-4eed-b226-6007dc76d593</UserSecretsId>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<DockerfileFile>./Dockerfile</DockerfileFile>
 	</PropertyGroup>
 
-  <ItemGroup>
+	<ItemGroup>
     <None Remove="Templates\_Layout.html" />
     <None Remove="Templates\_RequestData.html" />
   </ItemGroup>

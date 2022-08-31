@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FooCommerce.Application.Membership.Entities;
+
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Application.Membership.Entities.Configurations;
+namespace FooCommerce.Core.Membership.Entities.Configurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

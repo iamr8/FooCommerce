@@ -2,7 +2,7 @@
 
 using NetTopologySuite.Geometries;
 
-namespace FooCommerce.Application.Entities.Products;
+namespace FooCommerce.Application.DbProvider.Entities.Products;
 
 public record ProductMultimedia
     : IEntity, IEntityPublicId, IEntityCoordinate, IEntityMedia, IEntitySortable
