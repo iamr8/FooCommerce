@@ -22,4 +22,8 @@
     <ProjectReference Include="..\FooCommerce.Application\FooCommerce.Application.csproj" />
   </ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Membership\" />
+	</ItemGroup>
+
 </Project>

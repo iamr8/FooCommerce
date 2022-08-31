@@ -2,7 +2,6 @@
 using System.Text.Json.Nodes;
 
 using FooCommerce.Application.Localization.Models;
-using FooCommerce.Core.JsonCustomization;
 
 namespace FooCommerce.Core.Localization.Helpers;
 
@@ -15,7 +14,7 @@ public static class LocalizerSerializationHelper
     /// <returns>A <see cref="LocalizerValueCollection"/> instance.</returns>
     public static LocalizerValueCollection Deserialize(JsonNode node)
     {
-        var output = node.Deserialize<LocalizerValueCollection>(DefaultSettings.Settings);
+        var output = node.Deserialize<LocalizerValueCollection>(JsonDefaultSettings.Settings);
 
         return output;
     }
@@ -37,7 +36,7 @@ public static class LocalizerSerializationHelper
             json.StartsWith("[") &&
             json.EndsWith("]"))
         {
-            output = JsonSerializer.Deserialize<LocalizerValueCollection>(json, DefaultSettings.Settings);
+            output = JsonSerializer.Deserialize<LocalizerValueCollection>(json, JsonDefaultSettings.Settings);
         }
 
         return output;
@@ -51,6 +50,6 @@ public static class LocalizerSerializationHelper
     {
         return LocalizerValueCollection.Keys.Count <= 0
             ? null
-            : JsonSerializer.Serialize(LocalizerValueCollection, DefaultSettings.Settings);
+            : JsonSerializer.Serialize(LocalizerValueCollection, JsonDefaultSettings.Settings);
     }
 }

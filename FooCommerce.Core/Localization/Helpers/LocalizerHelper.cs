@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Core.Helpers;
-using FooCommerce.Domain.Interfaces;
+using FooCommerce.Domain;
 
 using Microsoft.AspNetCore.Html;
 

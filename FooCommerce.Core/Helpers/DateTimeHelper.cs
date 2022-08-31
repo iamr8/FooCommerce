@@ -1,5 +1,4 @@
-﻿using FooCommerce.Core.Helpers;
-using FooCommerce.Core.HttpContextRequest;
+﻿using FooCommerce.Core.HttpContextRequest;
 
 using Microsoft.AspNetCore.Http;
 

@@ -1,7 +1,7 @@
 ﻿#nullable enable
 
 using FooCommerce;
-using FooCommerce.Domain.Interfaces.Database;
+using FooCommerce.Domain;
 
 namespace FooCommerce.Application.Listings.Entities;
 

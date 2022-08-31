@@ -1,44 +1,12 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<UserSecretsId>ce133196-c61f-4eed-b226-6007dc76d593</UserSecretsId>
-		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-	</PropertyGroup>
+  </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\_Layout.html" />
-    <None Remove="Templates\_RequestData.html" />
+    <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Templates\_Layout.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\_RequestData.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Autofac" Version="6.4.0" />
-		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
-		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="MailKit" Version="3.3.0" />
-		<PackageReference Include="MassTransit" Version="8.0.6" />
-		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
-		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
-		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
-		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
-		<PackageReference Include="WebMarkupMin.Core" Version="2.12.0" />
-		<PackageReference Include="HtmlAgilityPack" Version="1.11.45" />
-		<PackageReference Include="HtmlAgilityPack.CssSelectors.NetCore" Version="1.2.1" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\FooCommerce.NotificationAPI.Bridge\FooCommerce.NotificationAPI.Bridge.csproj" />
-	</ItemGroup>
 
 </Project>

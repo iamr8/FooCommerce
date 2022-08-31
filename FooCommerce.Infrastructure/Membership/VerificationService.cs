@@ -2,15 +2,17 @@
 
 using Dapper;
 
+using FooCommerce.Application.Communications.Enums;
+using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Application.Membership.Enums;
 using FooCommerce.Application.Membership.Services;
 using FooCommerce.Core.DbProvider;
 using FooCommerce.Domain.Enums;
-using FooCommerce.NotificationAPI.Bridge.Contracts;
-using FooCommerce.NotificationAPI.Bridge.Enums;
-using FooCommerce.NotificationAPI.Bridge.Interfaces;
-using FooCommerce.NotificationAPI.Bridge.Models;
+using FooCommerce.NotificationAPI.Contracts;
+using FooCommerce.NotificationAPI.Enums;
+using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.NotificationAPI.Models;
 
 using MassTransit;
 

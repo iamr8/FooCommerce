@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Application.Helpers;
 using FooCommerce.Application.Localization.Attributes;
 using FooCommerce.Core.Localization.Contracts;
-using FooCommerce.Domain.Interfaces;
+using FooCommerce.Domain;
 using FooCommerce.Infrastructure.Localization.Models;
 
 using MassTransit;

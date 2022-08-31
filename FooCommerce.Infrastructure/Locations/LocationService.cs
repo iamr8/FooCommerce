@@ -1,7 +1,7 @@
 ﻿using Dapper;
 
 using EasyCaching.Core;
-
+using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Dtos;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Listings.Services;

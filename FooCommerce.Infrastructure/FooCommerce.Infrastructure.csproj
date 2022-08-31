@@ -21,7 +21,7 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
-    <ProjectReference Include="..\FooCommerce.NotificationAPI.Bridge\FooCommerce.NotificationAPI.Bridge.csproj" />
+    <ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />
   </ItemGroup>
 
 </Project>

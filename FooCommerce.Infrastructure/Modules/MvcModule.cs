@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-
-using FooCommerce.Core.JsonCustomization;
+using FooCommerce.Core;
 using FooCommerce.Infrastructure.Mvc;
 using FooCommerce.Infrastructure.Mvc.Localization;
 using FooCommerce.Infrastructure.Mvc.ModelBinders;
@@ -71,14 +70,14 @@ public class MvcModule : Module
             .AddJsonOptions(options =>
             {
                 options.JsonSerializerOptions.Converters.Clear();
-                foreach (var jsonConverter in DefaultSettings.Settings.Converters)
+                foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
                     options.JsonSerializerOptions.Converters.Add(jsonConverter);
 
-                options.JsonSerializerOptions.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
-                options.JsonSerializerOptions.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
-                options.JsonSerializerOptions.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
-                options.JsonSerializerOptions.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
+                options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonDefaultSettings.Settings.PropertyNamingPolicy;
                 options.JsonSerializerOptions.WriteIndented = true;
             })
             .AddRazorRuntimeCompilation();

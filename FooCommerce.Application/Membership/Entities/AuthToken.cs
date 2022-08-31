@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Application.Membership.Enums;
-using FooCommerce.Domain.Interfaces.Database;
+using FooCommerce.Domain;
 
 namespace FooCommerce.Application.Membership.Entities;
 

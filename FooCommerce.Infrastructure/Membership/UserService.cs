@@ -5,6 +5,8 @@ using Dapper;
 
 using EasyCaching.Core;
 
+using FooCommerce.Application.Communications.Enums;
+using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Listings.Services;
 using FooCommerce.Application.Membership.Dtos;
 using FooCommerce.Application.Membership.Entities;

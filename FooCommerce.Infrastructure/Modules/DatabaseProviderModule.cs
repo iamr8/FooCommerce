@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-
+using FooCommerce.Application.DbProvider;
 using FooCommerce.Core.DbProvider;
 
 using Microsoft.EntityFrameworkCore;

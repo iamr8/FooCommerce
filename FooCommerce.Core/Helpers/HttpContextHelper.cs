@@ -6,5 +6,5 @@ namespace FooCommerce.Core.Helpers;
 
 public static class HttpContextHelper
 {
-    public static HttpRequestInfo GetRequestInfo(this HttpContext context) => new(context);
+    public static IHttpRequestInfo GetRequestInfo(this HttpContext context) => new HttpRequestInfo(context);
 }

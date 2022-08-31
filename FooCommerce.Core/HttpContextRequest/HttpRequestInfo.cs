@@ -3,7 +3,6 @@
 using System.Globalization;
 using System.Net;
 using System.Text.Json.Serialization;
-
 using FooCommerce.Application.JsonConverters;
 
 using Microsoft.AspNetCore.Http;

@@ -2,7 +2,7 @@
 
 using FooCommerce.Core.Caching;
 using FooCommerce.Core.Localization.Contracts;
-using FooCommerce.Domain.Interfaces;
+using FooCommerce.Domain;
 using FooCommerce.Infrastructure.Localization.Models;
 
 using MassTransit;

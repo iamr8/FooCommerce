@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-
-using FooCommerce.Core.JsonCustomization;
-
+using FooCommerce.Core;
 using MassTransit;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -35,14 +33,14 @@ public class BusModule : Module
                 config.ConfigureJsonSerializerOptions(options =>
                 {
                     options.Converters.Clear();
-                    foreach (var jsonConverter in DefaultSettings.Settings.Converters)
+                    foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
                         options.Converters.Add(jsonConverter);
 
-                    options.DefaultIgnoreCondition = DefaultSettings.Settings.DefaultIgnoreCondition;
-                    options.UnknownTypeHandling = DefaultSettings.Settings.UnknownTypeHandling;
-                    options.DictionaryKeyPolicy = DefaultSettings.Settings.DictionaryKeyPolicy;
-                    options.PropertyNameCaseInsensitive = DefaultSettings.Settings.PropertyNameCaseInsensitive;
-                    options.PropertyNamingPolicy = DefaultSettings.Settings.PropertyNamingPolicy;
+                    options.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
+                    options.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
+                    options.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;
+                    options.PropertyNameCaseInsensitive = JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
+                    options.PropertyNamingPolicy = JsonDefaultSettings.Settings.PropertyNamingPolicy;
                     options.WriteIndented = true;
                     return options;
                 });

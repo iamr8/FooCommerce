@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Membership.Enums;
+﻿using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Domain.Enums;
 
 namespace FooCommerce.Application.Membership.Services;

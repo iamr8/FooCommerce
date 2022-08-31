@@ -1,4 +1,4 @@
-﻿using FooCommerce.Domain.Interfaces.Database;
+﻿using FooCommerce.Domain;
 
 using NetTopologySuite.Geometries;
 

@@ -5,9 +5,7 @@ using System.Text.Encodings.Web;
 using System.Web;
 
 using FooCommerce.Application.Helpers;
-
-using FooCommerce.Domain.Interfaces;
-
+using FooCommerce.Domain;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.TagHelpers;

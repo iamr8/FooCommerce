@@ -2,8 +2,6 @@
 
 using EasyCaching.Core;
 
-using FooCommerce.Core.JsonCustomization;
-
 using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.Core.Caching;
@@ -14,7 +12,7 @@ public static class CacheHelper
     {
         var jsonOfResult = value.ToString();
 
-        var result = JsonSerializer.Deserialize<TModel>(jsonOfResult, DefaultSettings.Settings);
+        var result = JsonSerializer.Deserialize<TModel>(jsonOfResult, JsonDefaultSettings.Settings);
 
         logger?.LogInformation("Cache hit for key {key}", key);
         return result;
@@ -27,7 +25,7 @@ public static class CacheHelper
         TModel result = null;
         await Task.Factory.StartNew(() =>
         {
-            result = JsonSerializer.Deserialize<TModel>(jsonOfResult, DefaultSettings.Settings);
+            result = JsonSerializer.Deserialize<TModel>(jsonOfResult, JsonDefaultSettings.Settings);
         });
 
         logger?.LogInformation("Cache hit for key {key}", key);
@@ -43,7 +41,7 @@ public static class CacheHelper
 
         await Task.Factory.StartNew(() =>
         {
-            jsonOfResult = JsonSerializer.Serialize(model, DefaultSettings.Settings);
+            jsonOfResult = JsonSerializer.Serialize(model, JsonDefaultSettings.Settings);
         }, cancellationToken);
 
         logger?.LogInformation("Cache preparing for key {key}", key);

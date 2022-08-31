@@ -17,9 +17,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{093B1D5D
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "FooCommerce.SQLScripts", "FooCommerce.SQLScripts\FooCommerce.SQLScripts.sqlproj", "{A61BC536-2451-44CB-9BBC-1F6DB18E6A56}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI", "FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj", "{D1CFEB08-7573-441E-8B77-E321EC6DAF29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI.Worker", "FooCommerce.NotificationAPI.Worker\FooCommerce.NotificationAPI.Worker.csproj", "{D1CFEB08-7573-441E-8B77-E321EC6DAF29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI.Tests", "FooCommerce.NotificationAPI.Tests\FooCommerce.NotificationAPI.Tests.csproj", "{D999BA5B-2A9B-4C44-969B-11F0F2AAEA9A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI.Worker.Tests", "FooCommerce.NotificationAPI.Worker.Tests\FooCommerce.NotificationAPI.Worker.Tests.csproj", "{D999BA5B-2A9B-4C44-969B-11F0F2AAEA9A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.Tests", "FooCommerce.Tests.Base\FooCommerce.Tests.csproj", "{6049B6BB-00AB-4E4D-BD70-349135563B0C}"
 EndProject
@@ -29,7 +29,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{A0
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workers", "Workers", "{C989B359-E49A-4CE0-B504-42588236AA4A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI.Bridge", "FooCommerce.NotificationAPI.Bridge\FooCommerce.NotificationAPI.Bridge.csproj", "{720AA534-DA92-4DEE-AABB-D218C7C8D19F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.NotificationAPI", "FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj", "{720AA534-DA92-4DEE-AABB-D218C7C8D19F}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6E59D18D-5761-4E2F-BADA-39D824923D60}"
 EndProject

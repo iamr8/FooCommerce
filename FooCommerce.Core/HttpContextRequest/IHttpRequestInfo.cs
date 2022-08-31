@@ -7,12 +7,14 @@ namespace FooCommerce.Core.HttpContextRequest;
 
 public interface IHttpRequestInfo
 {
-    IPAddress IPAddress { get; set; }
-    string UserAgent { get; set; }
-    RegionInfo Country { get; set; }
-    DateTimeZone Timezone { get; set; }
-    HttpRequestBrowser Browser { get; set; }
-    HttpRequestEngine Engine { get; set; }
-    HttpRequestDevice Device { get; set; }
-    HttpRequestPlatform Platform { get; set; }
+    IPAddress IPAddress { get; }
+    string UserAgent { get; }
+    RegionInfo Country { get; }
+    DateTimeZone Timezone { get; }
+    HttpRequestBrowser Browser { get; }
+    HttpRequestEngine Engine { get; }
+
+    HttpRequestPlatform Platform { get; }
+
+    HttpRequestDevice Device { get; }
 }
