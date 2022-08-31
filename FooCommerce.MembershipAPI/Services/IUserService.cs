@@ -1,5 +1,4 @@
-﻿using FooCommerce.Application.Models;
-using FooCommerce.MembershipAPI.Dtos;
+﻿using FooCommerce.MembershipAPI.Dtos;
 using FooCommerce.MembershipAPI.Enums;
 using FooCommerce.MembershipAPI.Models;
 
@@ -13,5 +12,5 @@ public interface IUserService
 
     Task<SignInResponse> SignInAsync(SignInRequest model, string returnUrl = null, CancellationToken cancellationToken = default);
 
-    Task<JobTaskResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default);
+    Task<SignUpResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default);
 }

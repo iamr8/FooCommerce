@@ -11,7 +11,7 @@ public record AuthToken
     public byte[] RowVersion { get; init; }
     public AuthTokenAction Action { get; init; }
     public string Token { get; init; }
-    public DateTimeOffset? Authorized { get; init; }
-    public Guid UserNotificationId { get; init; }
+    public DateTimeOffset? Authorized { get; set; }
+    public string More { get; init; }
     public Guid UserCommunicationId { get; init; }
 }

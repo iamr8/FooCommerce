@@ -8,11 +8,10 @@ using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Core.DbProvider;
-using FooCommerce.Infrastructure.Modules;
+using FooCommerce.Infrastructure.Bootstrapper.Modules;
 using FooCommerce.MembershipAPI.Enums;
 using FooCommerce.MembershipAPI.Worker.DbProvider.Entities;
 using FooCommerce.MembershipAPI.Worker.Enums;
-using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.Tests;
 
 using MassTransit.Testing;

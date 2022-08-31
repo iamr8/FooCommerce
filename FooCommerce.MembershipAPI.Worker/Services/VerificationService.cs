@@ -1,10 +1,13 @@
-﻿using System.Data;
+﻿using System.Collections.ObjectModel;
+using System.Data;
 
 using Dapper;
 
 using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Domain.Enums;
+using FooCommerce.MembershipAPI.Contracts;
+using FooCommerce.MembershipAPI.Enums;
 using FooCommerce.MembershipAPI.Models;
 using FooCommerce.MembershipAPI.Services;
 using FooCommerce.MembershipAPI.Worker.DbProvider.Entities;
@@ -18,11 +21,15 @@ public class VerificationService : IVerificationService
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
     private readonly IBus _bus;
+    private readonly ILogger<IVerificationService> _logger;
+    private readonly IRequestClient<UpdateAuthTokenState> _requestClient_AuthToken;
 
-    public VerificationService(IDbConnectionFactory dbConnectionFactory, IBus bus)
+    public VerificationService(IDbConnectionFactory dbConnectionFactory, ILogger<IVerificationService> logger, IBus bus, IRequestClient<UpdateAuthTokenState> requestClientAuthToken)
     {
         _dbConnectionFactory = dbConnectionFactory;
+        _logger = logger;
         _bus = bus;
+        _requestClient_AuthToken = requestClientAuthToken;
     }
 
     private static async Task<Guid?> CheckIfNotVerifiedYetAsync(CommunicationType type, string value, IDbConnection dbConnection, CancellationToken cancellationToken = default)
@@ -81,5 +88,22 @@ public class VerificationService : IVerificationService
             return JobStatus.Failed;
 
         return new RequestVerificationResponse(communicationId, authToken.Token);
+    }
+
+    public async Task<IReadOnlyDictionary<string, object>> UpdateAuthTokenStateAsync(Guid authTokenId, AuthTokenState state, CancellationToken cancellationToken = default)
+    {
+        var (success, failed) =
+            await _requestClient_AuthToken.GetResponse<UpdateAuthTokenStateSuccess, UpdateAuthTokenStateFailed>(new
+            {
+                AuthTokenId = authTokenId,
+                State = state
+            }, cancellationToken);
+
+        if (failed.IsCompleted)
+            return new ReadOnlyDictionary<string, object>(new Dictionary<string, object>());
+
+        var succeededData = await success;
+        var dict = succeededData.Message.Data;
+        return dict;
     }
 }

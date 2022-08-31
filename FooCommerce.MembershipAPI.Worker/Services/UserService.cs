@@ -8,7 +8,6 @@ using EasyCaching.Core;
 using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Application.Localization.Services;
-using FooCommerce.Application.Models;
 using FooCommerce.Core.Caching;
 using FooCommerce.Core.Protection;
 using FooCommerce.Domain.Enums;
@@ -131,57 +130,62 @@ public class UserService : IUserService
         return role;
     }
 
-    private async Task CreateUserAsync(SignUpRequest model, RoleModel role, IDbConnection dbConnection)
+    private async Task<CreatedUserModel> CreateUserAsync(SignUpRequest model, RoleModel role, IDbConnection dbConnection)
     {
-        // Must do this by Event Bus
-        var user = await dbConnection.QuerySingleAsync<User>("INSERT INTO [Users] OUTPUT INSERTED.* DEFAULT VALUES");
+        // Must use DbContext Transaction and Rollback strategy
+        var output = new CreatedUserModel();
+        output.User = await dbConnection.QuerySingleAsync<User>("INSERT INTO [Users] OUTPUT INSERTED.* DEFAULT VALUES");
 
         var hash = DataProtector.Hash(model.Password, 16, 32, 10_000);
-        var userPassword = await dbConnection.QuerySingleAsync<UserPassword>(
+        output.Password = await dbConnection.QuerySingleAsync<UserPassword>(
             $"INSERT INTO [UserPasswords] ([{nameof(UserPassword.Hash)}], [{nameof(UserPassword.UserId)}]) OUTPUT INSERTED.* VALUES (@Hash, @UserId)", new
             {
                 Hash = hash,
-                UserId = user.Id,
+                UserId = output.User.Id,
             });
 
-        var userRole = await dbConnection.QuerySingleAsync<UserRole>(
+        output.Role = await dbConnection.QuerySingleAsync<UserRole>(
             $"INSERT INTO [UserRoles] ([{nameof(UserRole.UserId)}], [{nameof(UserRole.RoleId)}]) OUTPUT INSERTED.* VALUES (@UserId, @RoleId)", new
             {
                 RoleId = role.Id,
-                UserId = user.Id
+                UserId = output.User.Id
             });
 
-        var userCommunication = await dbConnection.QuerySingleAsync<UserCommunication>(
+        output.Communication = await dbConnection.QuerySingleAsync<UserCommunication>(
             $"INSERT INTO [UserCommunications] ([{nameof(UserCommunication.Type)}], [{nameof(UserCommunication.Value)}], [{nameof(UserCommunication.UserId)}]) OUTPUT INSERTED.* VALUES (@Type, @Value, @UserId)", new
             {
                 Type = (byte)CommunicationType.Email_Message,
                 Value = model.Email.ToLowerInvariant(),
-                UserId = user.Id
+                UserId = output.User.Id
             });
 
-        var userCountry = await dbConnection.QuerySingleAsync<UserSetting>(
+        output.Settings ??= new List<UserSetting>();
+        output.Settings.Add(await dbConnection.QuerySingleAsync<UserSetting>(
             $"INSERT INTO [UserSettings] ([{nameof(UserSetting.Key)}], [{nameof(UserSetting.Value)}], [{nameof(UserSetting.UserId)}]) OUTPUT INSERTED.* VALUES (@Key, @Value, @UserId)", new
             {
                 Key = "country",
                 Value = model.Country.ToString(),
-                UserId = user.Id
-            });
+                UserId = output.User.Id
+            }));
 
-        var userFirstName = await dbConnection.QuerySingleAsync<UserInformation>(
+        output.Information ??= new List<UserInformation>();
+        output.Information.Add(await dbConnection.QuerySingleAsync<UserInformation>(
             $"INSERT INTO [UserInformation] ([{nameof(UserInformation.Type)}], [{nameof(UserInformation.Value)}], [{nameof(UserInformation.UserId)}]) OUTPUT INSERTED.* VALUES (@Type, @Value, @UserId)", new
             {
                 Type = (byte)UserInformationType.Name,
                 Value = model.FirstName,
-                UserId = user.Id
-            });
+                UserId = output.User.Id
+            }));
 
-        var userLastName = await dbConnection.QuerySingleAsync<UserInformation>(
+        output.Information.Add(await dbConnection.QuerySingleAsync<UserInformation>(
             $"INSERT INTO [UserInformation] ([{nameof(UserInformation.Type)}], [{nameof(UserInformation.Value)}], [{nameof(UserInformation.UserId)}]) OUTPUT INSERTED.* VALUES (@Type, @Value, @UserId)", new
             {
                 Type = (byte)UserInformationType.Surname,
                 Value = model.LastName,
-                UserId = user.Id
-            });
+                UserId = output.User.Id
+            }));
+
+        return output;
     }
 
     public async Task<SignInResponse> SignInAsync(SignInRequest model, string returnUrl = null, CancellationToken cancellationToken = default)
@@ -207,6 +211,10 @@ public class UserService : IUserService
         var (verified, needsUpgrade) = DataProtector.Check(credentialModel.Hash, model.Password, 32, 10_000);
         if (!verified)
             return JobStatus.IncorrectUsernameOrPassword;
+
+        // TODO: we check if user's communication is verified or not
+        // If communication hasn't verified yet, we return NeedVerification status
+        // Otherwise, we create ClaimsPrincipal and Sign them in
 
         //if (needsUpgrade)
         //    return JobStatus.UpgradePassword;
@@ -242,17 +250,16 @@ public class UserService : IUserService
         };
 
         var output = new SignInResponse(claimsPrincipal, authenticationProps);
-        // await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal, authenticationProps);
         return output;
     }
 
-    public async Task<JobTaskResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default)
+    public async Task<SignUpResponse> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default)
     {
         var validator = new SignUpRequestValidator(_locationService);
         var validationResult = await validator.ValidateAsync(model, cancellationToken);
         if (!validationResult.IsValid)
         {
-            return new JobTaskResponse
+            return new SignUpResponse
             {
                 Status = JobStatus.InputDataNotValid,
                 Errors = validationResult.Errors
@@ -266,19 +273,12 @@ public class UserService : IUserService
             return JobStatus.EmailAlreadyEstablished;
 
         var role = await GetRoleAsync(RoleType.NormalUser, dbConnection, cancellationToken);
-        await CreateUserAsync(model, role, dbConnection);
-        return JobStatus.Success;
-
-        //var query = from user in dbContext.Set<User>().AsNoTracking()
-        //    join password in dbContext.Set<UserPassword>().AsNoTracking() on user.Id equals password.UserId into
-        //        passwords
-        //    join communication in dbContext.Set<UserCommunication>().AsNoTracking() on user.Id equals communication
-        //        .UserId into communications
-        //    join lockout in dbContext.Set<UserLockout>().AsNoTracking() on user.Id equals lockout.UserId into lockouts
-        //    join role in dbContext.Set<UserRole>().AsNoTracking() on user.Id equals role.UserId into roles
-        //    join setting in dbContext.Set<UserSetting>().AsNoTracking() on user.Id equals setting.UserId into settings
-        //    join information in dbContext.Set<UserInformation>().AsNoTracking() on user.Id equals information.UserId
-        //        into informations
-        //    select user;
+        var createdUserModel = await CreateUserAsync(model, role, dbConnection);
+        return new SignUpResponse
+        {
+            Status = JobStatus.Success,
+            CommunicationType = createdUserModel.Communication.Type,
+            CommunicationAddress = createdUserModel.Communication.Value
+        };
     }
 }
