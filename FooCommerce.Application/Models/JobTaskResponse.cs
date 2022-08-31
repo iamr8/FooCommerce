@@ -6,6 +6,11 @@ namespace FooCommerce.Application.Models;
 
 public record JobTaskResponse
 {
+    public JobTaskResponse()
+    {
+        Status = JobStatus.Success;
+    }
+
     public IEnumerable<ValidationFailure> Errors { get; init; }
     public JobStatus Status { get; init; }
 

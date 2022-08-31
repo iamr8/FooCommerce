@@ -1,11 +1,10 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FooCommerce.Core;
-using FooCommerce.Infrastructure.Mvc;
-using FooCommerce.Infrastructure.Mvc.Localization;
-using FooCommerce.Infrastructure.Mvc.ModelBinders;
-using FooCommerce.Infrastructure.Mvc.ModelBinding.CustomProviders;
 
+using FooCommerce.Core;
+using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
+using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
+using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -16,7 +15,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace FooCommerce.Infrastructure.Modules;
+namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
 
 public class MvcModule : Module
 {
@@ -110,8 +109,8 @@ public class MvcModule : Module
             options.LowercaseUrls = true;
             options.LowercaseQueryStrings = false;
 
-            if (!options.ConstraintMap.ContainsKey(Constraints.LanguageKey))
-                options.ConstraintMap.Add(Constraints.LanguageKey, typeof(LanguageRouteConstraint));
+            if (!options.ConstraintMap.ContainsKey(LanguageConstraints.LanguageKey))
+                options.ConstraintMap.Add(LanguageConstraints.LanguageKey, typeof(LanguageRouteConstraint));
         });
 
         services.Configure<FormOptions>(options =>

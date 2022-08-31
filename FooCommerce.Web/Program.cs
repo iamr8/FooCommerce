@@ -1,10 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Infrastructure.Mvc;
-
-using Microsoft.EntityFrameworkCore;
+using FooCommerce.Infrastructure.Bootstrapper;
+using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,21 +17,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
-    {
-        containerBuilder.RegisterModule(new AutoFluentValidationModule());
-        containerBuilder.RegisterModule(new MvcModule(builder.Environment));
-        containerBuilder.RegisterModule(new BusModule());
-        containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
-        {
-            optionsBuilder.UseSqlServer(connectionString!,
-                config =>
-                {
-                    config.EnableRetryOnFailure(3);
-                    config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                });
-        }));
-    });
+        containerBuilder.ConfigureAutofac(builder.Environment, connectionString));
 
 var app = builder.Build();
 
@@ -53,7 +37,7 @@ app.UseRouting();
 app.UseAuthorization();
 
 var defaultCulture = app.Configuration.GetSection("SupportedLanguages").Get<string[]>()[0];
-const string culturePattern = $"{Constraints.LanguageKey}:{Constraints.LanguageKey}";
+const string culturePattern = $"{LanguageConstraints.LanguageKey}:{LanguageConstraints.LanguageKey}";
 
 app.MapControllerRoute(
     name: "default",

@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace FooCommerce.Infrastructure.Mvc.ModelBinding.CustomProviders;
+namespace FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
 
 public class CustomNameFormValueProviderFactory : IValueProviderFactory
 {

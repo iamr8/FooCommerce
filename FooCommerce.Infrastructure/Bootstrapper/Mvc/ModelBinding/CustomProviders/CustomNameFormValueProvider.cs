@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 
-namespace FooCommerce.Infrastructure.Mvc.ModelBinding.CustomProviders;
+namespace FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
 
 /// <summary>
 /// An <see cref="IValueProvider"/> adapter for data stored in an <see cref="IFormCollection"/>.

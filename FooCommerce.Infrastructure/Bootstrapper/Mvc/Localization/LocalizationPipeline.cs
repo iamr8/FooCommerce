@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 
-namespace FooCommerce.Infrastructure.Mvc.Localization;
+namespace FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
 public class LocalizationPipeline
 {

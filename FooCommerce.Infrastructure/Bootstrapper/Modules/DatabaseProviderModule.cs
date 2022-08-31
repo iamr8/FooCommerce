@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+
 using FooCommerce.Application.DbProvider;
 using FooCommerce.Core.DbProvider;
 
@@ -7,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Modules;
+namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
 
 public class DatabaseProviderModule : Module
 {

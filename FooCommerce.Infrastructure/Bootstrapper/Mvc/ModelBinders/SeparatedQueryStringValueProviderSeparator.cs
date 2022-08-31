@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Infrastructure.Mvc.ModelBinders;
+﻿namespace FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 
 public class SeparatedQueryStringValueProviderSeparator
 {

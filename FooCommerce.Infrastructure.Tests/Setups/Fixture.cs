@@ -7,10 +7,8 @@ using EasyCaching.Core;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Core.DbProvider;
-using FooCommerce.Infrastructure.Modules;
+using FooCommerce.Infrastructure.Bootstrapper.Modules;
 using FooCommerce.Tests;
-
-using MassTransit;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;

@@ -1,10 +1,9 @@
 ﻿using System.Globalization;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;
 
-namespace FooCommerce.Infrastructure.Mvc.ModelBinders;
+namespace FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 
 public class SeparatedQueryStringValueProvider : QueryStringValueProvider
 {

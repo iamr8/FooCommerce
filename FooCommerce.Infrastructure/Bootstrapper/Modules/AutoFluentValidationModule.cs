@@ -5,7 +5,7 @@ using FluentValidation.AspNetCore;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Modules
+namespace FooCommerce.Infrastructure.Bootstrapper.Modules
 {
     public class AutoFluentValidationModule : Module
     {
