@@ -5,5 +5,5 @@ namespace FooCommerce.NotificationAPI.Worker.Contracts;
 public interface UpdateUserNotificationState
 {
     Guid UserNotificationId { get; }
-    UserNotificationUpdateState State { get; }
+    UserNotificationState State { get; }
 }

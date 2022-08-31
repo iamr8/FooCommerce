@@ -25,9 +25,9 @@ public class UpdateUserNotificationStateConsumer
         {
             var columnName = context.Message.State switch
             {
-                UserNotificationUpdateState.Sent => nameof(UserNotification.Sent),
-                UserNotificationUpdateState.Delivered => nameof(UserNotification.Delivered),
-                UserNotificationUpdateState.Seen => nameof(UserNotification.Seen),
+                UserNotificationState.Sent => nameof(UserNotification.Sent),
+                UserNotificationState.Delivered => nameof(UserNotification.Delivered),
+                UserNotificationState.Seen => nameof(UserNotification.Seen),
                 _ => throw new ArgumentOutOfRangeException()
             };
 

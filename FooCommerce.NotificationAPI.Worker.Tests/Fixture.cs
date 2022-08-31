@@ -8,7 +8,7 @@ using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Application.Listings.Entities;
 using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Core.DbProvider;
-using FooCommerce.Infrastructure.Modules;
+using FooCommerce.Infrastructure.Bootstrapper.Modules;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
 using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;

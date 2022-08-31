@@ -68,10 +68,10 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
             Assert.True(published);
 
             var publishedEmail = await this.Fixture.Harness.Published.Any<QueueNotificationEmail>();
-            Assert.True(published);
+            Assert.True(publishedEmail);
 
             var notificationSent = await this.Fixture.Harness.Published.Any<NotificationSent>();
-            Assert.True(published);
+            Assert.True(notificationSent);
 
             var consumed = await consumer.Consumed.Any<QueueNotification>();
             Assert.True(consumed);

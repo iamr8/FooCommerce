@@ -83,7 +83,7 @@ public class QueueNotificationEmailConsumer
                 //    await context.Publish<UpdateAuthTokenState>(new
                 //    {
                 //        AuthTokenId = token.Id,
-                //        State = UserNotificationUpdateState.Sent
+                //        State = UserNotificationState.Sent
                 //    }, context.CancellationToken);
                 //}
             }

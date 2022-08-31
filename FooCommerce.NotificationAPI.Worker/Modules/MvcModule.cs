@@ -1,22 +1,14 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
+
 using FooCommerce.Core;
+
 using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FooCommerce.NotificationAPI.Worker.Modules;
 
 public class MvcModule : Module
 {
-    private readonly IWebHostEnvironment _webHostEnvironment;
-    private readonly Action<RazorPagesOptions> _razorOptions;
-
-    public MvcModule(IWebHostEnvironment webHostEnvironment, Action<RazorPagesOptions> razorOptions = null)
-    {
-        _webHostEnvironment = webHostEnvironment;
-        _razorOptions = razorOptions;
-    }
-
     protected override void Load(ContainerBuilder builder)
     {
         var services = new ServiceCollection();

@@ -16,7 +16,6 @@ public record UserNotification
     public DateTimeOffset? Sent { get; init; }
     public DateTimeOffset? Delivered { get; init; }
     public DateTimeOffset? Seen { get; init; }
-    public Guid? AuthTokenId { get; init; }
     public Guid NotificationId { get; init; }
     public Guid UserId { get; init; }
 }

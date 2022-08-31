@@ -1,6 +1,6 @@
 ﻿namespace FooCommerce.NotificationAPI.Worker.Enums;
 
-public enum UserNotificationUpdateState
+public enum UserNotificationState
 {
     Sent = 0,
     Delivered = 1,

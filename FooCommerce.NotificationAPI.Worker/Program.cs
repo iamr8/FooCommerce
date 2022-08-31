@@ -1,6 +1,8 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+
 using FooCommerce.NotificationAPI.Worker.Modules;
+
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,7 +19,7 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
     {
-        containerBuilder.RegisterModule(new MvcModule(builder.Environment));
+        containerBuilder.RegisterModule(new MvcModule());
         containerBuilder.RegisterModule(new BusModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
