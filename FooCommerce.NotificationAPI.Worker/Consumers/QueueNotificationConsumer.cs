@@ -53,7 +53,7 @@ public class QueueNotificationConsumer
 
         var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory, _localizer);
 
-        await context.Message.Receiver.ResolveInformationAsync(_dbContextFactory, context.CancellationToken);
+        // await context.Message.Receiver.ResolveInformationAsync(_dbContextFactory, context.CancellationToken);
 
         foreach (var communicationType in availableCommunicationTypes)
         {

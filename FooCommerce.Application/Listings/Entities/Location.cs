@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Membership.Enums;
+﻿using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Domain;
 
 using NetTopologySuite.Geometries;

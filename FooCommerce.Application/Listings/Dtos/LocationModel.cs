@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Membership.Enums;
+﻿using FooCommerce.Application.Localization.Enums;
 
 namespace FooCommerce.Application.Listings.Dtos;
 

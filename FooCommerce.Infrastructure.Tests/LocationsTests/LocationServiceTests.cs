@@ -1,9 +1,10 @@
 ﻿using Autofac;
 
 using EasyCaching.Core;
+
 using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Listings.Services;
-using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Localization.Enums;
+using FooCommerce.Application.Localization.Services;
 using FooCommerce.Core.DbProvider;
 using FooCommerce.Infrastructure.Locations;
 using FooCommerce.Infrastructure.Tests.Setups;

@@ -10,5 +10,5 @@ public interface INotificationReceiver
     string Name { get; }
     IEnumerable<UserCommunicationModel> UserCommunications { get; }
 
-    Task ResolveInformationAsync<TDbContext>(IDbContextFactory<TDbContext> dbConnection, CancellationToken cancellationToken = default) where TDbContext : DbContext;
+    //Task ResolveInformationAsync<TDbContext>(IDbContextFactory<TDbContext> dbConnection, CancellationToken cancellationToken = default) where TDbContext : DbContext;
 }

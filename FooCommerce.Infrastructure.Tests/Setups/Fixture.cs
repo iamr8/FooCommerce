@@ -5,8 +5,7 @@ using Autofac;
 using EasyCaching.Core;
 
 using FooCommerce.Application.Listings.Entities;
-using FooCommerce.Application.Membership.Entities;
-using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Core.DbProvider;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Tests;
@@ -69,7 +68,6 @@ public class Fixture : IAsyncLifetime, IFixture
         var dbContext = await dbContextFactory.CreateDbContextAsync();
         AppDbContext.TestMode = true;
         SeedLocationsData(dbContext);
-        SeedMembershipData(dbContext);
         // SagaHarness = Container.Resolve<ISagaStateMachineTestHarness<OrderStateMachine, OrderState>>();
         // Machine = Container.Resolve<OrderStateMachine>();
     }
@@ -104,19 +102,6 @@ public class Fixture : IAsyncLifetime, IFixture
             Division = LocationDivision.Quarter,
             Name = "Western",
             ParentId = district.Id,
-        }).Entity;
-        dbContext.SaveChanges();
-    }
-
-    private void SeedMembershipData(DbContext dbContext)
-    {
-        var normalUserRole = dbContext.Set<Role>().Add(new Role
-        {
-            Type = RoleType.NormalUser,
-        }).Entity;
-        var adminUserRole = dbContext.Set<Role>().Add(new Role
-        {
-            Type = RoleType.Admin,
         }).Entity;
         dbContext.SaveChanges();
     }

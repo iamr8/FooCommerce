@@ -42,4 +42,8 @@
 	  <ProjectReference Include="..\FooCommerce.Tests.Base\FooCommerce.Tests.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="MembershipTests\" />
+	</ItemGroup>
+
 </Project>

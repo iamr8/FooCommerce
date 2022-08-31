@@ -3,7 +3,6 @@
 using Autofac;
 
 using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Application.Membership.Entities;
 using FooCommerce.Core.DbProvider;
 using FooCommerce.Core.Helpers;
 using FooCommerce.Core.HttpContextRequest;
@@ -16,6 +15,7 @@ using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Models;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 using FooCommerce.NotificationAPI.Worker.Tests.Fakes;
+using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
 

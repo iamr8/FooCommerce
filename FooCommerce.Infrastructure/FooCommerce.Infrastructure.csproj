@@ -21,6 +21,7 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\FooCommerce.Core\FooCommerce.Core.csproj" />
+    <ProjectReference Include="..\FooCommerce.MembershipAPI\FooCommerce.MembershipAPI.csproj" />
     <ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />
   </ItemGroup>
 

@@ -6,12 +6,13 @@ using EasyCaching.Core;
 
 using FooCommerce.Application.Communications.Enums;
 using FooCommerce.Application.Listings.Entities;
-using FooCommerce.Application.Membership.Entities;
-using FooCommerce.Application.Membership.Enums;
+using FooCommerce.Application.Localization.Enums;
 using FooCommerce.Core.DbProvider;
 using FooCommerce.Infrastructure.Modules;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
+using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
+using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Enums;
 using FooCommerce.Tests;
 
 using MassTransit.Testing;
@@ -19,6 +20,8 @@ using MassTransit.Testing;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+
+using RoleType = FooCommerce.NotificationAPI.Worker.Tests.Fakes.Enums.RoleType;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
 
