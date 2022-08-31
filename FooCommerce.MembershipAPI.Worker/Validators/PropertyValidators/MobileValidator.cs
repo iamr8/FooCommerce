@@ -4,7 +4,7 @@ using FluentValidation;
 
 using PhoneNumbers;
 
-namespace FooCommerce.MembershipAPI.Validators;
+namespace FooCommerce.MembershipAPI.Worker.Validators.PropertyValidators;
 
 public class MobileValidator : AbstractValidator<string>
 {

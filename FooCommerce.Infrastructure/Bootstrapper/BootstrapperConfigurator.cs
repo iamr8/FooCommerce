@@ -14,7 +14,6 @@ public static class BootstrapperConfigurator
         containerBuilder.RegisterModule(new AutoFluentValidationModule());
         containerBuilder.RegisterModule(new MvcModule(environment));
         containerBuilder.RegisterModule(new ServicesModule());
-        containerBuilder.RegisterModule(new BusModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
         {

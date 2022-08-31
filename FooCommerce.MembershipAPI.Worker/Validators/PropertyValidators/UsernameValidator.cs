@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace FooCommerce.MembershipAPI.Validators;
+namespace FooCommerce.MembershipAPI.Worker.Validators.PropertyValidators;
 
 public class UsernameValidator : AbstractValidator<string>
 {

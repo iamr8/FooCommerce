@@ -2,7 +2,7 @@
 
 using FooCommerce.Application.Localization.Services;
 
-namespace FooCommerce.MembershipAPI.Validators;
+namespace FooCommerce.MembershipAPI.Worker.Validators.PropertyValidators;
 
 public class CountryValidator : AbstractValidator<uint>
 {

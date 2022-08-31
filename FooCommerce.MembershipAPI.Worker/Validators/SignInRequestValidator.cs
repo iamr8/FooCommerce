@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 
 using FooCommerce.MembershipAPI.Models;
-using FooCommerce.MembershipAPI.Validators;
+using FooCommerce.MembershipAPI.Worker.Validators.PropertyValidators;
 
 namespace FooCommerce.MembershipAPI.Worker.Validators;
 

@@ -3,18 +3,18 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <UserSecretsId>61a4811d-f0aa-4ba7-a3c4-f4375d4b414b</UserSecretsId>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+		<UserSecretsId>61a4811d-f0aa-4ba7-a3c4-f4375d4b414b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Autofac" Version="6.4.0" />
 		<PackageReference Include="Autofac.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="MassTransit" Version="8.0.6" />
 		<PackageReference Include="MassTransit.Autofac" Version="7.3.1" />
 		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
+		<PackageReference Include="libphonenumber-csharp" Version="8.12.54" />
 	</ItemGroup>
 
 	<ItemGroup>
