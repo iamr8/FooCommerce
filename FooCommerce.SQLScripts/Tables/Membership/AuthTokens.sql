@@ -6,15 +6,19 @@
     [Action] TINYINT NOT NULL, 
     [Token] NVARCHAR(20) NOT NULL, 
     [Authorized] DATETIME2 NULL, 
-    [UserNotificationId] UNIQUEIDENTIFIER NOT NULL, 
+    [More] NVARCHAR(MAX) NULL, 
     [UserCommunicationId] UNIQUEIDENTIFIER NOT NULL, 
     CONSTRAINT [FK_AuthTokens_UserCommunications] FOREIGN KEY ([UserCommunicationId]) REFERENCES [UserCommunications]([Id]), 
-    CONSTRAINT [FK_AuthTokens_Notifications] FOREIGN KEY ([UserNotificationId]) REFERENCES [UserNotifications]([Id]), 
 )
 
 GO
 
 CREATE UNIQUE INDEX [IX_AuthTokens_Id] ON [dbo].[AuthTokens] ([Id])
+
+GO
+
+CREATE FULLTEXT INDEX ON [dbo].[AuthTokens] ([More]) KEY INDEX [IX_AuthTokens_Id] ON [FullTextCatalog] WITH CHANGE_TRACKING AUTO
+
 GO
 
 CREATE TRIGGER [dbo].[Trigger_AuthTokensUpdateUserCommunications]
