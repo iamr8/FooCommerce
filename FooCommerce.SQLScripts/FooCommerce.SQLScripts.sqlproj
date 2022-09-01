@@ -109,4 +109,7 @@
     <Build Include="Tables\Membership\UserCommunications.sql" />
     <Build Include="Tables\Membership\UserPasswords.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ContainerDatabase.publish.xml" />
+  </ItemGroup>
 </Project>
