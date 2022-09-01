@@ -1,11 +1,12 @@
 {
   "profiles": {
-    "CLI": {
+    "Kestrel": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+        "ConnectionString": "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7213;http://localhost:5213"
@@ -15,7 +16,8 @@
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+        "ConnectionString": "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       }
     },
     "Docker": {
@@ -23,11 +25,15 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
       "environmentVariables": {
+        "ASPNETCORE_URLS": "https://+:443;http://+:80",
+        "ASPNETCORE_HTTPS_PORT": "7213",
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy"
+        "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
+        "ConnectionString": "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       },
-      "publishAllPorts": true,
-      "useSSL": true
+      "useSSL": true,
+      "httpPort": 5213,
+      "sslPort": 7213
     }
   },
   "iisSettings": {

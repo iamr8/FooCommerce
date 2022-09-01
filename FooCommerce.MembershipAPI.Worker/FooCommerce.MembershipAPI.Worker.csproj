@@ -4,8 +4,10 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
-		<UserSecretsId>61a4811d-f0aa-4ba7-a3c4-f4375d4b414b</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+		<UserSecretsId>25f99b3b-e566-4f2f-b208-d89b8a6cf4ca</UserSecretsId>
+	  <CopyRefAssembliesToPublishDirectory>True</CopyRefAssembliesToPublishDirectory>
+	  <RazorCompileOnPublish>false</RazorCompileOnPublish>
   </PropertyGroup>
 
 	<ItemGroup>
@@ -15,10 +17,24 @@
 		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
 		<PackageReference Include="MassTransit.RabbitMQ" Version="8.0.6" />
 		<PackageReference Include="libphonenumber-csharp" Version="8.12.54" />
+		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\FooCommerce.MembershipAPI\FooCommerce.MembershipAPI.csproj" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="web.Release.config">
+	    <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+		<ItemGroup>
+			<DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
+		</ItemGroup>
+		<Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
+	</Target>
 
 </Project>

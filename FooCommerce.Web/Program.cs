@@ -6,18 +6,26 @@ using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Configuration.AddJsonFile("appsettings.json", true, true);
-if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
-{
-    var path = $"appsettings.{builder.Environment.EnvironmentName}.json";
-    builder.Configuration.AddJsonFile(path, true, true);
-}
-builder.Configuration.AddEnvironmentVariables();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var config = builder.Configuration
+    .SetBasePath(AppContext.BaseDirectory)
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables()
+    .Build();
+
+var ff = Environment.GetEnvironmentVariables();
+var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
         containerBuilder.ConfigureAutofac(builder.Environment, connectionString));
+
+// In production, the React files will be served from this directory
+builder.Services.AddSpaStaticFiles(configuration =>
+{
+    configuration.RootPath = "wwwroot/build";
+});
 
 var app = builder.Build();
 
@@ -26,10 +34,10 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    //app.UseHsts();
+    //app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();

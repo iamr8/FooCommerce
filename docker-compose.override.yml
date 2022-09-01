@@ -6,14 +6,16 @@ services:
     environment:
       ConnectionString: "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       DOTNET_RUNNING_IN_CONTAINER: "True"
+      ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_HOSTINGSTARTUPASSEMBLIES: "Microsoft.AspNetCore.SpaProxy"
-    restart: on-failure
     ports:
       #- "5100:80" #{OutOfContainerPort:InContainerPort}
       - "44370:443" #{OutOfContainerPort:InContainerPort}
     build:
       context: .
       dockerfile: FooCommerce.Web/Dockerfile
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - sqlserver
       - rabbitmq
@@ -25,13 +27,15 @@ services:
     environment:
       ConnectionString: "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       DOTNET_RUNNING_IN_CONTAINER: "True"
-    restart: on-failure
+      ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "5110:80" #{OutOfContainerPort:InContainerPort}
       - "5111:443" #{OutOfContainerPort:InContainerPort}
     build:
       context: .
       dockerfile: FooCommerce.NotificationAPI.Worker/Dockerfile
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - sqlserver
       - rabbitmq
@@ -41,13 +45,15 @@ services:
     environment:
       ConnectionString: "sqlserver;Database=FooCommerce;User ID=sa;Password=%7BecNR%40xtY%7D0S;Persist Security Info=False;"
       DOTNET_RUNNING_IN_CONTAINER: "True"
-    restart: on-failure
+      ASPNETCORE_ENVIRONMENT: "Development"
     ports:
       - "5120:80" #{OutOfContainerPort:InContainerPort}
       - "5121:443" #{OutOfContainerPort:InContainerPort}
     build:
       context: .
       dockerfile: FooCommerce.MembershipAPI.Worker/Dockerfile
+    volumes:
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
       - sqlserver
       - rabbitmq
@@ -60,7 +66,7 @@ services:
       - 1433:1433
     #build:
     #  context: .
-    #  dockerfile: sqlserver/Dockerfile
+    #  dockerfile: FooCommerce.SQLScripts/Dockerfile # implements Full-Text Search to SQL Server 2019
     environment:
       MSSQL_AGENT_ENABLED: "True" # To enable Full-Text Search
       SA_PASSWORD: "{ecNR@xtY}0S" # Must be Super password
@@ -73,6 +79,3 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    volumes:
-      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
-      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq

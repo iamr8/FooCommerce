@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Application.Configurations;
-using FooCommerce.Core;
+using FooCommerce.Core.Configurations;
+
 using MassTransit;
 
 namespace FooCommerce.MembershipAPI.Worker.Modules;
@@ -24,11 +24,21 @@ public class BusModule : Module
 
             cfg.UsingRabbitMq((context, config) =>
             {
-                config.Host(RabbitMQConfiguration.Host, RabbitMQConfiguration.VirtualHost, h =>
+                config.AutoStart = true;
+                config.UseDelayedMessageScheduler();
+
+                if (ContainerSettings.IsRunningInContainer)
                 {
-                    h.Username(RabbitMQConfiguration.Username);
-                    h.Password(RabbitMQConfiguration.Password);
-                });
+                    config.Host(RabbitMQConfiguration.Host);
+                }
+                else
+                {
+                    config.Host(RabbitMQConfiguration.Host, RabbitMQConfiguration.VirtualHost, h =>
+                    {
+                        h.Username(RabbitMQConfiguration.Username);
+                        h.Password(RabbitMQConfiguration.Password);
+                    });
+                }
 
                 config.ConfigureJsonSerializerOptions(options =>
                 {

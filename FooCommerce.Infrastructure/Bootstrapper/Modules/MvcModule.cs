@@ -2,6 +2,7 @@
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Core;
+using FooCommerce.Core.Configurations;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
@@ -72,14 +73,16 @@ public class MvcModule : Module
                 foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
                     options.JsonSerializerOptions.Converters.Add(jsonConverter);
 
-                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
+                options.JsonSerializerOptions.DefaultIgnoreCondition =
+                    JsonDefaultSettings.Settings.DefaultIgnoreCondition;
                 options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive = JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive =
+                    JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonDefaultSettings.Settings.PropertyNamingPolicy;
                 options.JsonSerializerOptions.WriteIndented = true;
-            })
-            .AddRazorRuntimeCompilation();
+            });
+            // .AddRazorRuntimeCompilation();
         services.AddControllers(AddMvcOptions);
         var razorBuilder = services
             .AddRazorPages(options =>
@@ -88,8 +91,8 @@ public class MvcModule : Module
                 options.Conventions.Add(new LocalizedPageRouteModelConvention());
             });
 
-        if (_webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging())
-            razorBuilder.AddRazorRuntimeCompilation();
+        // if (_webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging())
+            // razorBuilder.AddRazorRuntimeCompilation();
 
         var controllers = services.AddControllersWithViews(AddMvcOptions);
 
@@ -97,7 +100,7 @@ public class MvcModule : Module
         // foreach (var assembly in moduleAssemblies)
         //     controllers.AddApplicationPart(assembly);
 
-        controllers = controllers.AddRazorRuntimeCompilation();
+        //controllers = controllers.AddRazorRuntimeCompilation();
 
         // services.Configure<MvcRazorRuntimeCompilationOptions>(options =>
         // {

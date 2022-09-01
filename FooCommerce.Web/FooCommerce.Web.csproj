@@ -11,16 +11,25 @@
 		<SpaProxyServerUrl>https://localhost:44490</SpaProxyServerUrl>
 		<SpaProxyLaunchCommand>npm start</SpaProxyLaunchCommand>
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-		<DockerfileFile>./Dockerfile</DockerfileFile>
+		<UserSecretsId>a0ec374b-b4f0-454e-97d5-757a563f2ad9</UserSecretsId>
+		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
+		<CopyRefAssembliesToPublishDirectory>True</CopyRefAssembliesToPublishDirectory>
+		<RazorCompileOnPublish>false</RazorCompileOnPublish>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="6.0.8" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="6.0.8" />
 		<PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.17.0" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\FooCommerce.Infrastructure\FooCommerce.Infrastructure.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
+		<Content Update="web.Release.config" CopyToPublishDirectory="Never" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -31,11 +40,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<Compile Remove="Controllers\OrderController.cs" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<Folder Include="Controllers\" />
+		<Folder Include="logs\" />
 	</ItemGroup>
 
 	<Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
@@ -64,5 +69,12 @@
 			</ResolvedFileToPublish>
 		</ItemGroup>
 	</Target>
+
+	<!--<Target Name="CopyDepsFiles" AfterTargets="Build" Condition="'$(TargetFramework)'!=''">
+		<ItemGroup>
+			<DepsFilePaths Include="$([System.IO.Path]::ChangeExtension('%(_ResolvedProjectReferencePaths.FullPath)', '.deps.json'))" />
+		</ItemGroup>
+		<Copy SourceFiles="%(DepsFilePaths.FullPath)" DestinationFolder="$(OutputPath)" Condition="Exists('%(DepsFilePaths.FullPath)')" />
+	</Target>-->
 
 </Project>

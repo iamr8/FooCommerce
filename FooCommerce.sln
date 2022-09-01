@@ -37,13 +37,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentatio
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{DF3A7B9F-0E81-42AF-9B89-888DB91D653F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.MembershipAPI", "FooCommerce.MembershipAPI\FooCommerce.MembershipAPI.csproj", "{56958962-6460-498B-8FA8-CAB2CA531753}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.MembershipAPI", "FooCommerce.MembershipAPI\FooCommerce.MembershipAPI.csproj", "{56958962-6460-498B-8FA8-CAB2CA531753}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.MembershipAPI.Worker", "FooCommerce.MembershipAPI.Worker\FooCommerce.MembershipAPI.Worker.csproj", "{17DDD9DD-6D52-4CFE-96F5-5649477AE9EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.MembershipAPI.Worker", "FooCommerce.MembershipAPI.Worker\FooCommerce.MembershipAPI.Worker.csproj", "{17DDD9DD-6D52-4CFE-96F5-5649477AE9EC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8DF3B6E7-8103-4F16-A631-1C05B31BBE75}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FooCommerce.MembershipAPI.Worker.Tests", "FooCommerce.MembershipAPI.Worker.Tests\FooCommerce.MembershipAPI.Worker.Tests.csproj", "{5B3B647E-C089-4280-AF08-63CEEB5FB727}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FooCommerce.MembershipAPI.Worker.Tests", "FooCommerce.MembershipAPI.Worker.Tests\FooCommerce.MembershipAPI.Worker.Tests.csproj", "{5B3B647E-C089-4280-AF08-63CEEB5FB727}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F97C359C-3DC9-41D3-AAA3-8390279142D8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{BC6F9425-29D1-4FE6-AA5D-30DC4971A593}"
+	ProjectSection(SolutionItems) = preProject
+		sqlserver\Dockerfile = sqlserver\Dockerfile
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,6 +116,10 @@ Global
 		{5B3B647E-C089-4280-AF08-63CEEB5FB727}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B3B647E-C089-4280-AF08-63CEEB5FB727}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B3B647E-C089-4280-AF08-63CEEB5FB727}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F97C359C-3DC9-41D3-AAA3-8390279142D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F97C359C-3DC9-41D3-AAA3-8390279142D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F97C359C-3DC9-41D3-AAA3-8390279142D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F97C359C-3DC9-41D3-AAA3-8390279142D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

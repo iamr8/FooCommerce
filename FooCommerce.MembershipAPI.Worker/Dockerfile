@@ -7,18 +7,18 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["FooCommerce.NotificationAPI.Worker/FooCommerce.NotificationAPI.Worker.csproj", "FooCommerce.NotificationAPI.Worker/"]
-COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooCommerce.NotificationAPI/"]
+COPY ["FooCommerce.MembershipAPI.Worker/FooCommerce.MembershipAPI.Worker.csproj", "FooCommerce.MembershipAPI.Worker/"]
+COPY ["FooCommerce.MembershipAPI/FooCommerce.MembershipAPI.csproj", "FooCommerce.MembershipAPI/"]
 COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
 COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
-RUN dotnet restore "FooCommerce.NotificationAPI.Worker/FooCommerce.NotificationAPI.Worker.csproj"
+RUN dotnet restore "FooCommerce.MembershipAPI.Worker/FooCommerce.MembershipAPI.Worker.csproj"
 COPY . .
-WORKDIR "/src/FooCommerce.NotificationAPI.Worker"
-RUN dotnet build "FooCommerce.NotificationAPI.Worker.csproj" -c Release -o /app/build
+WORKDIR "/src/FooCommerce.MembershipAPI.Worker"
+RUN dotnet build "FooCommerce.MembershipAPI.Worker.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "FooCommerce.NotificationAPI.Worker.csproj" --no-restore -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "FooCommerce.MembershipAPI.Worker.csproj" --no-restore -c Release -o /app/publish /p:UseAppHost=false
 WORKDIR /app/publish
 RUN mkdir logs
 RUN mkdir bin
@@ -30,4 +30,4 @@ RUN chmod 775 Keys
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "FooCommerce.NotificationAPI.Worker.dll"]
+ENTRYPOINT ["dotnet", "FooCommerce.MembershipAPI.Worker.dll"]

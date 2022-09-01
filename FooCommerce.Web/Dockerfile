@@ -1,28 +1,26 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+FROM node:latest AS node_base
+
+RUN echo "NODE Version:" && node --version
+RUN echo "NPM Version:" && npm --version
+
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+COPY --from=node_base . .
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-RUN apt-get update
-RUN apt-get install -y curl
-RUN apt-get install -y libpng-dev libjpeg-dev curl libxi6 build-essential libgl1-mesa-glx
-RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
-RUN apt-get install -y nodejs
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
-RUN apt-get update
-RUN apt-get install -y curl
-RUN apt-get install -y libpng-dev libjpeg-dev curl libxi6 build-essential libgl1-mesa-glx
-RUN curl -sL https://deb.nodesource.com/setup_lts.x | bash -
-RUN apt-get install -y nodejs
+COPY --from=node_base . .
 WORKDIR /src
-COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
-COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
-COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
-COPY ["FooCommerce.Infrastructure/FooCommerce.Infrastructure.csproj", "FooCommerce.Infrastructure/"]
-COPY ["FooCommerce.NotificationAPI.Bridge/FooCommerce.NotificationAPI.Bridge.csproj", "FooCommerce.NotificationAPI.Bridge/"]
 COPY ["FooCommerce.Web/FooCommerce.Web.csproj", "FooCommerce.Web/"]
+COPY ["FooCommerce.Infrastructure/FooCommerce.Infrastructure.csproj", "FooCommerce.Infrastructure/"]
+COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
+COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
+COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
+COPY ["FooCommerce.MembershipAPI/FooCommerce.MembershipAPI.csproj", "FooCommerce.MembershipAPI/"]
+COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooCommerce.NotificationAPI/"]
 RUN dotnet restore "FooCommerce.Web/FooCommerce.Web.csproj"
 COPY . .
 WORKDIR "/src/FooCommerce.Web"
@@ -33,9 +31,12 @@ RUN dotnet publish "FooCommerce.Web.csproj" -c Release -o /app/publish /p:UseApp
 WORKDIR /app/publish
 RUN mkdir logs
 RUN mkdir bin
+RUN mkdir Keys
 RUN chmod 775 bin
 RUN chmod 775 logs
-# RUN chmod 775 wwwroot/uploads
+RUN chmod 775 Keys
+RUN chmod 775 wwwroot
+RUN chmod 775 ClientApp
 
 FROM base AS final
 WORKDIR /app

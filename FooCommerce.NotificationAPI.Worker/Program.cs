@@ -14,7 +14,9 @@ if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
     builder.Configuration.AddJsonFile(path, true, true);
 }
 builder.Configuration.AddEnvironmentVariables();
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
@@ -22,6 +24,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         containerBuilder.RegisterModule(new MvcModule());
         containerBuilder.RegisterModule(new BusModule());
         containerBuilder.RegisterModule(new CachingModule());
+        containerBuilder.RegisterModule(new ProtectionModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
@@ -35,26 +38,5 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
     });
 
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller}/{action=Index}/{id?}");
-
-app.MapRazorPages();
 
 app.Run();
