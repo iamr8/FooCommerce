@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 
 using EasyCaching.Core;
-
+using FooCommerce.Core.Configurations;
 using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.Core.Caching;

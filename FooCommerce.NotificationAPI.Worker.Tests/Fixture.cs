@@ -48,7 +48,7 @@ public class Fixture : IAsyncLifetime, IFixture
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Register(_ => MockObjects.GetWebHostEnvironment());
         containerBuilder.RegisterModule(new LocalizationModule());
-        containerBuilder.RegisterModule(new ExternalModule(true));
+        containerBuilder.RegisterModule(new ExternalModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>

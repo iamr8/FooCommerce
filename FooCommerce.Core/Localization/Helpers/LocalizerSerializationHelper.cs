@@ -2,6 +2,7 @@
 using System.Text.Json.Nodes;
 
 using FooCommerce.Application.Localization.Models;
+using FooCommerce.Core.Configurations;
 
 namespace FooCommerce.Core.Localization.Helpers;
 

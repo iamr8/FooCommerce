@@ -15,6 +15,7 @@ public static class BootstrapperConfigurator
         containerBuilder.RegisterModule(new MvcModule(environment));
         containerBuilder.RegisterModule(new ServicesModule());
         containerBuilder.RegisterModule(new CachingModule());
+        containerBuilder.RegisterModule(new ProtectionModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,

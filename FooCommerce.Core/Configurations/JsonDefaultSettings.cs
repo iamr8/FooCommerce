@@ -1,10 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
-
 using FooCommerce.Application.JsonConverters;
 using FooCommerce.Core.JsonConverters;
 
-namespace FooCommerce.Core;
+namespace FooCommerce.Core.Configurations;
 
 public static class JsonDefaultSettings
 {
