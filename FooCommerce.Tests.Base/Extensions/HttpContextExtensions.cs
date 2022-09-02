@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.Encodings.Web;
 
-using FooCommerce.Core.Helpers;
+using FooCommerce.Common.Helpers;
 using FooCommerce.Tests.Fakes;
 using FooCommerce.Tests.Fakes.Models;
 using FooCommerce.Tests.Fakes.Providers;

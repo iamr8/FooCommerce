@@ -2,13 +2,13 @@
 
 using Autofac;
 
-using FooCommerce.Core.Helpers;
-using FooCommerce.Core.HttpContextRequest;
+using FooCommerce.Common.Helpers;
+using FooCommerce.Common.HttpContextRequest;
+using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Worker.Consumers;
-using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
@@ -59,7 +59,12 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
             {
                 NotificationId = notificationId,
                 Action = NotificationAction.Verification_Request_Email,
-                Receiver = new NotificationReceiverProvider(NotificationReceiverStrategy.ByUserCommunicationId, this.Fixture.UserCommunicationId),
+                //ReceiverProvider = new NotificationReceiverProvider
+                //{
+                //    Communications = new Dictionary<CommunicationType, string> { { CommunicationType.Email_Message, "arash.shabbeh@gmail.com" } },
+                //    Name = "Arash",
+                //    UserId = userId
+                //},
                 RequestInfo = (HttpRequestInfo)HttpContext.GetRequestInfo()
             });
 

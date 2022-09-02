@@ -4,10 +4,11 @@ using Autofac;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.Listings.Entities;
-using FooCommerce.Application.Localization.Enums;
-using FooCommerce.Core.DbProvider;
+using FooCommerce.Common.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Modules;
+using FooCommerce.Infrastructure.DbProvider;
+using FooCommerce.Infrastructure.Listings.Entities;
+using FooCommerce.Infrastructure.Locations.Enums;
 using FooCommerce.Tests;
 
 using Microsoft.Data.SqlClient;

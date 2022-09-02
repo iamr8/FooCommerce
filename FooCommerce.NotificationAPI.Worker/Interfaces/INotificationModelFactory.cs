@@ -1,5 +1,5 @@
-﻿using FooCommerce.NotificationAPI.Worker.Dtos;
-using FooCommerce.NotificationAPI.Worker.Models.Communications;
+﻿using FooCommerce.NotificationAPI.Models.Communications;
+using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 
 namespace FooCommerce.NotificationAPI.Worker.Interfaces;

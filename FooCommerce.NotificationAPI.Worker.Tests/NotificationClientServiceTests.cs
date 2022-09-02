@@ -1,7 +1,9 @@
 ﻿using Autofac;
-using FooCommerce.NotificationAPI.Services;
+
+using FooCommerce.NotificationAPI.Worker.Services;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
+
 using Xunit.Abstractions;
 
 namespace FooCommerce.NotificationAPI.Worker.Tests;

@@ -1,12 +1,8 @@
-﻿using FooCommerce.NotificationAPI.Enums;
-using FooCommerce.NotificationAPI.Models;
+﻿using FooCommerce.NotificationAPI.Models;
 
 namespace FooCommerce.NotificationAPI.Interfaces;
 
-public interface INotificationOptions : INotificationRequestInfo
+public interface INotificationOptions : INotificationOptionsBase
 {
-    NotificationAction Action { get; }
-    NotificationReceiverProvider Receiver { get; }
-    IEnumerable<INotificationContent> Content { get; }
-    IEnumerable<object> Bag { get; }
+    NotificationReceiverProvider ReceiverProvider { get; }
 }

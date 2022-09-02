@@ -1,6 +1,6 @@
 ﻿using Dapper;
 
-using FooCommerce.Application.DbProvider;
+using FooCommerce.Domain.DbProvider;
 using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
 using FooCommerce.NotificationAPI.Worker.Enums;
@@ -21,22 +21,20 @@ public class UpdateUserNotificationStateConsumer
 
     public async Task Consume(ConsumeContext<UpdateUserNotificationState> context)
     {
-        using (var dbConnection = _dbConnectionFactory.CreateConnection())
+        using var dbConnection = _dbConnectionFactory.CreateConnection();
+        var columnName = context.Message.State switch
         {
-            var columnName = context.Message.State switch
-            {
-                UserNotificationState.Sent => nameof(UserNotification.Sent),
-                UserNotificationState.Delivered => nameof(UserNotification.Delivered),
-                UserNotificationState.Seen => nameof(UserNotification.Seen),
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            UserNotificationState.Sent => nameof(UserNotification.Sent),
+            UserNotificationState.Delivered => nameof(UserNotification.Delivered),
+            UserNotificationState.Seen => nameof(UserNotification.Seen),
+            _ => throw new ArgumentOutOfRangeException()
+        };
 
-            var userNotification = await dbConnection.QuerySingleAsync<UserNotification>(
-                $"UPDATE [UserNotifications] SET {columnName} = GETUTCDATE() OUTPUT UPDATED.* WHERE Id = @UserNotificationId",
-                new
-                {
-                    context.Message.UserNotificationId
-                });
-        }
+        var userNotification = await dbConnection.QuerySingleAsync<UserNotification>(
+            $"UPDATE [UserNotifications] SET {columnName} = GETUTCDATE() OUTPUT UPDATED.* WHERE Id = @UserNotificationId",
+            new
+            {
+                context.Message.UserNotificationId
+            });
     }
 }

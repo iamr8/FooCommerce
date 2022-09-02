@@ -1,6 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-
+using FooCommerce.Common.HttpContextRequest;
 using FooCommerce.Infrastructure.Bootstrapper;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
@@ -41,6 +41,8 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
+
+HttpRequestInfo.UseWebsiteUrl(ref app);
 
 app.UseAuthorization();
 

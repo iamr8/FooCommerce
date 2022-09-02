@@ -2,9 +2,9 @@
 
 using Dapper;
 
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Core.DbProvider;
+using FooCommerce.Domain.DbProvider;
 using FooCommerce.MembershipAPI.Contracts;
+using FooCommerce.MembershipAPI.Worker.DbProvider;
 using FooCommerce.MembershipAPI.Worker.DbProvider.Entities;
 
 using MassTransit;
@@ -40,10 +40,11 @@ public class UpdateAuthTokenStateConsumer
         });
         if (string.IsNullOrEmpty(jsonMore))
         {
-            _logger.LogError("Unable to save User Notification for Auth Token {0} as Sent.", context.Message.AuthTokenId);
-            await context.RespondAsync<UpdateAuthTokenStateFailed>(new
+            _logger.LogError("Unable to get stored data inside of the AuthToken with Id {0}.", context.Message.AuthTokenId);
+            await context.RespondAsync<AuthTokenStateUpdateFailed>(new
             {
-                AuthTokenId = context.Message.AuthTokenId
+                AuthTokenId = context.Message.AuthTokenId,
+                Message = $"Unable to get stored data inside of the AuthToken with Id {context.Message.AuthTokenId}."
             });
             return;
         }
@@ -60,7 +61,7 @@ public class UpdateAuthTokenStateConsumer
 
             await transaction.CommitAsync(context.CancellationToken);
             var dict = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonMore);
-            await context.RespondAsync<UpdateAuthTokenStateSuccess>(new
+            await context.RespondAsync<AuthTokenStateUpdateSuccess>(new
             {
                 AuthTokenId = context.Message.AuthTokenId,
                 Data = (IReadOnlyDictionary<string, object>)dict!
@@ -70,9 +71,10 @@ public class UpdateAuthTokenStateConsumer
         catch (Exception e)
         {
             await transaction.RollbackAsync(context.CancellationToken);
-            await context.RespondAsync<UpdateAuthTokenStateFailed>(new
+            await context.RespondAsync<AuthTokenStateUpdateFailed>(new
             {
-                AuthTokenId = context.Message.AuthTokenId
+                AuthTokenId = context.Message.AuthTokenId,
+                Message = e.Message
             });
         }
     }

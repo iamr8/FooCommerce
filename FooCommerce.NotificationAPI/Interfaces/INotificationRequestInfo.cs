@@ -1,4 +1,4 @@
-﻿using FooCommerce.Core.HttpContextRequest;
+﻿using FooCommerce.Common.HttpContextRequest;
 
 namespace FooCommerce.NotificationAPI.Interfaces;
 

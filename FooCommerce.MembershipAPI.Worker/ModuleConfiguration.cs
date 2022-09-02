@@ -1,14 +1,12 @@
 ﻿using Autofac;
-
-using FooCommerce.Core.Modules;
-using FooCommerce.MembershipAPI.Services;
 using FooCommerce.MembershipAPI.Worker.Consumers;
 using FooCommerce.MembershipAPI.Worker.Services;
+using FooCommerce.MembershipAPI.Worker.Services.Repositories;
 using MassTransit;
 
 namespace FooCommerce.MembershipAPI.Worker;
 
-public class ModuleConfiguration : IModuleConfiguration
+public class ModuleConfiguration
 {
     public void AddConsumers(IBusRegistrationConfigurator cfg)
     {
@@ -24,6 +22,14 @@ public class ModuleConfiguration : IModuleConfiguration
 
         builder.RegisterType<VerificationService>()
             .As<IVerificationService>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<CommunicationService>()
+            .As<ICommunicationService>()
+            .InstancePerLifetimeScope();
+
+        builder.RegisterType<TokenService>()
+            .As<ITokenService>()
             .InstancePerLifetimeScope();
     }
 }

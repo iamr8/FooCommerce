@@ -2,11 +2,10 @@
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Application.Localization.Enums;
-using FooCommerce.Application.Localization.Services;
-using FooCommerce.Core.DbProvider;
-using FooCommerce.Infrastructure.Locations;
+using FooCommerce.Domain.DbProvider;
+using FooCommerce.Infrastructure.Locations.Enums;
+using FooCommerce.Infrastructure.Services;
+using FooCommerce.Infrastructure.Services.Repositories;
 using FooCommerce.Infrastructure.Tests.Setups;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;

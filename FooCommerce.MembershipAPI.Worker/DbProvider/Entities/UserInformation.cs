@@ -1,4 +1,5 @@
 ﻿using FooCommerce.Domain;
+using FooCommerce.MembershipAPI.Enums;
 using FooCommerce.MembershipAPI.Worker.Enums;
 
 namespace FooCommerce.MembershipAPI.Worker.DbProvider.Entities;

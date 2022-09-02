@@ -1,26 +1,21 @@
-﻿using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Application.Helpers;
-using FooCommerce.Core.DbProvider;
-using FooCommerce.Core.Helpers;
-using FooCommerce.Domain;
+﻿using FooCommerce.Common.Helpers;
+using FooCommerce.Common.Localization;
+using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Attributes;
 using FooCommerce.NotificationAPI.Contracts;
-using FooCommerce.NotificationAPI.Services;
-using FooCommerce.NotificationAPI.Worker.Contracts;
+using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Models;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
+using FooCommerce.NotificationAPI.Worker.Services;
 
 using MassTransit;
-
-using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.NotificationAPI.Worker.Consumers;
 
 public class QueueNotificationConsumer
     : IConsumer<QueueNotification>
 {
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     private readonly INotificationTemplateService _templateService;
     private readonly ILogger<QueueNotificationConsumer> _logger;
     private readonly ILoggerFactory _loggerFactory;
@@ -28,14 +23,13 @@ public class QueueNotificationConsumer
     private readonly ILocalizer _localizer;
 
     public QueueNotificationConsumer(INotificationTemplateService templateService,
-        IDbContextFactory<AppDbContext> dbContextFactory,
         IConfiguration configuration,
-        ILoggerFactory loggerFactory, ILocalizer localizer)
+        ILoggerFactory loggerFactory,
+        ILocalizer localizer)
     {
         _templateService = templateService;
         _loggerFactory = loggerFactory;
         _localizer = localizer;
-        _dbContextFactory = dbContextFactory;
         _logger = _loggerFactory.CreateLogger<QueueNotificationConsumer>();
         _configuration = configuration;
     }
@@ -53,8 +47,6 @@ public class QueueNotificationConsumer
 
         var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory, _localizer);
 
-        // await context.Message.Receiver.ResolveInformationAsync(_dbContextFactory, context.CancellationToken);
-
         foreach (var communicationType in availableCommunicationTypes)
         {
             switch (communicationType)
@@ -64,7 +56,16 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplateEmailModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
+                            continue;
+                        }
+
+                        var hasReceiver =
+                            context.Message.ReceiverProvider.Communications.TryGetValue(
+                                CommunicationType.Email_Message, out var receiver);
+                        if (!hasReceiver)
+                        {
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find receiver's address.", communicationType);
                             continue;
                         }
 
@@ -83,9 +84,10 @@ public class QueueNotificationConsumer
                             context.Message.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
-                            context.Message.Receiver,
+                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
                             context.Message.Bag,
-                            context.Message.Content
+                            context.Message.Formatters,
+                            context.Message.Links
                         }, context.CancellationToken);
                         break;
                     }
@@ -94,7 +96,16 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplatePushModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
+                            continue;
+                        }
+
+                        var hasReceiver =
+                            context.Message.ReceiverProvider.Communications.TryGetValue(
+                                CommunicationType.Email_Message, out var receiver);
+                        if (!hasReceiver)
+                        {
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find receiver's address.", communicationType);
                             continue;
                         }
 
@@ -111,9 +122,10 @@ public class QueueNotificationConsumer
                             context.Message.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
-                            context.Message.Receiver,
+                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
                             context.Message.Bag,
-                            context.Message.Content
+                            context.Message.Formatters,
+                            context.Message.Links
                         }, context.CancellationToken);
                         break;
                     }
@@ -122,7 +134,16 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplateSmsModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
+                            continue;
+                        }
+
+                        var hasReceiver =
+                            context.Message.ReceiverProvider.Communications.TryGetValue(
+                                CommunicationType.Email_Message, out var receiver);
+                        if (!hasReceiver)
+                        {
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find receiver's address.", communicationType);
                             continue;
                         }
 
@@ -139,9 +160,10 @@ public class QueueNotificationConsumer
                             context.Message.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
-                            context.Message.Receiver,
+                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
                             context.Message.Bag,
-                            context.Message.Content
+                            context.Message.Formatters,
+                            context.Message.Links
                         }, context.CancellationToken);
                         break;
                     }
@@ -150,7 +172,16 @@ public class QueueNotificationConsumer
                         var template = templates.OfType<NotificationTemplatePushInAppModel>().SingleOrDefault();
                         if (template == null)
                         {
-                            _logger.LogError("Action {0} needs to send notification via {1}, but unable to find appropriate {1} template for it.", context.Message.Action, communicationType);
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
+                            continue;
+                        }
+
+                        var hasReceiver =
+                            context.Message.ReceiverProvider.Communications.TryGetValue(
+                                CommunicationType.Email_Message, out var receiver);
+                        if (!hasReceiver)
+                        {
+                            _logger.LogError("Action {0} needs to send notification via {0}, but unable to find receiver's address.", communicationType);
                             continue;
                         }
 
@@ -167,9 +198,10 @@ public class QueueNotificationConsumer
                             context.Message.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
-                            context.Message.Receiver,
+                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
                             context.Message.Bag,
-                            context.Message.Content
+                            context.Message.Formatters,
+                            context.Message.Links
                         }, context.CancellationToken);
                         break;
                     }

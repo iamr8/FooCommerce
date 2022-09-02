@@ -24,6 +24,6 @@ public static class DateTimeHelper
 
         var httpContextAccessor = container.Resolve<IHttpContextAccessor>() ?? throw new ArgumentNullException("container.Resolve<IHttpContextAccessor>()");
         var httpContext = httpContextAccessor.HttpContext ?? throw new ArgumentNullException("httpContextAccessor.HttpContext");
-        return Core.Helpers.DateTimeHelper.ToLocal(utcDateTime, httpContext);
+        return Common.Helpers.DateTimeHelper.ToLocal(utcDateTime, httpContext);
     }
 }

@@ -1,4 +1,5 @@
-﻿using FooCommerce.Application.Communications.Enums;
+﻿using FooCommerce.Domain.Enums;
+using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
 
@@ -9,17 +10,8 @@ namespace FooCommerce.NotificationAPI.Worker.Consumers;
 public class QueueNotificationSmsConsumer
     : IConsumer<QueueNotificationSms>
 {
-    private readonly ILogger<QueueNotificationSmsConsumer> _logger;
-
-    public QueueNotificationSmsConsumer(ILogger<QueueNotificationSmsConsumer> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task Consume(ConsumeContext<QueueNotificationSms> context)
     {
-        var receiver = context.Message.Receiver.UserCommunications.Single(x => x.Type == CommunicationType.Mobile_Sms);
-
         // TODO: SDK must be implemented
         var smsSent = true;
         if (smsSent)

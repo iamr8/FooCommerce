@@ -1,9 +1,10 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Core.DbProvider;
+
+using FooCommerce.Domain.DbProvider;
+using FooCommerce.MembershipAPI.Worker.DbProvider;
+
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FooCommerce.MembershipAPI.Worker.Modules;
 
@@ -36,8 +37,7 @@ public class DatabaseProviderModule : Module
             options
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
-                .EnableThreadSafetyChecks()
-                .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
+                .EnableThreadSafetyChecks();
         });
 
         builder.Populate(serviceCollection);

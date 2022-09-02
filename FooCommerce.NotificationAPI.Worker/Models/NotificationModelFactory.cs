@@ -1,13 +1,13 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Domain;
+using FooCommerce.Common.Localization;
 using FooCommerce.NotificationAPI.Interfaces;
 using FooCommerce.NotificationAPI.Models;
+using FooCommerce.NotificationAPI.Models.Communications;
 using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Extensions;
 using FooCommerce.NotificationAPI.Worker.Interfaces;
-using FooCommerce.NotificationAPI.Worker.Models.Communications;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 
 using HtmlAgilityPack;
@@ -38,7 +38,7 @@ public record NotificationModelFactory : INotificationModelFactory
         var notificationText = new StringBuilder(template.Message.ToString());
         var notificationSubject = template.Subject.ToString();
 
-        ApplyFormatting(ref notificationText);
+        ApplyFormatters(ref notificationText);
 
         var pushModel = new NotificationPushInAppModel(notificationSubject, notificationText.ToString());
         return pushModel;
@@ -48,7 +48,7 @@ public record NotificationModelFactory : INotificationModelFactory
     {
         var sms = new StringBuilder(template.Text.ToString());
 
-        ApplyFormatting(ref sms);
+        ApplyFormatters(ref sms);
         ApplyLinks(sms,
             smsLink =>
                 $"\r\n{smsLink.Key}\r\n{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}{smsLink.Value}");
@@ -91,12 +91,12 @@ public record NotificationModelFactory : INotificationModelFactory
         if (string.IsNullOrEmpty(requestHtml))
             throw new Exception("Unable to find Request Html Layout.");
 
-        ApplyFormatting(ref emailHtml);
+        ApplyFormatters(ref emailHtml);
 
         doc.QuerySelector(".js-content").InnerHtml = emailHtml.ToString();
         htmlLayout = doc.DocumentNode.OuterHtml;
 
-        NotificationTemplateEmailModel.GetLayoutDictionary(dict, _notificationOptions.Receiver.Name, options, _localizer);
+        NotificationTemplateEmailModel.GetLayoutDictionary(dict, _notificationOptions.ReceiverProvider.Name, options, _localizer);
         if (emailShowRequestData)
             NotificationTemplateEmailModel.GetRequestDictionary(dict, options, _notificationOptions.RequestInfo, _localizer);
 
@@ -106,28 +106,20 @@ public record NotificationModelFactory : INotificationModelFactory
     }
     private void ApplyLinks(StringBuilder emailHtml, Func<NotificationLink, string> s)
     {
-        if (_notificationOptions.Content == null || !_notificationOptions.Content.Any())
+        if (_notificationOptions.Links == null || !_notificationOptions.Links.Any())
             return;
 
-        var links = _notificationOptions.Content.OfType<NotificationLink>();
-        if (!links.Any())
-            return;
-
-        foreach (var link in links)
+        foreach (var link in _notificationOptions.Links)
         {
             emailHtml.Append(s(link));
         }
     }
-    private void ApplyFormatting(ref StringBuilder emailHtml)
+    private void ApplyFormatters(ref StringBuilder emailHtml)
     {
-        if (_notificationOptions.Content == null || !_notificationOptions.Content.Any())
+        if (_notificationOptions.Formatters == null || !_notificationOptions.Formatters.Any())
             return;
 
-        var formattings = _notificationOptions.Content.OfType<NotificationFormatting>();
-        if (!formattings.Any())
-            return;
-
-        foreach (var formatting in formattings)
+        foreach (var formatting in _notificationOptions.Formatters)
         {
             emailHtml = emailHtml.Replace("{{" + formatting.Key + "}}", formatting.Value);
         }
@@ -137,7 +129,7 @@ public record NotificationModelFactory : INotificationModelFactory
         var notificationText = new StringBuilder(template.Message.ToString());
         var notificationSubject = template.Subject.ToString();
 
-        ApplyFormatting(ref notificationText);
+        ApplyFormatters(ref notificationText);
 
         var pushModel = new NotificationPushModel(notificationSubject, notificationText.ToString());
         return pushModel;

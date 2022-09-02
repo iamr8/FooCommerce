@@ -1,11 +1,11 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Core;
-using FooCommerce.Core.Configurations;
+using FooCommerce.Common.Configurations;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
@@ -14,7 +14,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
 
@@ -73,16 +72,14 @@ public class MvcModule : Module
                 foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
                     options.JsonSerializerOptions.Converters.Add(jsonConverter);
 
-                options.JsonSerializerOptions.DefaultIgnoreCondition =
-                    JsonDefaultSettings.Settings.DefaultIgnoreCondition;
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
                 options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;
-                options.JsonSerializerOptions.PropertyNameCaseInsensitive =
-                    JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
                 options.JsonSerializerOptions.PropertyNamingPolicy = JsonDefaultSettings.Settings.PropertyNamingPolicy;
                 options.JsonSerializerOptions.WriteIndented = true;
             });
-            // .AddRazorRuntimeCompilation();
+        // .AddRazorRuntimeCompilation();
         services.AddControllers(AddMvcOptions);
         var razorBuilder = services
             .AddRazorPages(options =>
@@ -92,7 +89,7 @@ public class MvcModule : Module
             });
 
         // if (_webHostEnvironment.IsDevelopment() || _webHostEnvironment.IsStaging())
-            // razorBuilder.AddRazorRuntimeCompilation();
+        // razorBuilder.AddRazorRuntimeCompilation();
 
         var controllers = services.AddControllersWithViews(AddMvcOptions);
 

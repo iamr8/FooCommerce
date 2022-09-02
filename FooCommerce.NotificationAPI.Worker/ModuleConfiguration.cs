@@ -1,13 +1,14 @@
 ﻿using Autofac;
-using FooCommerce.Core.Modules;
-using FooCommerce.NotificationAPI.Services;
+
 using FooCommerce.NotificationAPI.Worker.Consumers;
 using FooCommerce.NotificationAPI.Worker.Services;
+using FooCommerce.NotificationAPI.Worker.Services.Repositories;
+
 using MassTransit;
 
 namespace FooCommerce.NotificationAPI.Worker;
 
-public class ModuleConfiguration : IModuleConfiguration
+public class ModuleConfiguration
 {
     public void AddConsumers(IBusRegistrationConfigurator cfg)
     {

@@ -2,7 +2,7 @@
 
 namespace FooCommerce.MembershipAPI.Worker.Models;
 
-internal record CreatedUserModel
+public record CreatedUserModel
 {
     public User User { get; set; }
     public UserPassword Password { get; set; }

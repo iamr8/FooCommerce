@@ -4,13 +4,12 @@ using Autofac;
 
 using EasyCaching.Core;
 
-using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Application.Listings.Entities;
-using FooCommerce.Application.Localization.Enums;
-using FooCommerce.Core.DbProvider;
-using FooCommerce.Infrastructure.Bootstrapper.Modules;
+using FooCommerce.Common.Localization;
+using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Enums;
+using FooCommerce.NotificationAPI.Worker.DbProvider;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
+using FooCommerce.NotificationAPI.Worker.Modules;
 using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
 using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Enums;
 using FooCommerce.Tests;
@@ -48,7 +47,7 @@ public class Fixture : IAsyncLifetime, IFixture
         var containerBuilder = new ContainerBuilder();
         containerBuilder.Register(_ => MockObjects.GetWebHostEnvironment());
         containerBuilder.RegisterModule(new LocalizationModule());
-        containerBuilder.RegisterModule(new ExternalModule());
+        containerBuilder.RegisterModule(new BusInMemoryTestModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>
@@ -71,8 +70,6 @@ public class Fixture : IAsyncLifetime, IFixture
 
         var dbContextFactory = Container.Resolve<IDbContextFactory<AppDbContext>>();
         var dbContext = await dbContextFactory.CreateDbContextAsync();
-        AppDbContext.TestMode = true;
-        SeedLocationsData(dbContext);
         SeedMembershipData(dbContext);
         UserCommunicationId = await SeedCommunicationAsync(dbContext);
     }
@@ -108,40 +105,6 @@ public class Fixture : IAsyncLifetime, IFixture
         }).Entity;
         saved = await dbContext.SaveChangesAsync() > 0;
         return userCommunication.Id;
-    }
-
-    private void SeedLocationsData(DbContext dbContext)
-    {
-        var country = dbContext.Set<Location>().Add(new Location
-        {
-            Division = LocationDivision.Country,
-            Name = "Iran",
-        }).Entity;
-        var province = dbContext.Set<Location>().Add(new Location
-        {
-            Division = LocationDivision.Province,
-            Name = "Khuzestan",
-            ParentId = country.Id,
-        }).Entity;
-        var city = dbContext.Set<Location>().Add(new Location
-        {
-            Division = LocationDivision.City,
-            Name = "Ahvaz",
-            ParentId = province.Id,
-        }).Entity;
-        var district = dbContext.Set<Location>().Add(new Location
-        {
-            Division = LocationDivision.District,
-            Name = "Kianpars",
-            ParentId = city.Id,
-        }).Entity;
-        var neighborhood = dbContext.Set<Location>().Add(new Location
-        {
-            Division = LocationDivision.Quarter,
-            Name = "Western",
-            ParentId = district.Id,
-        }).Entity;
-        dbContext.SaveChanges();
     }
 
     private void SeedMembershipData(DbContext dbContext)

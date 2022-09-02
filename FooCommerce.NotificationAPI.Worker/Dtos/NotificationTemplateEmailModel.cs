@@ -1,12 +1,12 @@
 ﻿using System.Globalization;
 using System.Reflection;
 
-using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Application.Localization.Models;
-using FooCommerce.Core.Helpers;
-using FooCommerce.Core.HttpContextRequest;
-using FooCommerce.Core.Localization.Helpers;
-using FooCommerce.Domain;
+using FooCommerce.Common.Helpers;
+using FooCommerce.Common.HttpContextRequest;
+using FooCommerce.Common.Localization;
+using FooCommerce.Common.Localization.Helpers;
+using FooCommerce.Common.Localization.Models;
+using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Interfaces;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 

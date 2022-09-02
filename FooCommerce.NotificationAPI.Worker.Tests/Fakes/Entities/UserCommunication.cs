@@ -1,5 +1,5 @@
-﻿using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Domain;
+﻿using FooCommerce.Domain;
+using FooCommerce.Domain.Enums;
 
 namespace FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
 

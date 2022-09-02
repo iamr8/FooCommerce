@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Application.DbProvider;
-using FooCommerce.Core.DbProvider;
+using FooCommerce.Domain.DbProvider;
+using FooCommerce.Infrastructure.DbProvider;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;

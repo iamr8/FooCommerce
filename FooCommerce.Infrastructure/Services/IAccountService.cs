@@ -1,10 +1,11 @@
-﻿using FooCommerce.Domain.Enums;
-using FooCommerce.MembershipAPI.Models;
+﻿using FooCommerce.MembershipAPI.Contracts.Requests;
 
 namespace FooCommerce.Infrastructure.Services;
 
 public interface IAccountService
 {
-    Task<JobStatus> SignInAsync(SignInRequest model, string returnUrl = null, CancellationToken cancellationToken = default);
+    Task<JobStatus> RequestVerificationAsync(string auth, CancellationToken cancellationToken = default);
+    Task<JobStatus> SignInAsync(SignInRequest model, CancellationToken cancellationToken = default);
+
     Task<JobStatus> SignUpAsync(SignUpRequest model, CancellationToken cancellationToken = default);
 }

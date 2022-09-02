@@ -1,11 +1,11 @@
-﻿using FooCommerce.Application.Communications.Enums;
-using FooCommerce.Core.Helpers;
-using FooCommerce.Domain;
-using FooCommerce.NotificationAPI.Services;
+﻿using FooCommerce.Common.Helpers;
+using FooCommerce.Common.Localization;
+using FooCommerce.Domain.Enums;
+using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
 using FooCommerce.NotificationAPI.Worker.Models;
-
+using FooCommerce.NotificationAPI.Worker.Services;
 using MassTransit;
 
 using MimeKit;
@@ -33,8 +33,6 @@ public class QueueNotificationEmailConsumer
 
     public async Task Consume(ConsumeContext<QueueNotificationEmail> context)
     {
-        var receiver = context.Message.Receiver.UserCommunications.Single(x => x.Type == CommunicationType.Email_Message);
-
         var mailCredentials = _clientService.GetAvailableMailboxCredentials();
         if (mailCredentials == null || !mailCredentials.Any())
             throw new NullReferenceException("Unable to find any credentials for sender mailbox.");
@@ -50,7 +48,7 @@ public class QueueNotificationEmailConsumer
         };
 
         mime.From.Add(mime.Sender);
-        mime.To.Add(new MailboxAddress(context.Message.Receiver.Name, receiver.Value));
+        mime.To.Add(new MailboxAddress(context.Message.Receiver.Name, context.Message.Receiver.Address));
 
         var emailSent = true;
         if (!_environment.IsStaging())

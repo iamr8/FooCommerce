@@ -1,4 +1,4 @@
-﻿using FooCommerce.Application.Communications.Enums;
+﻿using FooCommerce.Domain.Enums;
 
 namespace FooCommerce.NotificationAPI.Attributes;
 

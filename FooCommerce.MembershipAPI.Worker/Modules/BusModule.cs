@@ -1,8 +1,8 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Core.Configurations;
-
+using FooCommerce.Common.Configurations;
+using FooCommerce.MembershipAPI.Contracts.Requests;
 using MassTransit;
 
 namespace FooCommerce.MembershipAPI.Worker.Modules;
@@ -21,6 +21,7 @@ public class BusModule : Module
             cfg.AddMediator();
 
             moduleConfiguration.AddConsumers(cfg);
+            cfg.AddRequestClient<SignInRequest>(new Uri("exchange:get-user-claims"));
 
             cfg.UsingRabbitMq((context, config) =>
             {

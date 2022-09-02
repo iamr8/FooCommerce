@@ -1,7 +1,7 @@
 ﻿using Autofac;
 using Autofac.Extensions.DependencyInjection;
 
-using FooCommerce.Core.Configurations;
+using FooCommerce.Common.Configurations;
 
 using Microsoft.AspNetCore.HttpOverrides;
 
