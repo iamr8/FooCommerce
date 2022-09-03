@@ -10,7 +10,6 @@ WORKDIR /src
 COPY ["FooCommerce.MembershipAPI.Worker/FooCommerce.MembershipAPI.Worker.csproj", "FooCommerce.MembershipAPI.Worker/"]
 COPY ["FooCommerce.MembershipAPI/FooCommerce.MembershipAPI.csproj", "FooCommerce.MembershipAPI/"]
 COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
-COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
 RUN dotnet restore "FooCommerce.MembershipAPI.Worker/FooCommerce.MembershipAPI.Worker.csproj"
 COPY . .

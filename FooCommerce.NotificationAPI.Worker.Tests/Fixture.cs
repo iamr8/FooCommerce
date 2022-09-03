@@ -10,17 +10,14 @@ using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Worker.DbProvider;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
 using FooCommerce.NotificationAPI.Worker.Modules;
-using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
-using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Enums;
 using FooCommerce.Tests;
 
+using MassTransit;
 using MassTransit.Testing;
 
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-
-using RoleType = FooCommerce.NotificationAPI.Worker.Tests.Fakes.Enums.RoleType;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
 
@@ -32,7 +29,6 @@ public class Fixture : IAsyncLifetime, IFixture
     public ITestHarness Harness { get; private set; }
     private IConfigurationRoot Configuration;
     private string connectionString;
-    public Guid UserCommunicationId;
 
     public async Task InitializeAsync()
     {
@@ -49,10 +45,11 @@ public class Fixture : IAsyncLifetime, IFixture
         containerBuilder.RegisterModule(new LocalizationModule());
         containerBuilder.RegisterModule(new BusInMemoryTestModule());
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
-            config.UseSqlServer(connectionString!, builder =>
-                builder.EnableRetryOnFailure(3)
-                    .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
+        containerBuilder.RegisterModule(new NotificationDatabaseProviderModule(connectionString, config =>
+        // config.UseInMemoryDatabase(Guid.NewGuid().ToString(), config => config.EnableNullChecks(false))));
+        config.UseSqlServer(connectionString!, builder =>
+        builder.EnableRetryOnFailure(3)
+        .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
@@ -68,56 +65,28 @@ public class Fixture : IAsyncLifetime, IFixture
 
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
-        var dbContextFactory = Container.Resolve<IDbContextFactory<AppDbContext>>();
+        var dbContextFactory = Container.Resolve<IDbContextFactory<NotificationDbContext>>();
         var dbContext = await dbContextFactory.CreateDbContextAsync();
-        SeedMembershipData(dbContext);
-        UserCommunicationId = await SeedCommunicationAsync(dbContext);
+        await SeedNotificationsAsync(dbContext);
+        NewId.NextGuid();
     }
 
-    private async Task<Guid> SeedCommunicationAsync(DbContext dbContext)
+    private async Task<Guid> SeedNotificationsAsync(NotificationDbContext dbContext)
     {
-        var user = dbContext.Set<User>().Add(new User()).Entity;
-        var saved = await dbContext.SaveChangesAsync() > 0;
-        var userInformation = dbContext.Set<UserInformation>().Add(new UserInformation
-        {
-            UserId = user.Id,
-            Type = UserInformationType.Name,
-            Value = "Arash"
-        }).Entity;
-        var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
-        {
-            Type = CommunicationType.Email_Message,
-            Value = "arash.shabbeh@gmail.com",
-            IsVerified = true,
-            UserId = user.Id,
-        }).Entity;
-        var notification = dbContext.Set<Notification>().Add(new Notification
+        var notification = dbContext.Notifications.Add(new Notification
         {
             Action = NotificationAction.Verification_Request_Email,
         }).Entity;
-        saved = await dbContext.SaveChangesAsync() > 0;
-        var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+        await dbContext.SaveChangesAsync();
+        var notificationTemplate = dbContext.NotificationTemplates.Add(new NotificationTemplate
         {
             NotificationId = notification.Id,
             IncludeRequest = true,
             JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
             Type = CommunicationType.Email_Message
         }).Entity;
-        saved = await dbContext.SaveChangesAsync() > 0;
-        return userCommunication.Id;
-    }
-
-    private void SeedMembershipData(DbContext dbContext)
-    {
-        var normalUserRole = dbContext.Set<Role>().Add(new Role
-        {
-            Type = RoleType.NormalUser,
-        }).Entity;
-        var adminUserRole = dbContext.Set<Role>().Add(new Role
-        {
-            Type = RoleType.Admin,
-        }).Entity;
-        dbContext.SaveChanges();
+        await dbContext.SaveChangesAsync();
+        return notification.Id;
     }
 
     public async Task DisposeAsync()

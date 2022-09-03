@@ -2,20 +2,18 @@
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Domain.DbProvider;
-using FooCommerce.Infrastructure.DbProvider;
+using FooCommerce.MembershipAPI.Worker.DbProvider;
 
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
+namespace FooCommerce.MembershipAPI.Worker.Modules;
 
-public class DatabaseProviderModule : Module
+public class MembershipDatabaseProviderModule : Module
 {
-    private readonly Action<DbContextOptionsBuilder<AppDbContext>> _dbContextOptionsBuilder;
+    private readonly Action<DbContextOptionsBuilder<MembershipDbContext>> _dbContextOptionsBuilder;
     private readonly string _connectionString;
 
-    public DatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
+    public MembershipDatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<MembershipDbContext>> dbContextOptionsBuilder)
     {
         _dbContextOptionsBuilder = dbContextOptionsBuilder;
         _connectionString = connectionString;
@@ -33,14 +31,13 @@ public class DatabaseProviderModule : Module
             .InstancePerDependency();
 
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddDbContextFactory<AppDbContext>(options =>
+        serviceCollection.AddDbContextFactory<MembershipDbContext>(options =>
         {
-            _dbContextOptionsBuilder((DbContextOptionsBuilder<AppDbContext>)options);
+            _dbContextOptionsBuilder((DbContextOptionsBuilder<MembershipDbContext>)options);
             options
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
-                .EnableThreadSafetyChecks()
-                .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
+                .EnableThreadSafetyChecks();
         });
 
         builder.Populate(serviceCollection);

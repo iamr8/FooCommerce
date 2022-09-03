@@ -16,12 +16,13 @@ public static class BootstrapperConfigurator
         containerBuilder.RegisterModule(new ServicesModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new ProtectionModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
+        containerBuilder.RegisterModule(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
                 config =>
                 {
                     config.EnableRetryOnFailure(3);
+                    config.UseNetTopologySuite();
                     config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 });
         }));

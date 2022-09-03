@@ -39,7 +39,7 @@ public class QueueNotificationSmsConsumer
         }
         else
         {
-            await context.RespondAsync<NotificationSendFailed>(new
+            await context.RespondAsync<NotificationSendFaulted>(new
             {
                 NotificationId = context.Message.NotificationId,
                 Gateway = CommunicationType.Mobile_Sms

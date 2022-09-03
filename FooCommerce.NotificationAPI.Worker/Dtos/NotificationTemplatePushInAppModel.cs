@@ -1,6 +1,7 @@
 ﻿using FooCommerce.Common.Localization.Models;
 using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.NotificationAPI.Worker.Interfaces;
 
 namespace FooCommerce.NotificationAPI.Worker.Dtos;
 

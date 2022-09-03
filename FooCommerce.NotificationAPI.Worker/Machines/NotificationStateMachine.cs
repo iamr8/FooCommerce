@@ -20,7 +20,7 @@
 //            {
 //                x.OnMissingInstance(m =>
 //                    m.ExecuteAsync(context =>
-//                        context.RespondAsync<NotificationSendFailed>(new { context.Message.NotificationId })));
+//                        context.RespondAsync<NotificationSendFaulted>(new { context.Message.NotificationId })));
 
 //                x.CorrelateById(context => context.Message.NotificationId);
 //            });

@@ -14,9 +14,10 @@ using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Models;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 using FooCommerce.NotificationAPI.Worker.Services;
-using FooCommerce.NotificationAPI.Worker.Tests.Fakes.Entities;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
+
+using MassTransit;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -49,36 +50,38 @@ namespace FooCommerce.NotificationAPI.Worker.Tests
             CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
-            var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+            var dbContextFactory = Scope.Resolve<IDbContextFactory<NotificationDbContext>>();
             await using (var dbContext = await dbContextFactory.CreateDbContextAsync())
             {
-                var user = dbContext.Set<User>().Add(new User()).Entity;
-                var saved = await dbContext.SaveChangesAsync() > 0;
-                var notification = dbContext.Set<Notification>().Add(new Notification
+                var notification = dbContext.Notifications.Add(new Notification
                 {
                     Action = NotificationAction.Verification_Request_Email,
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+                await dbContext.SaveChangesAsync();
+                var notificationTemplate = dbContext.NotificationTemplates.Add(new NotificationTemplate
                 {
                     NotificationId = notification.Id,
                     IncludeRequest = true,
                     JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
                     Type = CommunicationType.Email_Message
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
+                await dbContext.SaveChangesAsync();
             }
 
             // Action
             var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(1));
-            var templates =
-                await TemplateService.GetTemplateAsync(NotificationAction.Verification_Request_Email,
+            var notificationModel =
+                await TemplateService.GetNotificationModelAsync(NotificationAction.Verification_Request_Email,
                     tokenSource.Token);
 
             // Assert
-            Assert.NotNull(templates);
-            Assert.NotEmpty(templates);
-            Assert.Single(templates);
+            Assert.NotNull(notificationModel);
+            Assert.NotEqual(Guid.Empty, notificationModel.NotificationId);
+            Assert.NotEmpty(notificationModel.Templates);
+            Assert.Single(notificationModel.Templates);
+            Assert.Contains(notificationModel.Templates,
+                template => template.Id != Guid.Empty &&
+                            template.Communication == CommunicationType.Email_Message);
         }
 
         [Fact]
@@ -88,40 +91,30 @@ namespace FooCommerce.NotificationAPI.Worker.Tests
             CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
-            Guid userId;
-            var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+            var userId = NewId.NextGuid();
+            var dbContextFactory = Scope.Resolve<IDbContextFactory<NotificationDbContext>>();
             await using (var dbContext = await dbContextFactory.CreateDbContextAsync())
             {
-                var user = dbContext.Set<User>().Add(new User()).Entity;
-                var saved = await dbContext.SaveChangesAsync() > 0;
-                userId = user.Id;
-                var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
-                {
-                    Type = CommunicationType.Email_Message,
-                    Value = "arash.shabbeh@gmail.com",
-                    IsVerified = true,
-                    UserId = user.Id,
-                }).Entity;
-                var notification = dbContext.Set<Notification>().Add(new Notification
+                var notification = dbContext.Notifications.Add(new Notification
                 {
                     Action = NotificationAction.Verification_Request_Email,
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+                await dbContext.SaveChangesAsync();
+                var notificationTemplate = dbContext.NotificationTemplates.Add(new NotificationTemplate
                 {
                     NotificationId = notification.Id,
                     IncludeRequest = true,
                     JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
                     Type = CommunicationType.Email_Message
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
+                await dbContext.SaveChangesAsync();
             }
 
             //var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(1));
             var serviceProvider = Scope.Resolve<IServiceProvider>();
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
-            //var templates = await TemplateService.GetTemplateAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
+            //var templates = await TemplateService.GetNotificationModelAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
             var notificationOptions = new NotificationOptions
             {
                 Action = NotificationAction.Verification_Request_Email,
@@ -150,42 +143,29 @@ namespace FooCommerce.NotificationAPI.Worker.Tests
             CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
-            Guid userCommunicationId;
-            Guid templateId;
-            var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+            var dbContextFactory = Scope.Resolve<IDbContextFactory<NotificationDbContext>>();
             await using (var dbContext = await dbContextFactory.CreateDbContextAsync())
             {
-                var user = dbContext.Set<User>().Add(new User()).Entity;
-                var saved = await dbContext.SaveChangesAsync() > 0;
-                var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
-                {
-                    Type = CommunicationType.Email_Message,
-                    Value = "arash.shabbeh@gmail.com",
-                    IsVerified = true,
-                    UserId = user.Id,
-                }).Entity;
-                var notification = dbContext.Set<Notification>().Add(new Notification
+                var notification = dbContext.Notifications.Add(new Notification
                 {
                     Action = NotificationAction.Verification_Request_Email,
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+                await dbContext.SaveChangesAsync();
+                var notificationTemplate = dbContext.NotificationTemplates.Add(new NotificationTemplate
                 {
                     NotificationId = notification.Id,
                     IncludeRequest = true,
                     JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
                     Type = CommunicationType.Email_Message
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                userCommunicationId = userCommunication.Id;
-                templateId = notificationTemplate.Id;
+                await dbContext.SaveChangesAsync();
             }
 
             var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(1));
 
             // Action
-            var templates = await TemplateService.GetTemplateAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
-            var emailTemplates = templates.OfType<NotificationTemplateEmailModel>();
+            var notificationModel = await TemplateService.GetNotificationModelAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
+            var emailTemplates = notificationModel.Templates.OfType<NotificationTemplateEmailModel>();
 
             // Assert
             Assert.NotNull(emailTemplates);
@@ -206,40 +186,30 @@ namespace FooCommerce.NotificationAPI.Worker.Tests
             CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
             CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
-            Guid userId;
-            var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+            var userId = NewId.NextGuid();
+            var dbContextFactory = Scope.Resolve<IDbContextFactory<NotificationDbContext>>();
             await using (var dbContext = await dbContextFactory.CreateDbContextAsync())
             {
-                var user = dbContext.Set<User>().Add(new User()).Entity;
-                var saved = await dbContext.SaveChangesAsync() > 0;
-                userId = user.Id;
-                var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
-                {
-                    Type = CommunicationType.Email_Message,
-                    Value = "arash.shabbeh@gmail.com",
-                    IsVerified = true,
-                    UserId = user.Id,
-                }).Entity;
-                var notification = dbContext.Set<Notification>().Add(new Notification
+                var notification = dbContext.Notifications.Add(new Notification
                 {
                     Action = NotificationAction.Verification_Request_Email,
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
-                var notificationTemplate = dbContext.Set<NotificationTemplate>().Add(new NotificationTemplate
+                await dbContext.SaveChangesAsync();
+                var notificationTemplate = dbContext.NotificationTemplates.Add(new NotificationTemplate
                 {
                     NotificationId = notification.Id,
                     IncludeRequest = true,
                     JsonTemplate = "{\"h\":{\"en\":\"<p>123</p>\"}}",
                     Type = CommunicationType.Email_Message
                 }).Entity;
-                saved = await dbContext.SaveChangesAsync() > 0;
+                await dbContext.SaveChangesAsync();
             }
 
             var tokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(1));
             var serviceProvider = Scope.Resolve<IServiceProvider>();
             var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
             var httpContext = httpContextAccessor.HttpContext!;
-            var templates = await TemplateService.GetTemplateAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
+            var notificationModel = await TemplateService.GetNotificationModelAsync(NotificationAction.Verification_Request_Email, tokenSource.Token);
             var notificationOptions = new NotificationOptions
             {
                 Action = NotificationAction.Verification_Request_Email,
@@ -251,7 +221,7 @@ namespace FooCommerce.NotificationAPI.Worker.Tests
                 },
                 RequestInfo = (HttpRequestInfo)httpContext.GetRequestInfo()
             };
-            var emailTemplate = templates.OfType<NotificationTemplateEmailModel>().First();
+            var emailTemplate = notificationModel.Templates.OfType<NotificationTemplateEmailModel>().First();
 
             // Action
             var factory = NotificationModelFactory.CreateFactory(notificationOptions, Scope.Resolve<ILoggerFactory>(), Mock.Of<ILocalizer>());

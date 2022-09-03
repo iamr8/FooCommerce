@@ -10,9 +10,11 @@ using FooCommerce.Common.Localization.Helpers;
 using FooCommerce.Domain.DbProvider;
 using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Enums;
-using FooCommerce.NotificationAPI.Interfaces;
 using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
 using FooCommerce.NotificationAPI.Worker.Dtos;
+using FooCommerce.NotificationAPI.Worker.Interfaces;
+
+using MassTransit;
 
 namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
 {
@@ -33,29 +35,68 @@ namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
 
         public const string CacheKey = "config.notifications.templates";
 
-        public async ValueTask<IEnumerable<INotificationTemplate>> GetTemplateAsync(NotificationAction actionName, CancellationToken cancellationToken = default)
+        public async ValueTask<INotification> GetNotificationModelAsync(NotificationAction actionName, CancellationToken cancellationToken = default)
         {
             using var dbConnection = _dbConnectionFactory.CreateConnection();
 
-            return await GetTemplateAsync(actionName, dbConnection, cancellationToken);
+            return await GetNotificationModelAsync(actionName, dbConnection, cancellationToken);
         }
 
-        private async ValueTask<IEnumerable<INotificationTemplate>> GetTemplateAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
+        private async ValueTask<INotification> GetNotificationModelAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
         {
             var cacheKey = $"{CacheKey}.{actionName.ToString().ToLowerInvariant()}";
             return await _easyCaching.GetOrCreateAsync(cacheKey,
-                async () => await GetTemplateNonCachedAsync(actionName, dbConnection, cancellationToken), _logger, cancellationToken);
+                async () => await GetNotificationModelNonCachedAsync(actionName, dbConnection, cancellationToken), _logger, cancellationToken);
         }
 
-        private static async Task<IEnumerable<INotificationTemplate>> GetTemplateNonCachedAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
+        private static NotificationTemplateSmsModel ParseMobileModel(NotificationTemplateModel template, JsonNode json)
+        {
+            var text = json["t"];
+
+            var localizerText = LocalizerSerializationHelper.Deserialize(text);
+
+            return new NotificationTemplateSmsModel(template.Id)
+            {
+                Text = localizerText
+            };
+        }
+
+        private static NotificationTemplatePushModel ParsePushModel(NotificationTemplateModel template, JsonNode json)
+        {
+            var subject = json["s"];
+            var message = json["m"];
+
+            var localizerSubject = LocalizerSerializationHelper.Deserialize(subject);
+            var localizerMessage = LocalizerSerializationHelper.Deserialize(message);
+
+            return new NotificationTemplatePushModel(template.Id)
+            {
+                Subject = localizerSubject,
+                Message = localizerMessage
+            };
+        }
+
+        private static NotificationTemplateEmailModel ParseEmailModel(NotificationTemplateModel template, JsonNode json)
+        {
+            var html = json["h"];
+
+            var localizerHtml = LocalizerSerializationHelper.Deserialize(html);
+
+            return new NotificationTemplateEmailModel(template.Id)
+            {
+                ShowRequestData = template.IncludeRequest,
+                Html = localizerHtml
+            };
+        }
+
+        private static async Task<INotification> GetNotificationModelNonCachedAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
         {
             while (true)
             {
                 if (cancellationToken.IsCancellationRequested)
                     throw new OperationCanceledException(cancellationToken);
 
-                var templates = new List<NotificationTemplateModel>();
-                var notificationIds = (await dbConnection.QueryAsync<Guid?>(
+                var notificationId = (await dbConnection.QuerySingleOrDefaultAsync<Guid?>(
                     $"SELECT TOP(1) [notification].{nameof(Notification.Id)} " +
                     $"FROM [Notifications] AS [notification] " +
                     $"WHERE [notification].{nameof(Notification.Action)} = @Action " +
@@ -63,12 +104,8 @@ namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
                     new
                     {
                         Action = (short)actionName
-                    })).AsList();
-                if (notificationIds == null || !notificationIds.Any())
-                    throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
-
-                var notificationId = notificationIds[0];
-                if (notificationId is not { })
+                    }));
+                if (notificationId == null || notificationId == Guid.Empty)
                     throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
 
                 // Must be grouped by gateway
@@ -84,61 +121,42 @@ namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
                 if (!__templates.Any())
                     throw new NullReferenceException($"Unable to find a template related to the '{actionName}' action.");
 
-                templates = __templates.AsList();
-                var output = new List<INotificationTemplate>();
-                for (var i = 0; i < templates.Count; i++)
+                var templates = __templates.AsList();
+                var outputTemplates = new List<INotificationTemplate>();
+                foreach (var template in templates)
                 {
-                    var template = templates[i];
                     var json = JsonNode.Parse(template.JsonTemplate);
 
                     switch (template.Type)
                     {
                         case CommunicationType.Email_Message:
                             {
-                                var html = json["h"];
-
-                                var localizerHtml = LocalizerSerializationHelper.Deserialize(html);
-
-                                output.Add(new NotificationTemplateEmailModel(template.Id)
-                                {
-                                    ShowRequestData = template.IncludeRequest,
-                                    Html = localizerHtml
-                                });
+                                outputTemplates.Add(ParseEmailModel(template, json));
                                 break;
                             }
+                        case CommunicationType.Push_InApp:
                         case CommunicationType.Push_Notification:
                             {
-                                var subject = json["s"];
-                                var message = json["m"];
-
-                                var localizerSubject = LocalizerSerializationHelper.Deserialize(subject);
-                                var localizerMessage = LocalizerSerializationHelper.Deserialize(message);
-
-                                output.Add(new NotificationTemplatePushModel(template.Id)
-                                {
-                                    Subject = localizerSubject,
-                                    Message = localizerMessage
-                                });
+                                outputTemplates.Add(ParsePushModel(template, json));
                                 break;
                             }
 
                         case CommunicationType.Mobile_Sms:
                             {
-                                var text = json["t"];
-
-                                var localizerText = LocalizerSerializationHelper.Deserialize(text);
-
-                                output.Add(new NotificationTemplateSmsModel(template.Id)
-                                {
-                                    Text = localizerText
-                                });
+                                outputTemplates.Add(ParseMobileModel(template, json));
                                 break;
                             }
 
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            throw new ArgumentOutOfRangeException(nameof(template.Type));
                     }
                 }
+
+                var output = new NotificationModel
+                {
+                    NotificationId = notificationId.Value,
+                    Templates = outputTemplates
+                };
 
                 return output;
             }

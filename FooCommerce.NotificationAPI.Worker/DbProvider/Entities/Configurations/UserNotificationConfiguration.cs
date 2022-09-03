@@ -1,14 +1,13 @@
-﻿using FooCommerce.Infrastructure.DbProvider.Entities.Configurations;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Infrastructure.Listings.Entities.Configurations;
+namespace FooCommerce.NotificationAPI.Worker.DbProvider.Entities.Configurations;
 
-public class LocationConfiguration : IEntityTypeConfiguration<Location>
+public class UserNotificationConfiguration : IEntityTypeConfiguration<UserNotification>
 {
-    public void Configure(EntityTypeBuilder<Location> builder)
+    public void Configure(EntityTypeBuilder<UserNotification> builder)
     {
-        builder.ToTable("Locations");
+        builder.ToTable("UserNotifications");
         builder.Property(x => x.Id)
             .HasColumnType("UNIQUEIDENTIFIER ROWGUIDCOL");
         builder.HasIndex(x => x.Id)
@@ -22,7 +21,5 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .IsRequired()
             .IsRowVersion()
             .IsConcurrencyToken();
-        builder.Property(x => x.Division)
-            .HasColumnType("TINYINT");
     }
 }

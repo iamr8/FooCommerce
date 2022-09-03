@@ -2,7 +2,7 @@
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Models.Communications;
 
-namespace FooCommerce.NotificationAPI.Contracts;
+namespace FooCommerce.NotificationAPI.Worker.Contracts;
 
 public interface QueueNotificationPush
     : INotificationId, INotificationOptionsBase

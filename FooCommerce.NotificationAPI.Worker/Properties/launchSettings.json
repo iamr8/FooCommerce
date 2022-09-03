@@ -3,7 +3,8 @@
     "FooCommerce.NotificationAPI": {
       "commandName": "Project",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ConnectionString": "Data Source=.;Initial Catalog=FooCommerceDB_Test;Integrated Security=True;Encrypt=True;TrustServerCertificate=True;User Instance=False;"
       },
       "applicationUrl": "https://localhost:58702;http://localhost:58703"
     },

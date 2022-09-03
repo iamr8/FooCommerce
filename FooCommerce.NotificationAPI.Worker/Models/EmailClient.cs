@@ -70,6 +70,13 @@ public record EmailClient : IEmailClient
         return new EmailClient(client, senderAddress, senderAlias, password, server, smtpPort);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="mailMessage"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
     public async Task<bool> SendAsync(MimeMessage mailMessage, CancellationToken cancellationToken = default)
     {
         if (mailMessage == null) throw new ArgumentNullException(nameof(mailMessage));
@@ -84,16 +91,7 @@ public record EmailClient : IEmailClient
         var sender = new MailboxAddress(Encoding.UTF8, senderName, SenderAddress);
         mailMessage.From.Add(sender);
 
-        try
-        {
-            await _client.SendAsync(mailMessage, cancellationToken);
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-            return false;
-        }
-
+        await _client.SendAsync(mailMessage, cancellationToken);
         return true;
     }
 

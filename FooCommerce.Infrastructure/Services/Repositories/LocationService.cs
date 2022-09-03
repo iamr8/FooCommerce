@@ -4,8 +4,8 @@ using EasyCaching.Core;
 
 using FooCommerce.Common.Caching;
 using FooCommerce.Domain.DbProvider;
+using FooCommerce.Infrastructure.DbProvider.Entities.Configurations;
 using FooCommerce.Infrastructure.Listings.Dtos;
-using FooCommerce.Infrastructure.Listings.Entities;
 
 using Microsoft.Extensions.Logging;
 

@@ -2,18 +2,20 @@
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Domain.DbProvider;
-using FooCommerce.NotificationAPI.Worker.DbProvider;
+using FooCommerce.Infrastructure.DbProvider;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.NotificationAPI.Worker.Modules;
+namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
 
-public class DatabaseProviderModule : Module
+public class AppDatabaseProviderModule : Module
 {
     private readonly Action<DbContextOptionsBuilder<AppDbContext>> _dbContextOptionsBuilder;
     private readonly string _connectionString;
 
-    public DatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
+    public AppDatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
     {
         _dbContextOptionsBuilder = dbContextOptionsBuilder;
         _connectionString = connectionString;
@@ -37,7 +39,8 @@ public class DatabaseProviderModule : Module
             options
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()
-                .EnableThreadSafetyChecks();
+                .EnableThreadSafetyChecks()
+                .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
         });
 
         builder.Populate(serviceCollection);

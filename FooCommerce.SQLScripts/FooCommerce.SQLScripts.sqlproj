@@ -92,7 +92,6 @@
     <Build Include="Tables\Membership\UserSettings.sql" />
     <Build Include="Tables\Shoppings\Checkouts.sql" />
     <Build Include="Tables\Shoppings\Payments.sql" />
-    <Build Include="Tables\Listings\Locations.sql" />
     <Build Include="Tables\Products\ProductMultimedias.sql" />
     <Build Include="Tables\Products\ProductSpecifications.sql" />
     <Build Include="Tables\Products\Specifications.sql" />
@@ -101,6 +100,7 @@
     <Build Include="Tables\Notifications\Notifications.sql" />
     <Build Include="Tables\Notifications\NotificationTemplates.sql" />
     <Build Include="Tables\Notifications\UserNotifications.sql" />
+    <Build Include="Tables\Configurations\Locations.sql" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Membership\AuthTokens.sql" />
@@ -111,5 +111,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="ContainerDatabase.publish.xml" />
+    <None Include="TestDatabase.publish.publish.xml" />
   </ItemGroup>
 </Project>

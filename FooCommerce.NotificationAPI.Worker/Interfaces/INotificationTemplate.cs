@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.NotificationAPI.Interfaces;
+namespace FooCommerce.NotificationAPI.Worker.Interfaces;
 
 public interface INotificationTemplate
 {

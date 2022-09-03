@@ -18,9 +18,9 @@ namespace FooCommerce.MembershipAPI.Worker.Services.Repositories;
 public class CommunicationService : ICommunicationService
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MembershipDbContext> _dbContextFactory;
 
-    public CommunicationService(IDbConnectionFactory dbConnectionFactory, IDbContextFactory<AppDbContext> dbContextFactory)
+    public CommunicationService(IDbConnectionFactory dbConnectionFactory, IDbContextFactory<MembershipDbContext> dbContextFactory)
     {
         _dbConnectionFactory = dbConnectionFactory;
         _dbContextFactory = dbContextFactory;

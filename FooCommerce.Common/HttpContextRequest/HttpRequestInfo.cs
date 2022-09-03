@@ -30,6 +30,11 @@ public record HttpRequestInfo : IHttpRequestInfo
     {
     }
 
+    //public HttpRequestInfo(IPAddress ipAddress, string userAgent)
+    //{
+    //    IPAddress = ipAddress;
+    //    UserAgent = userAgent;
+    //}
     public HttpRequestInfo(HttpContext httpContext)
     {
         _httpContext = httpContext;
@@ -37,7 +42,11 @@ public record HttpRequestInfo : IHttpRequestInfo
         UserAgent = GetUserAgent(httpContext);
         Country = GetCountry(httpContext);
         Timezone = GetTimezone(httpContext);
+        GetDetection(httpContext);
+    }
 
+    public void GetDetection(HttpContext httpContext)
+    {
         var detectionService = httpContext.RequestServices.GetService<IDetectionService>();
         if (detectionService == null)
         {
@@ -63,7 +72,6 @@ public record HttpRequestInfo : IHttpRequestInfo
         Platform = new HttpRequestPlatform(detectionService.Platform.Name, detectionService.Platform.Version);
         Engine = new HttpRequestEngine(detectionService.Engine.Name);
     }
-
     public void SetHttpContext(HttpContext httpContext)
     {
         this._httpContext = httpContext;

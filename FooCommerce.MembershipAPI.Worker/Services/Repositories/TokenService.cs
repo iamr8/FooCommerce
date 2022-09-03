@@ -15,9 +15,9 @@ namespace FooCommerce.MembershipAPI.Worker.Services.Repositories;
 public class TokenService : ITokenService
 {
     private readonly IRequestClient<UpdateAuthTokenState> _updateAuthTokenState;
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MembershipDbContext> _dbContextFactory;
 
-    public TokenService(IDbContextFactory<AppDbContext> dbContextFactory, IRequestClient<UpdateAuthTokenState> updateAuthTokenState)
+    public TokenService(IDbContextFactory<MembershipDbContext> dbContextFactory, IRequestClient<UpdateAuthTokenState> updateAuthTokenState)
     {
         _updateAuthTokenState = updateAuthTokenState;
         _dbContextFactory = dbContextFactory;
@@ -49,7 +49,7 @@ public class TokenService : ITokenService
         var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            var authToken = dbContext.Set<AuthToken>().Add(new AuthToken
+            var authToken = dbContext.AuthTokens.Add(new AuthToken
             {
                 Action = (byte)AuthTokenAction.Request_EmailVerification,
                 UserCommunicationId = communicationId,

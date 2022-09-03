@@ -3,6 +3,6 @@
 namespace FooCommerce.NotificationAPI.Contracts;
 
 public interface QueueNotification
-    : INotificationId, INotificationOptions
+    : INotificationOptions
 {
 }

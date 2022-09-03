@@ -46,7 +46,7 @@ public class Fixture : IAsyncLifetime, IFixture
         containerBuilder.RegisterModule(new LocalizationModule());
         containerBuilder.RegisterModule(new BusInMemoryTestModule());
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
+        containerBuilder.RegisterModule(new MembershipDatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>
                 builder.EnableRetryOnFailure(3)
                     .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
@@ -65,23 +65,23 @@ public class Fixture : IAsyncLifetime, IFixture
 
         await DatabaseCheckpoint.checkpoint.Reset(connectionString);
 
-        var dbContextFactory = Container.Resolve<IDbContextFactory<AppDbContext>>();
+        var dbContextFactory = Container.Resolve<IDbContextFactory<MembershipDbContext>>();
         var dbContext = await dbContextFactory.CreateDbContextAsync();
         SeedMembershipData(dbContext);
         UserCommunicationId = await SeedCommunicationAsync(dbContext);
     }
 
-    private async Task<Guid> SeedCommunicationAsync(DbContext dbContext)
+    private async Task<Guid> SeedCommunicationAsync(MembershipDbContext dbContext)
     {
-        var user = dbContext.Set<User>().Add(new User()).Entity;
+        var user = dbContext.Users.Add(new User()).Entity;
         var saved = await dbContext.SaveChangesAsync() > 0;
-        var userInformation = dbContext.Set<UserInformation>().Add(new UserInformation
+        var userInformation = dbContext.UserInformation.Add(new UserInformation
         {
             UserId = user.Id,
             Type = UserInformationType.Name,
             Value = "Arash"
         }).Entity;
-        var userCommunication = dbContext.Set<UserCommunication>().Add(new UserCommunication
+        var userCommunication = dbContext.UserCommunications.Add(new UserCommunication
         {
             Type = CommunicationType.Email_Message,
             Value = "arash.shabbeh@gmail.com",
@@ -92,13 +92,13 @@ public class Fixture : IAsyncLifetime, IFixture
         return userCommunication.Id;
     }
 
-    private void SeedMembershipData(DbContext dbContext)
+    private void SeedMembershipData(MembershipDbContext dbContext)
     {
-        var normalUserRole = dbContext.Set<Role>().Add(new Role
+        var normalUserRole = dbContext.Roles.Add(new Role
         {
             Type = RoleType.NormalUser,
         }).Entity;
-        var adminUserRole = dbContext.Set<Role>().Add(new Role
+        var adminUserRole = dbContext.Roles.Add(new Role
         {
             Type = RoleType.Admin,
         }).Entity;

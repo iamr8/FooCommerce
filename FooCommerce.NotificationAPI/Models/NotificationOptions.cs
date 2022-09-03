@@ -8,6 +8,7 @@ public record NotificationOptions
     : INotificationOptions
 {
     public HttpRequestInfo RequestInfo { get; init; }
+    public Guid? UserId { get; }
     public NotificationAction Action { get; init; }
     public IEnumerable<NotificationLink> Links { get; init; }
     public IEnumerable<NotificationFormatter> Formatters { get; init; }

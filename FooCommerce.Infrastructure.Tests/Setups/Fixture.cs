@@ -7,7 +7,7 @@ using EasyCaching.Core;
 using FooCommerce.Common.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Modules;
 using FooCommerce.Infrastructure.DbProvider;
-using FooCommerce.Infrastructure.Listings.Entities;
+using FooCommerce.Infrastructure.DbProvider.Entities.Configurations;
 using FooCommerce.Infrastructure.Locations.Enums;
 using FooCommerce.Tests;
 
@@ -44,10 +44,12 @@ public class Fixture : IAsyncLifetime, IFixture
         // containerBuilder.RegisterModule(new OrderAPIEventBusTestModule());
         containerBuilder.RegisterModule(new LocalizationModule());
         containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, config =>
+        containerBuilder.RegisterModule(new AppDatabaseProviderModule(connectionString, config =>
             config.UseSqlServer(connectionString!, builder =>
                 builder.EnableRetryOnFailure(3)
-                    .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery))));
+                    .UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery)
+                    .UseNetTopologySuite()
+            )));
         containerBuilder.RegisterType<SqlConnection>()
             .OnRelease(async ins => await ins.DisposeAsync())
             .As<IDbConnection>();
@@ -71,32 +73,32 @@ public class Fixture : IAsyncLifetime, IFixture
         // Machine = Container.Resolve<OrderStateMachine>();
     }
 
-    private void SeedLocationsData(DbContext dbContext)
+    private void SeedLocationsData(AppDbContext dbContext)
     {
-        var country = dbContext.Set<Location>().Add(new Location
+        var country = dbContext.Locations.Add(new Location
         {
             Division = LocationDivision.Country,
             Name = "Iran",
         }).Entity;
-        var province = dbContext.Set<Location>().Add(new Location
+        var province = dbContext.Locations.Add(new Location
         {
             Division = LocationDivision.Province,
             Name = "Khuzestan",
             ParentId = country.Id,
         }).Entity;
-        var city = dbContext.Set<Location>().Add(new Location
+        var city = dbContext.Locations.Add(new Location
         {
             Division = LocationDivision.City,
             Name = "Ahvaz",
             ParentId = province.Id,
         }).Entity;
-        var district = dbContext.Set<Location>().Add(new Location
+        var district = dbContext.Locations.Add(new Location
         {
             Division = LocationDivision.District,
             Name = "Kianpars",
             ParentId = city.Id,
         }).Entity;
-        var neighborhood = dbContext.Set<Location>().Add(new Location
+        var neighborhood = dbContext.Locations.Add(new Location
         {
             Division = LocationDivision.Quarter,
             Name = "Western",

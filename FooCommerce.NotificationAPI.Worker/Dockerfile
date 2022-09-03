@@ -10,7 +10,6 @@ WORKDIR /src
 COPY ["FooCommerce.NotificationAPI.Worker/FooCommerce.NotificationAPI.Worker.csproj", "FooCommerce.NotificationAPI.Worker/"]
 COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooCommerce.NotificationAPI/"]
 COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
-COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
 RUN dotnet restore "FooCommerce.NotificationAPI.Worker/FooCommerce.NotificationAPI.Worker.csproj"
 COPY . .

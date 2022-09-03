@@ -24,7 +24,7 @@ public class QueueNotificationPushInAppConsumer
         }
         else
         {
-            await context.RespondAsync<NotificationSendFailed>(new
+            await context.RespondAsync<NotificationSendFaulted>(new
             {
                 NotificationId = context.Message.NotificationId,
                 Gateway = CommunicationType.Push_Notification

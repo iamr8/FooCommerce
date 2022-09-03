@@ -2,11 +2,12 @@
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Models.Communications;
 
-namespace FooCommerce.NotificationAPI.Contracts;
+namespace FooCommerce.NotificationAPI.Worker.Contracts;
 
-public interface QueueNotificationPushInApp
+public interface QueueNotificationEmail
     : INotificationId, INotificationOptionsBase
 {
+    bool IsImportant { get; }
     NotificationReceiver Receiver { get; }
-    NotificationPushInAppModel Model { get; }
+    NotificationEmailModel Model { get; }
 }

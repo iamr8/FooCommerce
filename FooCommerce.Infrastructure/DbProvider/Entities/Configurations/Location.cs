@@ -1,10 +1,9 @@
 ﻿using FooCommerce.Domain;
-using FooCommerce.Infrastructure.DbProvider;
 using FooCommerce.Infrastructure.Locations.Enums;
 
 using NetTopologySuite.Geometries;
 
-namespace FooCommerce.Infrastructure.Listings.Entities;
+namespace FooCommerce.Infrastructure.DbProvider.Entities.Configurations;
 
 public record Location
     : IEntity, IEntitySoftDeletable, IEntityHideable, IEntityPublicId, IEntityCoordinate

@@ -8,7 +8,7 @@ using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Models;
-using FooCommerce.NotificationAPI.Worker.Consumers;
+using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Extensions;
@@ -48,23 +48,25 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
         // Arrange
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
         CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
-        var notificationId = NewId.NextGuid();
 
         // Act
         await this.Fixture.Harness.Start();
         try
         {
-            var consumer = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+            // var consumerQueueNotification = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+            // var consumerQueueNotificationEmail = this.Fixture.Harness.GetConsumerHarness<QueueNotificationEmailConsumer>();
+            // var consumerCreateUserNotification = this.Fixture.Harness.GetConsumerHarness<CreateUserNotificationConsumer>();
+
             await this.Fixture.Harness.Bus.Publish<QueueNotification>(new
             {
-                NotificationId = notificationId,
+                UserId = NewId.NextGuid(),
                 Action = NotificationAction.Verification_Request_Email,
-                //ReceiverProvider = new NotificationReceiverProvider
-                //{
-                //    Communications = new Dictionary<CommunicationType, string> { { CommunicationType.Email_Message, "arash.shabbeh@gmail.com" } },
-                //    Name = "Arash",
-                //    UserId = userId
-                //},
+                ReceiverProvider = new NotificationReceiverProvider
+                {
+                    Communications = new Dictionary<CommunicationType, string> { { CommunicationType.Email_Message, "arash.shabbeh@gmail.com" } },
+                    Name = "Arash",
+                    UserId = NewId.NextGuid()
+                },
                 RequestInfo = (HttpRequestInfo)HttpContext.GetRequestInfo()
             });
 
@@ -78,11 +80,17 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
             var notificationSent = await this.Fixture.Harness.Published.Any<NotificationSent>();
             Assert.True(notificationSent);
 
-            var consumed = await consumer.Consumed.Any<QueueNotification>();
+            var consumed = await this.Fixture.Harness.Consumed.Any<QueueNotification>();
             Assert.True(consumed);
 
-            var consumedEmail = await consumer.Consumed.Any<QueueNotificationEmail>();
-            Assert.True(consumed);
+            var consumedEmail = await this.Fixture.Harness.Consumed.Any<QueueNotificationEmail>();
+            Assert.True(consumedEmail);
+
+            var consumedUpdateNotification = await this.Fixture.Harness.Consumed.Any<CreateUserNotification>();
+            Assert.True(consumedUpdateNotification);
+
+            var publishedUpdateNotificationDone = await this.Fixture.Harness.Published.Any<UserNotificationCreationDone>();
+            Assert.True(publishedUpdateNotificationDone);
         }
         finally
         {

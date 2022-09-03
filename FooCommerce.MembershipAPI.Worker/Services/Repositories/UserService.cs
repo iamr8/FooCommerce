@@ -25,13 +25,13 @@ namespace FooCommerce.MembershipAPI.Worker.Services.Repositories;
 public class UserService : IUserService
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MembershipDbContext> _dbContextFactory;
     private readonly IEasyCachingProvider _easyCaching;
     private readonly ILogger<IUserService> _logger;
 
     public UserService(
         IDbConnectionFactory dbConnectionFactory,
-        IDbContextFactory<AppDbContext> dbContextFactory,
+        IDbContextFactory<MembershipDbContext> dbContextFactory,
         IEasyCachingProvider easyCaching,
         ILogger<IUserService> logger
         )
@@ -145,23 +145,23 @@ public class UserService : IUserService
         var transaction = await dbContext.Database.BeginTransactionAsync(cancellationToken);
         try
         {
-            output.User = dbContext.Set<User>().Add(new User()).Entity;
+            output.User = dbContext.Users.Add(new User()).Entity;
             await dbContext.SaveChangesAsync(cancellationToken);
 
             var hash = DataProtector.Hash(model.Password, 16, 32, 10_000);
-            output.Password = dbContext.Set<UserPassword>().Add(new UserPassword
+            output.Password = dbContext.UserPasswords.Add(new UserPassword
             {
                 UserId = output.User.Id,
                 Hash = hash
             }).Entity;
 
-            output.Role = dbContext.Set<UserRole>().Add(new UserRole
+            output.Role = dbContext.UserRoles.Add(new UserRole
             {
                 RoleId = role.Id,
                 UserId = output.User.Id
             }).Entity;
 
-            output.Communication = dbContext.Set<UserCommunication>().Add(new UserCommunication
+            output.Communication = dbContext.UserCommunications.Add(new UserCommunication
             {
                 Type = (byte)CommunicationType.Email_Message,
                 Value = model.Email.ToLowerInvariant(),
@@ -169,7 +169,7 @@ public class UserService : IUserService
             }).Entity;
 
             output.Settings ??= new List<UserSetting>();
-            output.Settings.Add(dbContext.Set<UserSetting>().Add(new UserSetting
+            output.Settings.Add(dbContext.UserSettings.Add(new UserSetting
             {
                 Key = (byte)UserSettingKey.Country,
                 Value = model.Country.ToString(),
@@ -177,14 +177,14 @@ public class UserService : IUserService
             }).Entity);
 
             output.Information ??= new List<UserInformation>();
-            output.Information.Add(dbContext.Set<UserInformation>().Add(new UserInformation
+            output.Information.Add(dbContext.UserInformation.Add(new UserInformation
             {
                 Type = (byte)UserInformationType.Name,
                 Value = model.FirstName,
                 UserId = output.User.Id
             }).Entity);
 
-            output.Information.Add(dbContext.Set<UserInformation>().Add(new UserInformation
+            output.Information.Add(dbContext.UserInformation.Add(new UserInformation
             {
                 Type = UserInformationType.Surname,
                 Value = model.LastName,

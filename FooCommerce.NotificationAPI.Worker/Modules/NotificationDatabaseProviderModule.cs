@@ -2,18 +2,18 @@
 using Autofac.Extensions.DependencyInjection;
 
 using FooCommerce.Domain.DbProvider;
-using FooCommerce.MembershipAPI.Worker.DbProvider;
+using FooCommerce.NotificationAPI.Worker.DbProvider;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.MembershipAPI.Worker.Modules;
+namespace FooCommerce.NotificationAPI.Worker.Modules;
 
-public class DatabaseProviderModule : Module
+public class NotificationDatabaseProviderModule : Module
 {
-    private readonly Action<DbContextOptionsBuilder<AppDbContext>> _dbContextOptionsBuilder;
+    private readonly Action<DbContextOptionsBuilder<NotificationDbContext>> _dbContextOptionsBuilder;
     private readonly string _connectionString;
 
-    public DatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<AppDbContext>> dbContextOptionsBuilder)
+    public NotificationDatabaseProviderModule(string connectionString, Action<DbContextOptionsBuilder<NotificationDbContext>> dbContextOptionsBuilder)
     {
         _dbContextOptionsBuilder = dbContextOptionsBuilder;
         _connectionString = connectionString;
@@ -31,9 +31,9 @@ public class DatabaseProviderModule : Module
             .InstancePerDependency();
 
         var serviceCollection = new ServiceCollection();
-        serviceCollection.AddDbContextFactory<AppDbContext>(options =>
+        serviceCollection.AddDbContextFactory<NotificationDbContext>(options =>
         {
-            _dbContextOptionsBuilder((DbContextOptionsBuilder<AppDbContext>)options);
+            _dbContextOptionsBuilder((DbContextOptionsBuilder<NotificationDbContext>)options);
             options
                 .EnableSensitiveDataLogging()
                 .EnableDetailedErrors()

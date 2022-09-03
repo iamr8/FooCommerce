@@ -17,11 +17,11 @@ public class UpdateAuthTokenStateConsumer
     : IConsumer<UpdateAuthTokenState>
 {
     private readonly IDbConnectionFactory _dbConnectionFactory;
-    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MembershipDbContext> _dbContextFactory;
     private readonly ILogger<UpdateAuthTokenStateConsumer> _logger;
 
     public UpdateAuthTokenStateConsumer(IDbConnectionFactory dbConnectionFactory,
-        ILogger<UpdateAuthTokenStateConsumer> logger, IDbContextFactory<AppDbContext> dbContextFactory)
+        ILogger<UpdateAuthTokenStateConsumer> logger, IDbContextFactory<MembershipDbContext> dbContextFactory)
     {
         _dbConnectionFactory = dbConnectionFactory;
         _logger = logger;
@@ -56,7 +56,7 @@ public class UpdateAuthTokenStateConsumer
             // Must be updated through IDbConnectionFactory
             var token = dbContext.Attach(new AuthToken { Id = context.Message.AuthTokenId }).Entity;
             token.Authorized = DateTimeOffset.UtcNow;
-            dbContext.Set<AuthToken>().Update(token);
+            dbContext.AuthTokens.Update(token);
             await dbContext.SaveChangesAsync(context.CancellationToken);
 
             await transaction.CommitAsync(context.CancellationToken);

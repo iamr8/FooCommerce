@@ -25,7 +25,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         containerBuilder.RegisterModule(new BusModule());
         containerBuilder.RegisterModule(new CachingModule());
         containerBuilder.RegisterModule(new ProtectionModule());
-        containerBuilder.RegisterModule(new DatabaseProviderModule(connectionString, optionsBuilder =>
+        containerBuilder.RegisterModule(new MembershipDatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
                 config =>

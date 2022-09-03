@@ -4,8 +4,6 @@
     [Created] DATETIME2 DEFAULT GETUTCDATE() NOT NULL, 
     [RowVersion] ROWVERSION, 
     [RenderedContent] NVARCHAR(MAX) NOT NULL,
-    [IPAddress] NCHAR(39) NOT NULL, 
-    [UserAgent] NVARCHAR(MAX) NOT NULL, 
     [Sent] DATETIME2 NULL, 
     [Delivered] DATETIME2 NULL, 
     [Seen] DATETIME2 NULL, 

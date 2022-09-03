@@ -19,7 +19,6 @@ RUN apt-get install -y nodejs
 #ENV PUBLIC_URL=ClientApp
 WORKDIR /src
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
-COPY ["FooCommerce.Application/FooCommerce.Application.csproj", "FooCommerce.Application/"]
 COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
 COPY ["FooCommerce.Infrastructure/FooCommerce.Infrastructure.csproj", "FooCommerce.Infrastructure/"]
 COPY ["FooCommerce.NotificationAPI.Bridge/FooCommerce.NotificationAPI.Bridge.csproj", "FooCommerce.NotificationAPI.Bridge/"]

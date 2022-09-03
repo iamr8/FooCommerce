@@ -8,6 +8,7 @@ using FooCommerce.Common.Localization.Helpers;
 using FooCommerce.Common.Localization.Models;
 using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.NotificationAPI.Worker.Interfaces;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 
 using Microsoft.AspNetCore.Html;

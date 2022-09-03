@@ -8,8 +8,8 @@ namespace FooCommerce.NotificationAPI.Models.Communications;
 
 public record NotificationEmailModel
 {
-    public IReadOnlyDictionary<string, string> Values { get; }
-    public IHtmlContent Html { get; }
+    public IReadOnlyDictionary<string, string> Values { get; init; }
+    public IHtmlContent Html { get; init; }
 
     public NotificationEmailModel() { }
     private NotificationEmailModel(IHtmlContent html, IDictionary<string, string> values)

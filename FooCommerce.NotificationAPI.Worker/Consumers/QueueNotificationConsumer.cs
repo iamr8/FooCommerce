@@ -4,6 +4,7 @@ using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Attributes;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Models;
+using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Models;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
@@ -41,8 +42,8 @@ public class QueueNotificationConsumer
                .CommunicationTypes;
 
         var websiteUrl = _configuration["WebsiteURL"];
-        var templates = await _templateService.GetTemplateAsync(context.Message.Action, context.CancellationToken);
-        if (templates == null || !templates.Any())
+        var notificationModel = await _templateService.GetNotificationModelAsync(context.Message.Action, context.CancellationToken);
+        if (notificationModel == null || !notificationModel.Templates.Any())
             throw new NullReferenceException("Unable to find any corresponding templates.");
 
         var factory = NotificationModelFactory.CreateFactory(context.Message, _loggerFactory, _localizer);
@@ -53,7 +54,7 @@ public class QueueNotificationConsumer
             {
                 case CommunicationType.Email_Message:
                     {
-                        var template = templates.OfType<NotificationTemplateEmailModel>().SingleOrDefault();
+                        var template = notificationModel.Templates.OfType<NotificationTemplateEmailModel>().SingleOrDefault();
                         if (template == null)
                         {
                             _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
@@ -81,19 +82,20 @@ public class QueueNotificationConsumer
                         {
                             Model = model,
                             IsImportant = true,
-                            context.Message.NotificationId,
+                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
+                            notificationModel.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
-                            Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
                             context.Message.Bag,
                             context.Message.Formatters,
-                            context.Message.Links
+                            context.Message.Links,
+                            context.Message.UserId
                         }, context.CancellationToken);
                         break;
                     }
                 case CommunicationType.Push_Notification:
                     {
-                        var template = templates.OfType<NotificationTemplatePushModel>().SingleOrDefault();
+                        var template = notificationModel.Templates.OfType<NotificationTemplatePushModel>().SingleOrDefault();
                         if (template == null)
                         {
                             _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
@@ -119,7 +121,7 @@ public class QueueNotificationConsumer
                         await context.Publish<QueueNotificationPush>(new
                         {
                             Model = model,
-                            context.Message.NotificationId,
+                            notificationModel.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
                             Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
@@ -131,7 +133,7 @@ public class QueueNotificationConsumer
                     }
                 case CommunicationType.Mobile_Sms:
                     {
-                        var template = templates.OfType<NotificationTemplateSmsModel>().SingleOrDefault();
+                        var template = notificationModel.Templates.OfType<NotificationTemplateSmsModel>().SingleOrDefault();
                         if (template == null)
                         {
                             _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
@@ -157,7 +159,7 @@ public class QueueNotificationConsumer
                         await context.Publish<QueueNotificationSms>(new
                         {
                             Model = model,
-                            context.Message.NotificationId,
+                            notificationModel.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
                             Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },
@@ -169,7 +171,7 @@ public class QueueNotificationConsumer
                     }
                 case CommunicationType.Push_InApp:
                     {
-                        var template = templates.OfType<NotificationTemplatePushInAppModel>().SingleOrDefault();
+                        var template = notificationModel.Templates.OfType<NotificationTemplatePushInAppModel>().SingleOrDefault();
                         if (template == null)
                         {
                             _logger.LogError("Action {0} needs to send notification via {0}, but unable to find appropriate {1} template for it.", communicationType, context.Message.Action);
@@ -195,7 +197,7 @@ public class QueueNotificationConsumer
                         await context.Publish<QueueNotificationPushInApp>(new
                         {
                             Model = model,
-                            context.Message.NotificationId,
+                            notificationModel.NotificationId,
                             context.Message.Action,
                             context.Message.RequestInfo,
                             Receiver = new NotificationReceiver { Name = context.Message.ReceiverProvider.Name, UserId = context.Message.ReceiverProvider.UserId, Address = receiver },

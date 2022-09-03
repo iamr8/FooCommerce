@@ -33,7 +33,7 @@ public class UserServiceTests : IClassFixture<Fixture>, ITestScope<Fixture>
         var easyCaching = Scope.Resolve<IEasyCachingProvider>();
         var userServiceLogger = Scope.Resolve<ILogger<IUserService>>();
         var dbConnectionFactory = Scope.Resolve<IDbConnectionFactory>();
-        var dbContextFactory = Scope.Resolve<IDbContextFactory<AppDbContext>>();
+        var dbContextFactory = Scope.Resolve<IDbContextFactory<MembershipDbContext>>();
         easyCaching.Flush();
         UserService = new UserService(dbConnectionFactory, dbContextFactory, easyCaching, userServiceLogger);
     }
