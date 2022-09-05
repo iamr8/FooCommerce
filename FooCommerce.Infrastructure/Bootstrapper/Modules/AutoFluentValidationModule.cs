@@ -1,22 +1,16 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
+﻿using FluentValidation.AspNetCore;
 
-using FluentValidation.AspNetCore;
+using FooCommerce.Common.Configurations;
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.Infrastructure.Bootstrapper.Modules
+namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
+
+public class AutoFluentValidationModule : Module
 {
-    public class AutoFluentValidationModule : Module
+    public void Load(IServiceCollection services)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            var services = new ServiceCollection();
-
-            services.AddFluentValidationAutoValidation();
-            services.AddFluentValidationClientsideAdapters();
-
-            builder.Populate(services);
-        }
+        services.AddFluentValidationAutoValidation();
+        services.AddFluentValidationClientsideAdapters();
     }
 }

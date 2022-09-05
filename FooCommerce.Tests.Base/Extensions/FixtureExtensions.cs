@@ -1,7 +1,4 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-
-using MassTransit;
+﻿using MassTransit;
 
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,24 +11,22 @@ namespace FooCommerce.Tests.Extensions;
 
 public static class FixtureExtensions
 {
-    public static ILifetimeScope ConfigureLogging<TFixture>(this TFixture fixture, ITestOutputHelper outputHelper) where TFixture : class, IFixture
+    public static IServiceScope ConfigureLogging<TFixture>(this TFixture fixture, ITestOutputHelper outputHelper) where TFixture : class, IFixture
     {
-        var scope = fixture.Container.BeginLifetimeScope(containerBuilder =>
-        {
-            var services = new ServiceCollection();
-            services.AddLogging(loggingBuilder =>
-            {
-                loggingBuilder.AddXUnit(outputHelper);
-                loggingBuilder.AddDebug();
-                loggingBuilder.AddConsole();
-                loggingBuilder.AddEventLog();
-                loggingBuilder.AddConfiguration(fixture.Container.Resolve<IConfiguration>());
-                loggingBuilder.AddConfiguration();
-            });
-            containerBuilder.Populate(services);
-        });
+        var scope = fixture.ServiceProvider.CreateScope();
 
-        var loggerFactory = scope.Resolve<ILoggerFactory>();
+        var services = new ServiceCollection();
+        services.AddLogging(loggingBuilder =>
+        {
+            loggingBuilder.AddXUnit(outputHelper);
+            loggingBuilder.AddDebug();
+            loggingBuilder.AddConsole();
+            loggingBuilder.AddEventLog();
+            loggingBuilder.AddConfiguration(scope.ServiceProvider.GetService<IConfiguration>());
+            loggingBuilder.AddConfiguration();
+        });
+        var sc = services.BuildServiceProvider();
+        var loggerFactory = sc.GetService<ILoggerFactory>();
         LogContext.ConfigureCurrentLogContext(loggerFactory);
         return scope;
     }

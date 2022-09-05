@@ -1,9 +1,5 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-
-using FooCommerce.Domain.DbProvider;
-using FooCommerce.Infrastructure.DbProvider;
-
+﻿using FooCommerce.Common.Configurations;
+using FooCommerce.DbProvider;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,19 +17,11 @@ public class AppDatabaseProviderModule : Module
         _connectionString = connectionString;
     }
 
-    protected override void Load(ContainerBuilder builder)
+    public void Load(IServiceCollection services)
     {
-        if (builder.Properties.ContainsKey(GetType().AssemblyQualifiedName))
-            return;
-
-        builder.Properties.Add(GetType().AssemblyQualifiedName, null);
-
-        builder.Register(ctx => new DbConnectionFactory(_connectionString))
-            .As<IDbConnectionFactory>()
-            .InstancePerDependency();
-
-        var serviceCollection = new ServiceCollection();
-        serviceCollection.AddDbContextFactory<AppDbContext>(options =>
+        services.AddTransient<IDbConnectionFactory>(_ => new DbConnectionFactory(_connectionString));
+        services.AddTransient(sp => sp.GetService<IDbConnectionFactory>().CreateConnection());
+        services.AddDbContextFactory<AppDbContext>(options =>
         {
             _dbContextOptionsBuilder((DbContextOptionsBuilder<AppDbContext>)options);
             options
@@ -42,7 +30,5 @@ public class AppDatabaseProviderModule : Module
                 .EnableThreadSafetyChecks()
                 .ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
         });
-
-        builder.Populate(serviceCollection);
     }
 }

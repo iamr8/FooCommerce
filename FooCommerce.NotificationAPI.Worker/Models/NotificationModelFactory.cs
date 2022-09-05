@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 
-using FooCommerce.Common.Localization;
+using FooCommerce.Localization;
 using FooCommerce.NotificationAPI.Interfaces;
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Models.Communications;

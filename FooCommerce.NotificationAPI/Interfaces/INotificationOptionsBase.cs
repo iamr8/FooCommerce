@@ -7,7 +7,7 @@ public interface INotificationOptionsBase : INotificationRequestInfo
 {
     Guid? UserId { get; }
     NotificationAction Action { get; }
-    IEnumerable<NotificationLink> Links { get; }
-    IEnumerable<NotificationFormatter> Formatters { get; }
-    IEnumerable<object> Bag { get; }
+    List<NotificationLink> Links { get; }
+    List<NotificationFormatter> Formatters { get; }
+    List<object> Bag { get; }
 }

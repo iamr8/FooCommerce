@@ -47,7 +47,7 @@ services:
       - "5121:443" #{OutOfContainerPort:InContainerPort}
     build:
       context: .
-      dockerfile: FooCommerce.MembershipAPI.Worker/Dockerfile
+      dockerfile: FooCommerce.IdentityAPI.Worker/Dockerfile
     depends_on:
       - sqlserver
       - rabbitmq

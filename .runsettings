@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<RunConfiguration>
+		<EnvironmentVariables>
+			<!--<DOTNET_ROOT>C:\ProgramFiles\dotnet</DOTNET_ROOT>-->
+			<!--<SDK_PATH>C:\Codebase\Sdk</SDK_PATH>-->
+		</EnvironmentVariables>
+		<!--<MaxCpuCount>1</MaxCpuCount>-->
+		<ResultsDirectory>.\TestResults</ResultsDirectory>
+		<TargetPlatform>x64</TargetPlatform>
+		<TargetFrameworkVersion>net6.0</TargetFrameworkVersion>
+		<TestAdaptersPaths>%SystemDrive%\Temp\foo;%SystemDrive%\Temp\bar</TestAdaptersPaths>
+		<!--<TestSessionTimeout>10000</TestSessionTimeout>-->
+		<TreatNoTestsAsError>true</TreatNoTestsAsError>
+	</RunConfiguration>
+	<TestRunParameters>
+		<Parameter name="logger" value="console;verbosity=detailed" />
+	</TestRunParameters>
+	<DataCollectionRunSettings>
+		<DataCollectors>
+			<DataCollector friendlyName="Code Coverage" uri="datacollector://Microsoft/CodeCoverage/2.0" assemblyQualifiedName="Microsoft.VisualStudio.Coverage.DynamicCoverageDataCollector, Microsoft.VisualStudio.TraceCollector, Version=11.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+				<Configuration>
+					<CodeCoverage>
+						<ModulePaths>
+							<Exclude>
+								<ModulePath>.*CPPUnitTestFramework.*</ModulePath>
+							</Exclude>
+						</ModulePaths>
+						<UseVerifiableInstrumentation>True</UseVerifiableInstrumentation>
+						<AllowLowIntegrityProcesses>True</AllowLowIntegrityProcesses>
+						<CollectFromChildProcesses>True</CollectFromChildProcesses>
+						<CollectAspDotNet>False</CollectAspDotNet>
+					</CodeCoverage>
+				</Configuration>
+			</DataCollector>
+
+			<!--<DataCollector uri="datacollector://microsoft/VideoRecorder/1.0" assemblyQualifiedName="Microsoft.VisualStudio.TestTools.DataCollection.VideoRecorder.VideoRecorderDataCollector, Microsoft.VisualStudio.TestTools.DataCollection.VideoRecorder, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" friendlyName="Screen and Voice Recorder">
+				--><!--Video data collector was introduced in Visual Studio 2017 version 15.5 --><!--
+				<Configuration>
+					--><!-- Set "sendRecordedMediaForPassedTestCase" to "false" to add video attachments to failed tests only --><!--
+					<MediaRecorder sendRecordedMediaForPassedTestCase="true"  xmlns="">
+						<ScreenCaptureVideo bitRate="512" frameRate="2" quality="20" />
+					</MediaRecorder>
+				</Configuration>
+			</DataCollector>-->
+
+			<!-- Configuration for blame data collector -->
+			<DataCollector friendlyName="blame" enabled="True">
+			</DataCollector>
+		</DataCollectors>
+	</DataCollectionRunSettings>
+	<LoggerRunSettings>
+		<Loggers>
+			<Logger friendlyName="console" enabled="True">
+				<Configuration>
+					<Verbosity>quiet</Verbosity>
+				</Configuration>
+			</Logger>
+			<Logger friendlyName="trx" enabled="True">
+				<Configuration>
+					<LogFileName>foo.trx</LogFileName>
+				</Configuration>
+			</Logger>
+			<Logger friendlyName="html" enabled="True">
+				<Configuration>
+					<LogFileName>foo.html</LogFileName>
+				</Configuration>
+			</Logger>
+		</Loggers>
+	</LoggerRunSettings>
+</RunSettings>

@@ -18,7 +18,7 @@ COPY ["FooCommerce.Web/FooCommerce.Web.csproj", "FooCommerce.Web/"]
 COPY ["FooCommerce.Infrastructure/FooCommerce.Infrastructure.csproj", "FooCommerce.Infrastructure/"]
 COPY ["FooCommerce.Core/FooCommerce.Core.csproj", "FooCommerce.Core/"]
 COPY ["FooCommerce.Domain/FooCommerce.Domain.csproj", "FooCommerce.Domain/"]
-COPY ["FooCommerce.MembershipAPI/FooCommerce.MembershipAPI.csproj", "FooCommerce.MembershipAPI/"]
+COPY ["FooCommerce.IdentityAPI/FooCommerce.IdentityAPI.csproj", "FooCommerce.IdentityAPI/"]
 COPY ["FooCommerce.NotificationAPI/FooCommerce.NotificationAPI.csproj", "FooCommerce.NotificationAPI/"]
 RUN dotnet restore "FooCommerce.Web/FooCommerce.Web.csproj"
 COPY . .

@@ -41,7 +41,7 @@ public class NotificationService : INotificationService
     //            UserId = communicationModel.
     //        },
     //        Content = Enumerable.Range(0, 1).Select(_ => new NotificationFormatter("authToken", result.Token)),
-    //        RequestInfo = (HttpRequestInfo)_httpContextAccessor.HttpContext.GetRequestInfo()
+    //        RequestInfo = (ContextRequestInfo)_httpContextAccessor.HttpContext.GetRequestInfo()
     //    }, cancellationToken);
     //}
 }

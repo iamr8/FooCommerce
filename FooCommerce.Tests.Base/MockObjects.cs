@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 
 using Moq;
@@ -25,10 +26,17 @@ public static class MockObjects
         return mock.Object;
     }
 
+    public static IHostEnvironment GetHostEnvironment()
+    {
+        var mock = new Mock<IHostEnvironment>();
+        mock.SetupGet(x => x.EnvironmentName).Returns(Environments.Staging);
+        return mock.Object;
+    }
+
     public static IWebHostEnvironment GetWebHostEnvironment()
     {
         var mock = new Mock<IWebHostEnvironment>();
-        mock.SetupGet(x => x.EnvironmentName).Returns(Microsoft.Extensions.Hosting.Environments.Staging);
+        mock.SetupGet(x => x.EnvironmentName).Returns(Environments.Staging);
         return mock.Object;
     }
 

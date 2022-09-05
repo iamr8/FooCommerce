@@ -1,31 +1,28 @@
-﻿using Autofac;
+﻿using FooCommerce.NotificationAPI.Worker.Services;
+using FooCommerce.NotificationAPI.Worker.Tests.Setup;
 
-using FooCommerce.NotificationAPI.Worker.Services;
-using FooCommerce.Tests;
-using FooCommerce.Tests.Extensions;
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit.Abstractions;
 
 namespace FooCommerce.NotificationAPI.Worker.Tests;
 
-public class NotificationClientServiceTests : IClassFixture<Fixture>, ITestScope<Fixture>
+public class NotificationClientServiceTests
 {
-    public Fixture Fixture { get; }
     public ITestOutputHelper TestConsole { get; }
-    public ILifetimeScope Scope { get; }
 
-    public NotificationClientServiceTests(Fixture fixture, ITestOutputHelper outputHelper)
+    public NotificationClientServiceTests(ITestOutputHelper outputHelper)
     {
-        this.Fixture = fixture;
-        this.TestConsole = outputHelper;
-        this.Scope = fixture.ConfigureLogging(outputHelper);
+        TestConsole = outputHelper;
     }
 
     [Fact]
-    public void Should_Return_Clients()
+    public async Task Should_Return_Clients()
     {
         // Arrange
-        var service = this.Scope.Resolve<INotificationClientService>();
+        await using var fixture = new Fixture(TestConsole);
+        await fixture.InitializeAsync();
+        var service = fixture.ServiceProvider.GetService<INotificationClientService>();
 
         // Act
         var clients = service.GetAvailableMailboxCredentials();

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+		<EnableNETAnalyzers>true</EnableNETAnalyzers>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.ViewFeatures" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor" Version="2.2.0" />
+		<PackageReference Include="Wangkanai.Detection" Version="5.5.200" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
+  </ItemGroup>
+
+</Project>

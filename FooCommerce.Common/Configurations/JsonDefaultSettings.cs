@@ -29,8 +29,6 @@ public static class JsonDefaultSettings
             settings.Converters.Add(new JsonIPAddressToStringConverter());
             settings.Converters.Add(new JsonIPEndPointConverter());
             settings.Converters.Add(new JsonRegionInfoToStringConverter());
-            settings.Converters.Add(new JsonDateTimeZoneToStringConverter());
-            settings.Converters.Add(new JsonHtmlContentToStringConverter());
             settings.Converters.Insert(0, new JsonDateTimeToUnixConverter());
             return settings;
         }

@@ -1,8 +1,8 @@
-﻿using FooCommerce.Common.HttpContextRequest;
+﻿using FooCommerce.Domain.ContextRequest;
 
 namespace FooCommerce.NotificationAPI.Interfaces;
 
 public interface INotificationRequestInfo
 {
-    HttpRequestInfo RequestInfo { get; }
+    ContextRequestInfo RequestInfo { get; }
 }

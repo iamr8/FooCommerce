@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Common.Helpers;
-using FooCommerce.Common.Localization;
 using FooCommerce.Domain.Enums;
+using FooCommerce.Localization;
 using FooCommerce.NotificationAPI.Attributes;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Models;
@@ -11,6 +11,8 @@ using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
 using FooCommerce.NotificationAPI.Worker.Services;
 
 using MassTransit;
+
+using DateTimeHelper = FooCommerce.Localization.Helpers.DateTimeHelper;
 
 namespace FooCommerce.NotificationAPI.Worker.Consumers;
 
@@ -74,7 +76,7 @@ public class QueueNotificationConsumer
                             template,
                             new NotificationEmailModelFactoryOptions
                             {
-                                LocalDateTime = DateTime.UtcNow.ToLocal(context.Message.RequestInfo),
+                                LocalDateTime = DateTimeHelper.ToLocal(DateTime.UtcNow, context.Message.RequestInfo),
                                 WebsiteUrl = websiteUrl,
                             });
 

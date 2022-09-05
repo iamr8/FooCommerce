@@ -1,12 +1,10 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-using FooCommerce.Common.HttpContextRequest;
+using FooCommerce.AspNetCoreExtensions.Helpers;
 using FooCommerce.Infrastructure.Bootstrapper;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var config = builder.Configuration
+builder.Configuration
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
@@ -14,12 +12,8 @@ var config = builder.Configuration
     .Build();
 
 var ff = Environment.GetEnvironmentVariables();
-var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
-        containerBuilder.ConfigureAutofac(builder.Environment, connectionString));
+builder.Services.ConfigureModules();
 
 // In production, the React files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration =>
@@ -42,7 +36,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-HttpRequestInfo.UseWebsiteUrl(ref app);
+ContextRequestHelper.UseWebsiteUrl(ref app);
 
 app.UseAuthorization();
 

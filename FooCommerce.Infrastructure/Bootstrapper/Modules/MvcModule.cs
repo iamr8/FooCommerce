@@ -1,13 +1,9 @@
-﻿using Autofac;
-using Autofac.Extensions.DependencyInjection;
-
-using FooCommerce.Common.Configurations;
+﻿using FooCommerce.Common.Configurations;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
 
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -19,19 +15,15 @@ namespace FooCommerce.Infrastructure.Bootstrapper.Modules;
 
 public class MvcModule : Module
 {
-    private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly Action<RazorPagesOptions> _razorOptions;
 
-    public MvcModule(IWebHostEnvironment webHostEnvironment, Action<RazorPagesOptions> razorOptions = null)
+    public MvcModule(Action<RazorPagesOptions> razorOptions = null)
     {
-        _webHostEnvironment = webHostEnvironment;
         _razorOptions = razorOptions;
     }
 
-    protected override void Load(ContainerBuilder builder)
+    public void Load(IServiceCollection services)
     {
-        var services = new ServiceCollection();
-
         services.Configure<ForwardedHeadersOptions>(options =>
             options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto);
 
@@ -118,7 +110,5 @@ public class MvcModule : Module
             const int megabytes = 10;
             options.MultipartBodyLengthLimit = megabytes * 1048576;
         });
-
-        builder.Populate(services);
     }
 }

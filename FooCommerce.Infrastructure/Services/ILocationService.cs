@@ -1,4 +1,4 @@
-﻿using FooCommerce.Infrastructure.Listings.Dtos;
+﻿using FooCommerce.DbProvider.Entities.Listings.Dtos;
 
 namespace FooCommerce.Infrastructure.Services;
 

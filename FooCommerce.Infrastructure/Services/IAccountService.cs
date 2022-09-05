@@ -1,4 +1,4 @@
-﻿using FooCommerce.MembershipAPI.Contracts.Requests;
+﻿using FooCommerce.IdentityAPI.Contracts.Requests;
 
 namespace FooCommerce.Infrastructure.Services;
 

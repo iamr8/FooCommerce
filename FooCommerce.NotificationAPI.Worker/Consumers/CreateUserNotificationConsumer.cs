@@ -1,6 +1,6 @@
-﻿using FooCommerce.NotificationAPI.Worker.Contracts;
-using FooCommerce.NotificationAPI.Worker.DbProvider;
-using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
+﻿using FooCommerce.DbProvider;
+using FooCommerce.DbProvider.Entities.Notifications;
+using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
 
 using MassTransit;
@@ -12,10 +12,10 @@ namespace FooCommerce.NotificationAPI.Worker.Consumers;
 public class CreateUserNotificationConsumer
     : IConsumer<CreateUserNotification>
 {
-    private readonly IDbContextFactory<NotificationDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
     private readonly ILogger<CreateUserNotificationConsumer> _logger;
 
-    public CreateUserNotificationConsumer(IDbContextFactory<NotificationDbContext> dbContextFactory, ILogger<CreateUserNotificationConsumer> logger)
+    public CreateUserNotificationConsumer(IDbContextFactory<AppDbContext> dbContextFactory, ILogger<CreateUserNotificationConsumer> logger)
     {
         _dbContextFactory = dbContextFactory;
         _logger = logger;

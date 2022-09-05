@@ -1,8 +1,8 @@
-﻿using Autofac;
+﻿namespace FooCommerce.Tests;
 
-namespace FooCommerce.Tests;
-
-public interface IFixture
+public interface IFixture : IAsyncDisposable
 {
-    IContainer Container { get; }
+    IServiceProvider ServiceProvider { get; }
+
+    Task InitializeAsync();
 }

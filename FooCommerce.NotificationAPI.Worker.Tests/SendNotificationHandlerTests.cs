@@ -1,22 +1,20 @@
 ﻿using System.Globalization;
 
-using Autofac;
-
-using FooCommerce.Common.Helpers;
-using FooCommerce.Common.HttpContextRequest;
+using FooCommerce.AspNetCoreExtensions.Helpers;
+using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Models;
 using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Events;
+using FooCommerce.NotificationAPI.Worker.Tests.Setup;
 using FooCommerce.Tests;
-using FooCommerce.Tests.Extensions;
 
 using MassTransit;
 using MassTransit.Testing;
 
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
 
 using Xunit.Abstractions;
 using Xunit.Priority;
@@ -24,22 +22,13 @@ using Xunit.Priority;
 namespace FooCommerce.NotificationAPI.Worker.Tests;
 
 [TestCaseOrderer(PriorityOrderer.Name, PriorityOrderer.Assembly)]
-public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<Fixture>
+public class SendNotificationHandlerTests
 {
-    public Fixture Fixture { get; }
     public ITestOutputHelper TestConsole { get; }
-    public ILifetimeScope Scope { get; }
-    public HttpContext HttpContext { get; }
 
-    public SendNotificationHandlerTests(Fixture fixture, ITestOutputHelper outputHelper)
+    public SendNotificationHandlerTests(ITestOutputHelper outputHelper)
     {
-        Fixture = fixture;
         TestConsole = outputHelper;
-        Scope = fixture.ConfigureLogging(outputHelper);
-
-        var serviceProvider = Scope.Resolve<IServiceProvider>();
-        var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
-        HttpContext = httpContextAccessor.HttpContext!;
     }
 
     [Fact, Priority(1)]
@@ -49,52 +38,58 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
         CultureInfo.CurrentCulture = CultureInfo.GetCultureInfo("en");
         CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
 
+        await using var fixture = new Fixture(TestConsole);
+        await fixture.InitializeAsync();
+        var serviceProvider = fixture.ServiceProvider.GetService<IServiceProvider>();
+        var httpContextAccessor = serviceProvider.GetHttpContextAccessor();
+        var httpContext = httpContextAccessor.HttpContext!;
+
         // Act
-        await this.Fixture.Harness.Start();
+        await fixture.Harness.Start();
         try
         {
-            // var consumerQueueNotification = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
-            // var consumerQueueNotificationEmail = this.Fixture.Harness.GetConsumerHarness<QueueNotificationEmailConsumer>();
-            // var consumerCreateUserNotification = this.Fixture.Harness.GetConsumerHarness<CreateUserNotificationConsumer>();
+            // var consumerQueueNotification = fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+            // var consumerQueueNotificationEmail = fixture.Harness.GetConsumerHarness<QueueNotificationEmailConsumer>();
+            // var consumerCreateUserNotification = fixture.Harness.GetConsumerHarness<CreateUserNotificationConsumer>();
 
-            await this.Fixture.Harness.Bus.Publish<QueueNotification>(new
+            await fixture.Harness.Bus.Publish<QueueNotification>(new
             {
-                UserId = NewId.NextGuid(),
+                fixture.UserId,
                 Action = NotificationAction.Verification_Request_Email,
                 ReceiverProvider = new NotificationReceiverProvider
                 {
                     Communications = new Dictionary<CommunicationType, string> { { CommunicationType.Email_Message, "arash.shabbeh@gmail.com" } },
                     Name = "Arash",
-                    UserId = NewId.NextGuid()
+                    UserId = fixture.UserId
                 },
-                RequestInfo = (HttpRequestInfo)HttpContext.GetRequestInfo()
+                RequestInfo = (ContextRequestInfo)httpContext.GetRequestInfo()
             });
 
             // Assert
-            var published = await this.Fixture.Harness.Published.Any<QueueNotification>();
+            var published = await fixture.Harness.Published.Any<QueueNotification>();
             Assert.True(published);
 
-            var publishedEmail = await this.Fixture.Harness.Published.Any<QueueNotificationEmail>();
+            var publishedEmail = await fixture.Harness.Published.Any<QueueNotificationEmail>();
             Assert.True(publishedEmail);
 
-            var notificationSent = await this.Fixture.Harness.Published.Any<NotificationSent>();
+            var notificationSent = await fixture.Harness.Published.Any<NotificationSent>();
             Assert.True(notificationSent);
 
-            var consumed = await this.Fixture.Harness.Consumed.Any<QueueNotification>();
+            var consumed = await fixture.Harness.Consumed.Any<QueueNotification>();
             Assert.True(consumed);
 
-            var consumedEmail = await this.Fixture.Harness.Consumed.Any<QueueNotificationEmail>();
+            var consumedEmail = await fixture.Harness.Consumed.Any<QueueNotificationEmail>();
             Assert.True(consumedEmail);
 
-            var consumedUpdateNotification = await this.Fixture.Harness.Consumed.Any<CreateUserNotification>();
+            var consumedUpdateNotification = await fixture.Harness.Consumed.Any<CreateUserNotification>();
             Assert.True(consumedUpdateNotification);
 
-            var publishedUpdateNotificationDone = await this.Fixture.Harness.Published.Any<UserNotificationCreationDone>();
+            var publishedUpdateNotificationDone = await fixture.Harness.Published.Any<UserNotificationCreationDone>();
             Assert.True(publishedUpdateNotificationDone);
         }
         finally
         {
-            await this.Fixture.Harness.Stop();
+            await fixture.Harness.Stop();
         }
     }
 
@@ -107,35 +102,35 @@ public class SendNotificationHandlerTests : IClassFixture<Fixture>, ITestScope<F
     //    var notificationId = NewId.NextGuid();
 
     //    // Act
-    //    await this.Fixture.Harness.Start();
+    //    await fixture.Harness.Start();
     //    try
     //    {
     //        var cancellationTokenSource = new CancellationTokenSource(TimeSpan.FromSeconds(30));
-    //        var consumer = this.Fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
+    //        var consumer = fixture.Harness.GetConsumerHarness<QueueNotificationConsumer>();
 
-    //        var client = this.Fixture.Harness.GetRequestClient<QueueNotification>();
+    //        var client = fixture.Harness.GetRequestClient<QueueNotification>();
     //        var response = await client.GetResponse<NotificationSent>(new
     //        {
     //            NotificationId = notificationId,
     //            Action = NotificationAction.Verification_Request_Email,
-    //            Receiver = new NotificationReceiverProvider(NotificationReceiverStrategy.ByUserCommunicationId, this.Fixture.UserCommunicationId),
+    //            Receiver = new NotificationReceiverProvider(NotificationReceiverStrategy.ByUserCommunicationId, fixture.UserCommunicationId),
     //            RequestInfo = HttpContext.GetRequestInfo()
     //        }, cancellationTokenSource.Token);
 
     //        Assert.NotEqual(Guid.Empty, response.Message.NotificationId);
 
-    //        var published = await this.Fixture.Harness.Published.Any<QueueNotification>(cancellationTokenSource.Token);
+    //        var published = await fixture.Harness.Published.Any<QueueNotification>(cancellationTokenSource.Token);
     //        Assert.True(published);
 
     //        var consumed = await consumer.Consumed.Any<QueueNotification>(cancellationTokenSource.Token);
     //        Assert.True(consumed);
 
-    //        var publishedSent = await this.Fixture.Harness.Published.Any<NotificationSent>(cancellationTokenSource.Token);
+    //        var publishedSent = await fixture.Harness.Published.Any<NotificationSent>(cancellationTokenSource.Token);
     //        Assert.True(publishedSent);
     //    }
     //    finally
     //    {
-    //        await this.Fixture.Harness.Stop();
+    //        await fixture.Harness.Stop();
     //    }
     //}
 }

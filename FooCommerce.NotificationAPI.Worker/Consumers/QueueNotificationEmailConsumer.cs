@@ -1,6 +1,5 @@
-﻿using FooCommerce.Common.Helpers;
-using FooCommerce.Common.Localization;
-using FooCommerce.Domain.Enums;
+﻿using FooCommerce.Domain.Enums;
+using FooCommerce.Localization;
 using FooCommerce.NotificationAPI.Worker.Contracts;
 using FooCommerce.NotificationAPI.Worker.Enums;
 using FooCommerce.NotificationAPI.Worker.Events;
@@ -19,12 +18,12 @@ public class QueueNotificationEmailConsumer
     private readonly ILogger<QueueNotificationEmailConsumer> _logger;
     private readonly INotificationClientService _clientService;
     private readonly ILocalizer _localizer;
-    private readonly IWebHostEnvironment _environment;
+    private readonly IHostEnvironment _environment;
 
     public QueueNotificationEmailConsumer(ILogger<QueueNotificationEmailConsumer> logger,
         INotificationClientService clientService,
         ILocalizer localizer,
-        IWebHostEnvironment environment)
+        IHostEnvironment environment)
     {
         _logger = logger;
         _clientService = clientService;
@@ -34,7 +33,7 @@ public class QueueNotificationEmailConsumer
 
     public async Task Consume(ConsumeContext<QueueNotificationEmail> context)
     {
-        var html = context.Message.Model.Html.GetString();
+        var html = context.Message.Model.Html;
         if (string.IsNullOrEmpty(html))
         {
             await context.RespondAsync<NotificationSendFaulted>(new

@@ -1,22 +1,23 @@
-﻿using Autofac;
-
+﻿using FooCommerce.Common.Helpers;
 using FooCommerce.Infrastructure.Bootstrapper.Modules;
 
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace FooCommerce.Infrastructure.Bootstrapper;
 
 public static class BootstrapperConfigurator
 {
-    public static void ConfigureAutofac(this ContainerBuilder containerBuilder, IWebHostEnvironment environment, string connectionString)
+    public static void ConfigureModules(this IServiceCollection services)
     {
-        containerBuilder.RegisterModule(new AutoFluentValidationModule());
-        containerBuilder.RegisterModule(new MvcModule(environment));
-        containerBuilder.RegisterModule(new ServicesModule());
-        containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new ProtectionModule());
-        containerBuilder.RegisterModule(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
+        var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+        services.RegisterModule(new AutoFluentValidationModule());
+        services.RegisterModule(new MvcModule());
+        services.RegisterModule(new ServicesModule());
+        services.RegisterModule(new CacheProviderModule());
+        services.RegisterModule(new ProtectionModule());
+        services.RegisterModule(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
                 config =>

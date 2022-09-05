@@ -1,31 +1,28 @@
-using Autofac;
-using Autofac.Extensions.DependencyInjection;
-
+using FooCommerce.Common.Helpers;
+using FooCommerce.NotificationAPI.Worker;
 using FooCommerce.NotificationAPI.Worker.Modules;
 
 using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration.AddJsonFile("appsettings.json", true, true);
-if (!string.IsNullOrEmpty(builder.Environment?.EnvironmentName))
-{
-    var path = $"appsettings.{builder.Environment.EnvironmentName}.json";
-    builder.Configuration.AddJsonFile(path, true, true);
-}
-builder.Configuration.AddEnvironmentVariables();
-
 var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-// var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
-    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
+var host = Host.CreateDefaultBuilder(args)
+    .ConfigureAppConfiguration((hostingContext, config) =>
     {
-        containerBuilder.RegisterModule(new MvcModule());
-        containerBuilder.RegisterModule(new BusModule());
-        containerBuilder.RegisterModule(new CachingModule());
-        containerBuilder.RegisterModule(new ProtectionModule());
-        containerBuilder.RegisterModule(new NotificationDatabaseProviderModule(connectionString, optionsBuilder =>
+        config
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile($"appsettings.{hostingContext.HostingEnvironment.EnvironmentName}.json", optional: false, reloadOnChange: true)
+            .AddEnvironmentVariables()
+            .Build();
+    })
+    .ConfigureServices(services =>
+    {
+        services.AddHostedService<Worker>();
+        services.RegisterModule(new BusModule());
+        services.RegisterModule(new CacheProviderModule());
+        services.RegisterModule(new ServicesModule());
+        services.RegisterModule(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
                 config =>
@@ -35,8 +32,7 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
                     config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
                 });
         }));
-    });
+    })
+    .Build();
 
-var app = builder.Build();
-
-app.Run();
+await host.RunAsync();

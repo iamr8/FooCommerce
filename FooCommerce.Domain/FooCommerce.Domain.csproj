@@ -6,8 +6,4 @@
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
-  <ItemGroup>
-		<PackageReference Include="Microsoft.Data.SqlClient" Version="5.0.0" />
-	</ItemGroup>
-
 </Project>

@@ -20,11 +20,8 @@
   </ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="6.0.8" />
-	  <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.8" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.8" />
 	  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.1" />
-	  <PackageReference Include="Moq" Version="4.18.2" />
 	  <PackageReference Include="xunit" Version="2.4.2" />
 	  <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -50,6 +47,7 @@
 	</ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\FooCommerce.AspNetCoreExtensions\FooCommerce.AspNetCoreExtensions.csproj" />
     <ProjectReference Include="..\FooCommerce.NotificationAPI.Worker\FooCommerce.NotificationAPI.Worker.csproj" />
     <ProjectReference Include="..\FooCommerce.Tests.Base\FooCommerce.Tests.csproj" />
   </ItemGroup>

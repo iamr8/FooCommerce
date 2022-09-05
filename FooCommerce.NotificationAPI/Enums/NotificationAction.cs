@@ -1,5 +1,5 @@
-﻿using FooCommerce.Common.Localization.Attributes;
-using FooCommerce.Domain.Enums;
+﻿using FooCommerce.Domain.Enums;
+using FooCommerce.Localization.Attributes;
 using FooCommerce.NotificationAPI.Attributes;
 
 namespace FooCommerce.NotificationAPI.Enums;

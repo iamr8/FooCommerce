@@ -1,18 +1,14 @@
 ﻿using System.Text;
 
-using JetBrains.Annotations;
-
-using Microsoft.AspNetCore.Html;
-
 namespace FooCommerce.NotificationAPI.Models.Communications;
 
 public record NotificationEmailModel
 {
     public IReadOnlyDictionary<string, string> Values { get; init; }
-    public IHtmlContent Html { get; init; }
+    public string Html { get; init; }
 
     public NotificationEmailModel() { }
-    private NotificationEmailModel(IHtmlContent html, IDictionary<string, string> values)
+    private NotificationEmailModel(string html, IDictionary<string, string> values)
     {
         Values = (IReadOnlyDictionary<string, string>)values;
         Html = html;
@@ -25,7 +21,7 @@ public record NotificationEmailModel
     /// <param name="values"></param>
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
-    public static NotificationEmailModel GetInstance([NotNull] string html, [NotNull] IDictionary<string, string> values)
+    public static NotificationEmailModel GetInstance(string html, IDictionary<string, string> values)
     {
         if (html == null) throw new ArgumentNullException(nameof(html));
         if (values == null) throw new ArgumentNullException(nameof(values));
@@ -36,7 +32,6 @@ public record NotificationEmailModel
             htmlBuilder.Replace(key, value);
         }
 
-        var htmlString = new HtmlString(htmlBuilder.ToString());
-        return new NotificationEmailModel(htmlString, values);
+        return new NotificationEmailModel(htmlBuilder.ToString(), values);
     }
 }

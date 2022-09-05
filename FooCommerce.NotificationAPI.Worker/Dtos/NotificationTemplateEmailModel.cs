@@ -1,17 +1,12 @@
 ﻿using System.Globalization;
 using System.Reflection;
 
-using FooCommerce.Common.Helpers;
-using FooCommerce.Common.HttpContextRequest;
-using FooCommerce.Common.Localization;
-using FooCommerce.Common.Localization.Helpers;
-using FooCommerce.Common.Localization.Models;
+using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
-using FooCommerce.NotificationAPI.Interfaces;
+using FooCommerce.Localization;
+using FooCommerce.Localization.Models;
 using FooCommerce.NotificationAPI.Worker.Interfaces;
 using FooCommerce.NotificationAPI.Worker.Models.FactoryOptions;
-
-using Microsoft.AspNetCore.Html;
 
 namespace FooCommerce.NotificationAPI.Worker.Dtos;
 
@@ -27,7 +22,7 @@ public record NotificationTemplateEmailModel : INotificationTemplate
     public bool ShowRequestData { get; init; }
     public IDictionary<string, string> Values { get; }
 
-    public static void GetRequestDictionary(IDictionary<string, string> dict, NotificationEmailModelFactoryOptions options, IHttpRequestInfo requestInfo, ILocalizer localizer)
+    public static void GetRequestDictionary(IDictionary<string, string> dict, NotificationEmailModelFactoryOptions options, IContextRequestInfo requestInfo, ILocalizer localizer)
     {
         var ipAddress = requestInfo.IPAddress;
         var country = requestInfo.Country;
@@ -44,7 +39,7 @@ public record NotificationTemplateEmailModel : INotificationTemplate
         dict.Add("{{translation_browser}}", localizer["WebBrowser"]);
 
         var resetPasswordUrl = $"{options.WebsiteUrl}/{CultureInfo.CurrentCulture.TwoLetterISOLanguageName}/account/password/reset";
-        dict.Add("{{translation_caution}}", localizer.Html("Account_Email_IfYouDoNotRecognizeThisActivity", c => new HtmlString($"<a href=\"{resetPasswordUrl}\" class=\"e-link js-mail-link\">{localizer["Account_ResetPassword"]}</a>")).GetString());
+        dict.Add("{{translation_caution}}", localizer.Format("Account_Email_IfYouDoNotRecognizeThisActivity", $"<a href=\"{resetPasswordUrl}\" class=\"e-link js-mail-link\">{localizer["Account_ResetPassword"]}</a>"));
     }
 
     public static void GetLayoutDictionary(Dictionary<string, string> dict, string receiverName, NotificationEmailModelFactoryOptions options, ILocalizer localizer)

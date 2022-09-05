@@ -3,14 +3,12 @@ using System.Text.Json.Nodes;
 
 using Dapper;
 
-using EasyCaching.Core;
-
-using FooCommerce.Common.Caching;
-using FooCommerce.Common.Localization.Helpers;
-using FooCommerce.Domain.DbProvider;
+using FooCommerce.Caching;
+using FooCommerce.DbProvider;
+using FooCommerce.DbProvider.Entities.Notifications;
 using FooCommerce.Domain.Enums;
+using FooCommerce.Localization.Helpers;
 using FooCommerce.NotificationAPI.Enums;
-using FooCommerce.NotificationAPI.Worker.DbProvider.Entities;
 using FooCommerce.NotificationAPI.Worker.Dtos;
 using FooCommerce.NotificationAPI.Worker.Interfaces;
 
@@ -21,16 +19,16 @@ namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
     public class NotificationTemplateService : INotificationTemplateService
     {
         private readonly IDbConnectionFactory _dbConnectionFactory;
-        private readonly IEasyCachingProvider _easyCaching;
+        private readonly ICacheProvider _cacheProvider;
         private readonly ILogger<INotificationTemplateService> _logger;
 
         public NotificationTemplateService(IDbConnectionFactory dbConnectionFactory,
-            IEasyCachingProvider easyCaching,
+            ICacheProvider cacheProvider,
             ILogger<INotificationTemplateService> logger)
         {
             _logger = logger;
             _dbConnectionFactory = dbConnectionFactory;
-            _easyCaching = easyCaching;
+            _cacheProvider = cacheProvider;
         }
 
         public const string CacheKey = "config.notifications.templates";
@@ -44,9 +42,15 @@ namespace FooCommerce.NotificationAPI.Worker.Services.Repositories
 
         private async ValueTask<INotification> GetNotificationModelAsync(NotificationAction actionName, IDbConnection dbConnection, CancellationToken cancellationToken = default)
         {
+            // var serializer = JsonDefaultSettings.Settings;
+            // serializer.Converters.Add(new JsonHtmlContentToStringConverter());
+
             var cacheKey = $"{CacheKey}.{actionName.ToString().ToLowerInvariant()}";
-            return await _easyCaching.GetOrCreateAsync(cacheKey,
-                async () => await GetNotificationModelNonCachedAsync(actionName, dbConnection, cancellationToken), _logger, cancellationToken);
+            return await _cacheProvider.GetOrCreateAsync(cacheKey,
+                async token => await GetNotificationModelNonCachedAsync(actionName, dbConnection, token),
+                //new CacheOptions { Logger = _logger, SerializerOptions = serializer },
+                new CacheOptions { Logger = _logger },
+                cancellationToken);
         }
 
         private static NotificationTemplateSmsModel ParseMobileModel(NotificationTemplateModel template, JsonNode json)

@@ -14,6 +14,6 @@ public class NotificationClientService : INotificationClientService
 
     public IEnumerable<IEmailClientCredential> GetAvailableMailboxCredentials()
     {
-        return _configuration.GetSection("Emails").Get<List<EmailClientCredential>>();
+        return _configuration.GetSection("Emails").Get<IEnumerable<EmailClientCredential>>();
     }
 }

@@ -1,11 +1,12 @@
-﻿using FooCommerce.Common.Helpers;
-using FooCommerce.Common.HttpContextRequest;
+﻿using FooCommerce.AspNetCoreExtensions.Helpers;
+using FooCommerce.Common.Helpers;
+using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
-using FooCommerce.MembershipAPI.Contracts.FaultedResponses;
-using FooCommerce.MembershipAPI.Contracts.FaultedResponses.Enums;
-using FooCommerce.MembershipAPI.Contracts.Requests;
-using FooCommerce.MembershipAPI.Contracts.Responses;
-using FooCommerce.MembershipAPI.Validators;
+using FooCommerce.IdentityAPI.Contracts.FaultedResponses;
+using FooCommerce.IdentityAPI.Contracts.FaultedResponses.Enums;
+using FooCommerce.IdentityAPI.Contracts.Requests;
+using FooCommerce.IdentityAPI.Contracts.Responses;
+using FooCommerce.IdentityAPI.Validators;
 using FooCommerce.NotificationAPI.Contracts;
 using FooCommerce.NotificationAPI.Enums;
 using FooCommerce.NotificationAPI.Models;
@@ -75,7 +76,16 @@ public class AccountService : IAccountService
         else
         {
             var response = await prepared;
-            await _httpContextAccessor.HttpContext!.SignInAsync(response.Message.ClaimsPrincipal, response.Message.Properties);
+
+            var authenticationProps = new AuthenticationProperties
+            {
+                AllowRefresh = true,
+                IsPersistent = model.Remember,
+                RedirectUri = model.ReturnUrl,
+                IssuedUtc = DateTimeOffset.UtcNow,
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(30)
+            };
+            await _httpContextAccessor.HttpContext!.SignInAsync(response.Message.ClaimsPrincipal, authenticationProps);
             return JobStatus.Success;
         }
     }
@@ -167,10 +177,10 @@ public class AccountService : IAccountService
                 {
                     UserId = response.Message.UserId,
                     Name = response.Message.Name,
-                    Communications = new Dictionary<CommunicationType, string>{{ response.Message.Communication.Type, response.Message.Communication.Value } }
+                    Communications = new Dictionary<CommunicationType, string> { { response.Message.Communication.Type, response.Message.Communication.Value } }
                 },
                 Content = Enumerable.Range(0, 1).Select(_ => new NotificationFormatter("authToken", response.Message.Token)),
-                RequestInfo = (HttpRequestInfo)_httpContextAccessor.HttpContext.GetRequestInfo()
+                RequestInfo = (ContextRequestInfo)_httpContextAccessor.HttpContext.GetRequestInfo()
             }, cancellationToken);
             return JobStatus.Success;
         }
