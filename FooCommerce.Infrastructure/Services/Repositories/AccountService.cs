@@ -1,5 +1,4 @@
 ﻿using FooCommerce.AspNetCoreExtensions.Helpers;
-using FooCommerce.Common.Helpers;
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
 using FooCommerce.IdentityAPI.Contracts.FaultedResponses;
