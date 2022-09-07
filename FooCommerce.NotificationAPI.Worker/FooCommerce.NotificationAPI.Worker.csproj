@@ -24,7 +24,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
 	  <ProjectReference Include="..\FooCommerce.Caching\FooCommerce.Caching.csproj" />
 	  <ProjectReference Include="..\FooCommerce.DbProvider\FooCommerce.DbProvider.csproj" />
 	  <ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />

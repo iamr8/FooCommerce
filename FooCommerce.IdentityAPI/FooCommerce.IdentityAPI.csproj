@@ -7,12 +7,12 @@
 	</PropertyGroup>
 
   <ItemGroup>
-	  <PackageReference Include="MassTransit" Version="8.0.6" />
 		<PackageReference Include="FluentValidation" Version="11.2.1" />
 		<PackageReference Include="libphonenumber-csharp" Version="8.12.54" />
 	</ItemGroup>
 
 	<ItemGroup>
+    <ProjectReference Include="..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
     <ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
     <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
     <ProjectReference Include="..\FooCommerce.Localization\FooCommerce.Localization.csproj" />

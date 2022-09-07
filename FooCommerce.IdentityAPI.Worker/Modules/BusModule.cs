@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Common.Configurations;
-using FooCommerce.IdentityAPI.Worker.Extensions;
+using FooCommerce.EventSource;
 
 using MassTransit;
 
@@ -9,6 +9,6 @@ public class BusModule : Module
 {
     public void Load(IServiceCollection services)
     {
-        services.AddMassTransit(cfg => cfg.ConfigureBus());
+        services.AddMassTransit(cfg => cfg.ConfigureBus(this.GetType().Assembly));
     }
 }

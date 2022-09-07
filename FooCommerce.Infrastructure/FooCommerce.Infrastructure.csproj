@@ -20,6 +20,7 @@
 		<ProjectReference Include="..\FooCommerce.Caching\FooCommerce.Caching.csproj" />
 		<ProjectReference Include="..\FooCommerce.DbProvider\FooCommerce.DbProvider.csproj" />
 		<ProjectReference Include="..\FooCommerce.AspNetCoreExtensions\FooCommerce.AspNetCoreExtensions.csproj" />
+		<ProjectReference Include="..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
 		<ProjectReference Include="..\FooCommerce.Localization.AspNetCoreExtensions\FooCommerce.Localization.AspNetCoreExtensions.csproj" />
 		<ProjectReference Include="..\FooCommerce.Localization\FooCommerce.Localization.csproj" />
 		<ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />

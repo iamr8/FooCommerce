@@ -1,4 +1,5 @@
-﻿using FooCommerce.NotificationAPI.Worker.Extensions;
+﻿using FooCommerce.Common.Helpers;
+using FooCommerce.EventSource;
 
 using MassTransit;
 
@@ -12,6 +13,7 @@ public class TestBusModule : Module
 {
     public void Load(IServiceCollection services)
     {
-        services.AddMassTransitTestHarness(cfg => cfg.ConfigureBus());
+        var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies().ToArray();
+        services.AddMassTransitTestHarness(cfg => cfg.ConfigureBus(assemblies));
     }
 }
