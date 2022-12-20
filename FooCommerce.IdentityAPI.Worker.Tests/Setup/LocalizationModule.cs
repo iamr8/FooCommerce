@@ -1,15 +1,9 @@
 ﻿using System.Globalization;
 using System.Text.Json;
-
-using Dapper;
-
 using FooCommerce.Common.Configurations;
-using FooCommerce.Localization;
-using FooCommerce.Localization.Models;
-
 using Microsoft.Extensions.DependencyInjection;
 
-namespace FooCommerce.IdentityAPI.Worker.Tests.Setup;
+namespace FooCommerce.Services.TokenAPI.Tests.Setup;
 
 public class LocalizationModule : Module
 {
