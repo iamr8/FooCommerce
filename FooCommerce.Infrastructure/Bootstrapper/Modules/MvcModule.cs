@@ -61,9 +61,12 @@ public class MvcModule : Module
             })
             .AddJsonOptions(options =>
             {
-                options.JsonSerializerOptions.Converters.Clear();
                 foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
-                    options.JsonSerializerOptions.Converters.Add(jsonConverter);
+                {
+                    var duplicateConverter = options.JsonSerializerOptions.Converters.Any(x => x.GetType() == jsonConverter.GetType());
+                    if (!duplicateConverter)
+                        options.JsonSerializerOptions.Converters.Add(jsonConverter);
+                }
 
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
                 options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;

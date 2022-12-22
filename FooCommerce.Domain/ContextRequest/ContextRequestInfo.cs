@@ -2,25 +2,30 @@
 
 using System.Globalization;
 using System.Net;
+using System.Text.Json.Serialization;
+
+using FooCommerce.Domain.Jsons.JsonConverters;
 
 namespace FooCommerce.Domain.ContextRequest;
 
 [Serializable]
-public sealed record ContextRequestInfo
+public sealed record ContextRequestInfo : ITimezone
 {
+    [JsonConverter(typeof(JsonIPAddressToStringConverter))]
     public IPAddress? IPAddress { get; set; }
 
     public string? UserAgent { get; set; }
 
+    [JsonConverter(typeof(JsonRegionInfoToStringConverter))]
     public RegionInfo? Country { get; set; }
+    [JsonConverter(typeof(JsonCultureToStringConverter))]
+    public CultureInfo Culture { get; set; }
 
     public string TimezoneId { get; set; }
-    public IDictionary<string, object> Items { get; } = new Dictionary<string, object>();
     public ContextRequestBrowser Browser { get; set; }
     public ContextRequestEngine Engine { get; set; }
 
     public ContextRequestPlatform Platform { get; set; }
-    public CultureInfo Culture { get; set; }
 
     public ContextRequestDevice Device { get; set; }
 }

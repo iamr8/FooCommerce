@@ -19,13 +19,13 @@ public class ServicesModule : Module
         //services.AddScoped<ILocationService, LocationService>();
         services.AddScoped<IAccountService, AccountService>();
 
-        services.AddHttpClient<ITokenService, TokenService>(client =>
-                client.BaseAddress = new Uri("https://0.0.0.0:5061"))
+        services.AddHttpClient<INotificationService, NotificationService>(client =>
+                client.BaseAddress = new Uri("https://localhost:5101"))
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
-
-        services.AddHttpClient<INotificationService, NotificationService>(client =>
-                client.BaseAddress = new Uri("https://0.0.0.0:5051"))
+        
+        services.AddHttpClient<ITokenService, TokenService>(client =>
+                client.BaseAddress = new Uri("https://localhost:5111"))
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
     }

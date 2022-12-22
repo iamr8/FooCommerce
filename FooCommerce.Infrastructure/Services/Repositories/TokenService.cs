@@ -26,7 +26,7 @@ public class TokenService : ITokenService
             var payload = new
             {
                 id = userCommunicationId,
-                interval = (int)interval.TotalSeconds
+                interval = (long)interval.TotalSeconds
             };
             var response = await _httpClient.PostAsync("generate",
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
