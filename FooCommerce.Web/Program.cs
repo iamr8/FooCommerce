@@ -7,7 +7,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.WebHost
     .UseContentRoot(Directory.GetCurrentDirectory())
     .UseKestrel()
-    .UseIISIntegration()
     .UseSetting("detailedErrors", "true")
     .CaptureStartupErrors(true);
 
@@ -21,10 +20,7 @@ builder.Configuration
 builder.Services.ConfigureModules();
 
 // In production, the React files will be served from this directory
-builder.Services.AddSpaStaticFiles(configuration =>
-{
-    configuration.RootPath = "wwwroot/build";
-});
+builder.Services.AddSpaStaticFiles(configuration => configuration.RootPath = "wwwroot/build");
 
 var app = builder.Build();
 
@@ -55,6 +51,6 @@ app.MapControllerRoute(
 
 app.MapRazorPages();
 
-app.MapFallbackToFile("index.html"); ;
+app.MapFallbackToFile("index.html");
 
-app.Run();
+await app.RunAsync();
