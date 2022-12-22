@@ -1,4 +1,7 @@
-﻿using FooCommerce.Services.NotificationAPI.Models;
+﻿using System.Globalization;
+using System.Net;
+using FooCommerce.Domain.ContextRequest;
+using FooCommerce.Services.NotificationAPI.Models;
 using FooCommerce.Services.NotificationAPI.Services;
 
 using Microsoft.AspNetCore.Mvc;
@@ -24,13 +27,26 @@ public class NotificationController : ControllerBase
     {
         try
         {
+            var reqInfo = new ContextRequestInfo
+            {
+                Browser = req.RequestInfo.Browser,
+                Device = req.RequestInfo.Device,
+                IPAddress = IPAddress.Parse(req.RequestInfo.IPAddress),
+                Platform = req.RequestInfo.Platform,
+                UserAgent = req.RequestInfo.UserAgent,
+                Country = new RegionInfo(req.RequestInfo.Country),
+                Culture = CultureInfo.GetCultureInfo(req.RequestInfo.Culture),
+                Engine = req.RequestInfo.Engine,
+                TimezoneId = req.RequestInfo.TimezoneId,
+            };
+            
             await _service.EnqueueAsync(req.Purpose,
                 req.ReceiverName,
                 req.ReceiverCommunications,
                 req.Links,
                 req.Formatters,
                 req.BaseUrl,
-                req.RequestInfo,
+                reqInfo,
                 cancellationToken);
 
             this.Response.StatusCode = StatusCodes.Status200OK;

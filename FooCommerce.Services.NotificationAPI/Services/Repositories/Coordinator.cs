@@ -9,6 +9,7 @@ using FooCommerce.Services.NotificationAPI.Enums;
 using FooCommerce.Services.NotificationAPI.Exceptions;
 using FooCommerce.Services.NotificationAPI.Handlers;
 using FooCommerce.Services.NotificationAPI.Interfaces;
+using FooCommerce.Services.NotificationAPI.Models;
 
 namespace FooCommerce.Services.NotificationAPI.Services.Repositories;
 

@@ -2,13 +2,14 @@
 using FooCommerce.Domain.Enums;
 using FooCommerce.Services.NotificationAPI.Enums;
 using FooCommerce.Services.NotificationAPI.Exceptions;
+using FooCommerce.Services.NotificationAPI.Models;
 
 namespace FooCommerce.Services.NotificationAPI.Services;
 
 public interface ICoordinator
 {
     /// <summary>
-    ///
+    /// 
     /// </summary>
     /// <param name="purpose"></param>
     /// <param name="receiverName"></param>

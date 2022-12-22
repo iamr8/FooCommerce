@@ -7,6 +7,7 @@ using FooCommerce.Services.NotificationAPI.Contracts;
 using FooCommerce.Services.NotificationAPI.Dtos;
 using FooCommerce.Services.NotificationAPI.Enums;
 using FooCommerce.Services.NotificationAPI.Interfaces;
+using FooCommerce.Services.NotificationAPI.Models;
 using FooCommerce.Services.NotificationAPI.Services.Repositories;
 
 using MassTransit;

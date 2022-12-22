@@ -32,7 +32,7 @@ public class TokenController : ControllerBase
             var response = await _requestCodeClient.GetResponse<TokenGenerationStatus>(new
             {
                 IdentifierId = req.Identifier,
-                Seconds = (int)req.Interval.TotalSeconds
+                Seconds = (int)req.Interval
             }, cancellationToken);
 
             this.Response.StatusCode = StatusCodes.Status200OK;

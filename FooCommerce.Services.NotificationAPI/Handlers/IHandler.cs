@@ -1,13 +1,14 @@
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Services.NotificationAPI.Enums;
 using FooCommerce.Services.NotificationAPI.Interfaces;
+using FooCommerce.Services.NotificationAPI.Models;
 
 namespace FooCommerce.Services.NotificationAPI.Handlers;
 
 public interface IHandler
 {
     /// <summary>
-    ///
+    /// 
     /// </summary>
     /// <param name="template"></param>
     /// <param name="purpose"></param>

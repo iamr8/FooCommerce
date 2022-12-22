@@ -2,7 +2,7 @@
 using FooCommerce.Localization;
 using FooCommerce.Services.NotificationAPI.Enums;
 using FooCommerce.Services.NotificationAPI.Interfaces;
-
+using FooCommerce.Services.NotificationAPI.Models;
 using MassTransit;
 
 namespace FooCommerce.Services.NotificationAPI.Handlers;

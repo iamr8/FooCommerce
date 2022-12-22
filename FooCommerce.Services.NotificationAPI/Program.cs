@@ -1,3 +1,4 @@
+using FooCommerce.Domain.Jsons;
 using FooCommerce.EventSource;
 using FooCommerce.Localization.DependencyInjection;
 using FooCommerce.Services.NotificationAPI.Consumers;
@@ -46,6 +47,32 @@ public static class Program
                 .EnableDetailedErrors();
         });
 
+        builder.Services
+            .AddMvc()
+            .AddJsonOptions(options =>
+            {
+                foreach (var jsonConverter in JsonDefaultSettings.Settings.Converters)
+                {
+                    var duplicateConverter = options.JsonSerializerOptions.Converters.Any(x => x.GetType() == jsonConverter.GetType());
+                    if (!duplicateConverter)
+                        options.JsonSerializerOptions.Converters.Add(jsonConverter);
+                }
+
+                options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
+                options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
+                options.JsonSerializerOptions.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = JsonDefaultSettings.Settings.PropertyNameCaseInsensitive;
+                options.JsonSerializerOptions.PropertyNamingPolicy = JsonDefaultSettings.Settings.PropertyNamingPolicy;
+                options.JsonSerializerOptions.WriteIndented = true;
+            });
+        builder.Services.AddControllers();
+
+        builder.Services.AddRouting(options =>
+        {
+            options.LowercaseUrls = true;
+            options.LowercaseQueryStrings = false;
+        });
+
         builder.Services.AddLocalizer();
         builder.Services.AddScoped<EnqueueEmailConsumer>();
         builder.Services.AddScoped<EnqueuePushConsumer>();
@@ -76,8 +103,6 @@ public static class Program
 
         builder.Services.AddScoped<ITemplateService, TemplateService>();
         builder.Services.AddScoped<ICoordinator, Coordinator>();
-
-        builder.Services.AddControllers();
 
         var app = builder.Build();
 
