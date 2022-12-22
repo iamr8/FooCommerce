@@ -11,9 +11,9 @@ public static class BootstrapperConfigurator
     {
         var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
-        services.RegisterModule(new AutoFluentValidationModule());
-        services.RegisterModule(new MvcModule());
-        services.RegisterModule(new ServicesModule());
-        services.RegisterModule(new ProtectionModule());
+        services.AddService<AutoFluentValidationModule>();
+        services.AddService(new MvcModule());
+        services.AddService<ServicesModule>();
+        services.AddService<ProtectionModule>();
     }
 }

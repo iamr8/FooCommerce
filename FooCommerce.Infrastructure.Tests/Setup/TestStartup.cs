@@ -40,10 +40,10 @@ public class TestStartup : IStartup
         services.AddSingleton(_ => MockObjects.GetWebHostEnvironment());
         services.AddSingleton(_ => Configuration);
 
-        services.RegisterModule(new AutoFluentValidationModule());
-        services.RegisterModule(new MvcModule());
-        services.RegisterModule(new ServicesModule());
-        services.RegisterModule(new ProtectionModule());
+        services.AddService<AutoFluentValidationModule>();
+        services.AddService(new MvcModule());
+        services.AddService<ServicesModule>();
+        services.AddService<ProtectionModule>();
 
         return services.BuildServiceProvider();
     }

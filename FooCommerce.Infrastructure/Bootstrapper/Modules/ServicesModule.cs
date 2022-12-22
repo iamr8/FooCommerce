@@ -20,12 +20,12 @@ public class ServicesModule : Module
         services.AddScoped<IAccountService, AccountService>();
 
         services.AddHttpClient<ITokenService, TokenService>(client =>
-                client.BaseAddress = new Uri("http://0.0.0.0:50010"))
+                client.BaseAddress = new Uri("https://0.0.0.0:5061"))
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
 
         services.AddHttpClient<INotificationService, NotificationService>(client =>
-                client.BaseAddress = new Uri("http://0.0.0.0:50020"))
+                client.BaseAddress = new Uri("https://0.0.0.0:5051"))
             .AddPolicyHandler(GetRetryPolicy())
             .AddPolicyHandler(GetCircuitBreakerPolicy());
     }

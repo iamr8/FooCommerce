@@ -1,6 +1,7 @@
 using FooCommerce.EventSource;
 using FooCommerce.Localization.DependencyInjection;
 using FooCommerce.Services.NotificationAPI.Consumers;
+using FooCommerce.Services.NotificationAPI.Contracts;
 using FooCommerce.Services.NotificationAPI.DbProvider;
 using FooCommerce.Services.NotificationAPI.Handlers;
 using FooCommerce.Services.NotificationAPI.Interfaces;
@@ -54,8 +55,18 @@ public static class Program
         {
             cfg.ConfigureBus(config =>
             {
-                var assemblies = new[] { typeof(Program).GetType().Assembly };
-                config.BusConfig = configurator => configurator.AddConsumers(assemblies);
+                config.TransportConfig = (_, context) =>
+                {
+                    context.Message<EnqueueEmail>(c => c.SetEntityName("notification"));
+                    context.Message<EnqueueSms>(c => c.SetEntityName("notification"));
+                    context.Message<EnqueuePush>(c => c.SetEntityName("notification"));
+                };
+                config.BusConfig = configurator =>
+                {
+                    configurator.AddConsumer<EnqueueEmailConsumer>();
+                    configurator.AddConsumer<EnqueueSmsConsumer>();
+                    configurator.AddConsumer<EnqueuePushConsumer>();
+                };
             });
         });
 
@@ -65,6 +76,8 @@ public static class Program
 
         builder.Services.AddScoped<ITemplateService, TemplateService>();
         builder.Services.AddScoped<ICoordinator, Coordinator>();
+
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 

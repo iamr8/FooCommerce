@@ -1,5 +1,4 @@
-﻿using FooCommerce.Domain.Helpers;
-using FooCommerce.EventSource;
+﻿using FooCommerce.EventSource;
 using FooCommerce.Services.TokenAPI.Sagas;
 using FooCommerce.Tests;
 
@@ -47,9 +46,6 @@ public class FixturePerTestClass : IAsyncLifetime
                     configurator
                         .AddSagaStateMachine<TokenStateMachine, TokenState>()
                         .InMemoryRepository();
-
-                    var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies().ToArray();
-                    config.BusConfig = configurator => configurator.AddConsumers(assemblies);
                 };
             });
         });

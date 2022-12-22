@@ -29,10 +29,10 @@ var host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.RegisterModule(new BusModule());
-        services.RegisterModule(new CacheProviderModule());
-        services.RegisterModule(new ServicesModule());
-        services.RegisterModule(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
+        services.AddService<BusModule>();
+        services.AddService<CacheProviderModule>();
+        services.AddService<ServicesModule>();
+        services.AddService(new AppDatabaseProviderModule(connectionString, optionsBuilder =>
         {
             optionsBuilder.UseSqlServer(connectionString!,
                 config =>

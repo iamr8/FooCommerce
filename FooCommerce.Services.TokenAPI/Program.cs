@@ -1,4 +1,3 @@
-using FooCommerce.Domain.Helpers;
 using FooCommerce.EventSource;
 using FooCommerce.Services.TokenAPI.Sagas;
 
@@ -23,12 +22,10 @@ public static class Program
                     configurator
                         .AddSagaStateMachine<TokenStateMachine, TokenState>()
                         .InMemoryRepository();
-
-                    var assemblies = AppDomain.CurrentDomain.GetExecutingAssemblies().ToArray();
-                    config.BusConfig = configurator => configurator.AddConsumers(assemblies);
                 };
             });
         });
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 
