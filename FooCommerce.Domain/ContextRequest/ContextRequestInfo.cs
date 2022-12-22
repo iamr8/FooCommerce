@@ -5,7 +5,8 @@ using System.Net;
 
 namespace FooCommerce.Domain.ContextRequest;
 
-public record ContextRequestInfo : IContextRequestInfo
+[Serializable]
+public sealed record ContextRequestInfo
 {
     public IPAddress? IPAddress { get; set; }
 
@@ -19,6 +20,7 @@ public record ContextRequestInfo : IContextRequestInfo
     public ContextRequestEngine Engine { get; set; }
 
     public ContextRequestPlatform Platform { get; set; }
+    public CultureInfo Culture { get; set; }
 
     public ContextRequestDevice Device { get; set; }
 }

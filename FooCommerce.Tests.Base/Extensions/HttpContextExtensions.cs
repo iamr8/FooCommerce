@@ -9,8 +9,6 @@ using FooCommerce.Tests.Fakes.Models;
 using FooCommerce.Tests.Fakes.Providers;
 using FooCommerce.Tests.Helpers;
 
-using MassTransit.Internals;
-
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -189,13 +187,13 @@ public static class HttpContextExtensions
 
     public static IHtmlGenerator GetHtmlGenerator<TModel>(this TestModelMetadataProvider metadataProvider, TModel input, Expression<Func<TModel>> containerAccessor, Expression<Func<TModel, object>> modelAccessor, out ModelExpression modelExpression) where TModel : class
     {
-        var containerVar = containerAccessor.GetMemberExpression().Member.Name;
+        var containerVar = ((MemberExpression)containerAccessor.Body).Member.Name;
         var containerType = containerAccessor.GetType();
 
         var containerMetadata = metadataProvider.GetMetadataForType(containerType);
         var containerExplorer = metadataProvider.GetModelExplorerForType(containerType, input);
 
-        var memberExpression = modelAccessor.GetMemberExpression();
+        var memberExpression = (MemberExpression)modelAccessor.Body;
         var member = memberExpression.Member;
         var propertyInfo = (PropertyInfo)member;
 

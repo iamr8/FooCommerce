@@ -36,7 +36,7 @@ public static class MockObjects
     public static IWebHostEnvironment GetWebHostEnvironment()
     {
         var mock = new Mock<IWebHostEnvironment>();
-        mock.SetupGet(x => x.EnvironmentName).Returns(Environments.Staging);
+        mock.SetupGet(x => x.EnvironmentName).Returns(Environments.Development);
         return mock.Object;
     }
 

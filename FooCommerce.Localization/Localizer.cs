@@ -1,6 +1,4 @@
-﻿using System.Data;
-
-using FooCommerce.Localization.Attributes;
+﻿using FooCommerce.Localization.Attributes;
 using FooCommerce.Localization.Helpers;
 using FooCommerce.Localization.Models;
 
@@ -11,12 +9,10 @@ namespace FooCommerce.Localization;
 public class Localizer : ILocalizer
 {
     private readonly IOptions<LocalizerOptions> _options;
-    private readonly IDbConnection _dbConnection;
 
-    public Localizer(IOptions<LocalizerOptions> options, IDbConnection dbConnection)
+    public Localizer(IOptions<LocalizerOptions> options)
     {
         _options = options;
-        _dbConnection = dbConnection;
     }
 
     public static LocalizerDictionary Dictionary { get; set; } = null!;
@@ -55,6 +51,6 @@ public class Localizer : ILocalizer
 
     public async Task RefreshAsync(CancellationToken cancellationToken = default)
     {
-        Dictionary = await _options.Value.Provider(_dbConnection);
+        Dictionary = await _options.Value.Provider();
     }
 }

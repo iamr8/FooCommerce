@@ -12,7 +12,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
     <ProjectReference Include="..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
   </ItemGroup>
 

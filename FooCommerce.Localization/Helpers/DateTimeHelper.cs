@@ -33,7 +33,7 @@ public static class DateTimeHelper
     /// <returns></returns>
     /// <exception cref="ArgumentNullException"></exception>
     /// <exception cref="ArgumentException"></exception>
-    public static DateTime ToLocal(this DateTime utcDateTime, IContextRequestInfo contextRequestInfo)
+    public static DateTime ToLocal(this DateTime utcDateTime, ContextRequestInfo contextRequestInfo)
     {
         if (contextRequestInfo == null)
             throw new ArgumentNullException(nameof(contextRequestInfo));
@@ -45,7 +45,7 @@ public static class DateTimeHelper
         return result;
     }
 
-    public static DateTimeZone? GetTimezone(this IContextRequestInfo requestInfo)
+    public static DateTimeZone? GetTimezone(this ContextRequestInfo requestInfo)
     {
         if (!string.IsNullOrEmpty(requestInfo.TimezoneId))
             return DateTimeZoneProviders.Tzdb[requestInfo.TimezoneId];
@@ -61,7 +61,7 @@ public static class DateTimeHelper
             .Select(x => x.ZoneId)
             .ToList();
         if (zoneIds.Any())
-            return DateTimeZoneProviders.Tzdb[zoneIds.First()];
+            return DateTimeZoneProviders.Tzdb[zoneIds[0]];
 
         return null;
     }

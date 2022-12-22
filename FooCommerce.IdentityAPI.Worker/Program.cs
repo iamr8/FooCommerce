@@ -3,10 +3,20 @@ using FooCommerce.IdentityAPI.Worker;
 using FooCommerce.IdentityAPI.Worker.Modules;
 
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging.Configuration;
 
 var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
 var host = Host.CreateDefaultBuilder(args)
+    .ConfigureLogging(loggerFactory =>
+    {
+        loggerFactory
+            .AddConsole()
+            .AddEventLog()
+            .AddEventSourceLogger()
+            .AddDebug()
+            .AddConfiguration();
+    })
     .ConfigureAppConfiguration((hostingContext, config) =>
     {
         config

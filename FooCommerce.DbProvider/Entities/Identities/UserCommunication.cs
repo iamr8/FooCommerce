@@ -9,7 +9,7 @@ public record UserCommunication
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public CommunicationType Type { get; init; }
+    public CommType Type { get; init; }
     public string Value { get; init; }
     public bool IsVerified { get; init; }
     public bool IsOpenId { get; init; }

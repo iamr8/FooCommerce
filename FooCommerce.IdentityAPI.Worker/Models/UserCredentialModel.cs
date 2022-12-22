@@ -1,4 +1,4 @@
-﻿using FooCommerce.IdentityAPI.Enums;
+﻿using FooCommerce.IdentityAPI.Worker.Enums;
 
 namespace FooCommerce.IdentityAPI.Worker.Models;
 

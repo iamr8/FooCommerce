@@ -1,14 +1,10 @@
 ﻿using System.Globalization;
 using System.Net;
-using System.Text.Json;
 
 using FooCommerce.Domain.ContextRequest;
 
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 
 using Wangkanai.Detection;
@@ -25,9 +21,9 @@ public static class ContextRequestHelper
     private static IPAddress? _ipAddressRemoteConnection;
     private static IPAddress? _ipAddressLocalConnection;
 
-    public static IContextRequestInfo GetRequestInfo(this HttpContext context) => GetInstance(context);
+    public static ContextRequestInfo GetRequestInfo(this HttpContext context) => GetInstance(context);
 
-    public static IContextRequestInfo GetInstance(HttpContext httpContext)
+    public static ContextRequestInfo GetInstance(HttpContext httpContext)
     {
         var instance = new ContextRequestInfo
         {
@@ -81,39 +77,6 @@ public static class ContextRequestHelper
     // this._httpContext = httpContext;
     // }
 
-    /// <summary>
-    /// Returns endpoint url of the web app.
-    /// </summary>
-    /// <exception cref="ArgumentNullException"></exception>
-    /// <returns></returns>
-    public static string GetWebsiteUrl(this HttpContext httpContext)
-    {
-        if (httpContext == null) throw new ArgumentNullException(nameof(httpContext));
-
-        var scheme = httpContext.Request.Scheme;
-        var webEnvironment = httpContext.RequestServices.GetService<IWebHostEnvironment>();
-        if (webEnvironment.IsDevelopment())
-            return $"{scheme}://{httpContext.Request.Host}{httpContext.Request.PathBase}";
-
-        if (httpContext.Request.Headers.TryGetValue("CF-Visitor", out var cloudFlareVisitor))
-        {
-            scheme = JsonSerializer.Deserialize<dynamic>(cloudFlareVisitor)!.scheme;
-        }
-        else
-        {
-            if (httpContext.Request.Headers.TryGetValue("X-Forwarded-Proto", out var xForwarderProto))
-            {
-                scheme = xForwarderProto;
-            }
-        }
-
-        var hasWebsiteUrl = httpContext.Items.TryGetValue("WebsiteURL", out var websiteUrl);
-        if (!hasWebsiteUrl)
-            throw new NullReferenceException("Unable to get Website url from HttpContext.");
-
-        return $"{scheme}://{(webEnvironment.IsProduction() ? "www." : "")}{websiteUrl}/";
-    }
-
     private static RegionInfo GetCountry(this HttpContext httpContext)
     {
         if (!httpContext.Request.Headers.TryGetValue("CF-IPCountry", out var countryCode))
@@ -123,27 +86,6 @@ public static class ContextRequestHelper
             return null;
 
         return new RegionInfo(countryCode!);
-    }
-
-    /// <summary>
-    /// Adds website endpoint to <see cref="HttpContext"/> for future uses.
-    /// </summary>
-    /// <remarks>This code must be appended right after <code>app.UseRouting()</code> in <c>Program.cs</c></remarks>
-    /// <param name="app"></param>
-    /// <exception cref="ArgumentNullException"></exception>
-    public static void UseWebsiteUrl(ref WebApplication app)
-    {
-        if (app == null) throw new ArgumentNullException(nameof(app));
-        app.Use(async (context, next) =>
-        {
-            var endpoint = context.GetEndpoint();
-            if (endpoint != null)
-            {
-                context.Items.Add("WebsiteURL", endpoint.Metadata);
-            }
-
-            await next();
-        });
     }
 
     private static string? GetUserAgent(this HttpContext httpContext)
@@ -166,7 +108,7 @@ public static class ContextRequestHelper
             _ipAddressRemoteConnection = httpContext.Connection.RemoteIpAddress;
 
         if (httpContext.Connection.LocalIpAddress != null && !IPAddress.IsLoopback(httpContext.Connection.LocalIpAddress))
-            _ipAddressLocalConnection = httpContext.Connection.RemoteIpAddress;
+            _ipAddressLocalConnection = httpContext.Connection.LocalIpAddress;
 
         if (_ipAddressCloudflare != null)
             return _ipAddressCloudflare;

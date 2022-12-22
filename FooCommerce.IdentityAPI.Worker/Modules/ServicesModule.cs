@@ -8,9 +8,8 @@ public class ServicesModule : Module
 {
     public void Load(IServiceCollection services)
     {
-        services.AddScoped<IUserService, UserService>();
-        services.AddScoped<IVerificationService, VerificationService>();
-        services.AddScoped<ICommunicationService, CommunicationService>();
-        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IUserManagerService, UserManager>();
+        services.AddScoped<ICommunicationsManagerService, CommunicationsManager>();
+        services.AddSingleton<ITokenStore, TokenStore>();
     }
 }

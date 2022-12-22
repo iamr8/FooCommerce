@@ -4,7 +4,6 @@ using FooCommerce.Tests;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -42,19 +41,9 @@ public class TestStartup : IStartup
         services.AddSingleton(_ => Configuration);
 
         services.RegisterModule(new AutoFluentValidationModule());
-        services.RegisterModule(new LocalizationModule());
-        //services.RegisterModule(new BusModule());
-        services.RegisterModule(new CacheProviderModule());
-        services.RegisterModule(new AppDatabaseProviderModule(ConnectionString, optionsBuilder =>
-        {
-            optionsBuilder.UseSqlServer(ConnectionString!,
-                config =>
-                {
-                    config.EnableRetryOnFailure(3);
-                    config.UseNetTopologySuite();
-                    config.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery);
-                });
-        }));
+        services.RegisterModule(new MvcModule());
+        services.RegisterModule(new ServicesModule());
+        services.RegisterModule(new ProtectionModule());
 
         return services.BuildServiceProvider();
     }

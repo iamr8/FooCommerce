@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 	  <EnableNETAnalyzers>true</EnableNETAnalyzers>
 
@@ -10,13 +10,7 @@
 
   <ItemGroup>
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-		<PackageReference Include="Xunit.Priority" Version="1.1.6" />
-		<PackageReference Include="MartinCostello.Logging.XUnit" Version="0.3.0" />
-		<PackageReference Include="MassTransit" Version="8.0.6" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" Version="6.0.0" />
-    <PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="Moq" Version="4.18.3" />
     <PackageReference Include="xunit.abstractions" Version="2.0.3" />
 		<PackageReference Include="Respawn" Version="5.0.1" />
 	</ItemGroup>
@@ -24,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
     <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
+    <ProjectReference Include="..\FooCommerce.Localization\FooCommerce.Localization.csproj" />
   </ItemGroup>
 
 </Project>

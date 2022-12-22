@@ -1,10 +1,10 @@
-﻿using FooCommerce.DbProvider.Entities.Listings.Dtos;
+﻿//using FooCommerce.DbProvider.Entities.Listings.Dtos;
 
-namespace FooCommerce.Infrastructure.Services;
+//namespace FooCommerce.Infrastructure.Services;
 
-public interface ILocationService
-{
-    ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default);
+//public interface ILocationService
+//{
+//    ValueTask<IEnumerable<LocationModel>> GetLocationsAsync(CancellationToken cancellationToken = default);
 
-    Task<bool> IsCountryValidAsync(uint countryId, CancellationToken cancellationToken = default);
-}
+//    Task<bool> IsCountryValidAsync(uint countryId, CancellationToken cancellationToken = default);
+//}

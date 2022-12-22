@@ -4,5 +4,5 @@ namespace FooCommerce.Localization.Models;
 
 public record LocalizerOptions
 {
-    public Func<IDbConnection, Task<LocalizerDictionary>> Provider { get; set; }
+    public Func<Task<LocalizerDictionary>> Provider { get; set; }
 }

@@ -1,10 +1,9 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.NotificationAPI.Models;
+namespace FooCommerce.Services.NotificationAPI.Models;
 
 public record NotificationReceiverProvider
 {
-    public Guid UserId { get; init; }
     public string Name { get; init; }
-    public IDictionary<CommunicationType, string> Communications { get; init; }
+    public IDictionary<CommType, string> Communications { get; init; }
 }

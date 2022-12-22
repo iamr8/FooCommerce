@@ -1,13 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
 	<ItemGroup>
-    <PackageReference Include="MassTransit" Version="8.0.6" />
+		<PackageReference Include="MassTransit" Version="8.0.9">
+			<TreatAsUsed>true</TreatAsUsed>
+		</PackageReference>
   </ItemGroup>
 
   <ItemGroup>

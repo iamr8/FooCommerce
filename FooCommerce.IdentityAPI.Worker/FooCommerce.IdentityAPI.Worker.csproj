@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
@@ -10,18 +10,30 @@
 	  <ServerGarbageCollection>true</ServerGarbageCollection>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Consumers\TokenExpiredConsumer.cs" />
+    <Compile Remove="Consumers\TokenGeneratedConsumer.cs" />
+    <Compile Remove="Consumers\TokenInvalidatedConsumer.cs" />
+    <Compile Remove="Consumers\TokenNotValidatedConsumer.cs" />
+    <Compile Remove="Consumers\TokenValidatedConsumer.cs" />
+  </ItemGroup>
+
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.1" />
-		<PackageReference Include="MassTransit.Analyzers" Version="8.0.6" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0-preview.7.22376.2" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.0-preview.7.22376.2" />
+		<PackageReference Include="FluentValidation" Version="11.4.0" />
+		<PackageReference Include="libphonenumber-csharp" Version="8.13.2" />
+		<PackageReference Include="MassTransit" Version="8.0.9" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
+		<PackageReference Include="MassTransit.Analyzers" Version="8.0.9" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.1" />
 		<PackageReference Include="Dapper" Version="2.0.123" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\FooCommerce.Caching\FooCommerce.Caching.csproj" />
+		<ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
 		<ProjectReference Include="..\FooCommerce.DbProvider\FooCommerce.DbProvider.csproj" />
-		<ProjectReference Include="..\FooCommerce.IdentityAPI\FooCommerce.IdentityAPI.csproj" />
+		<ProjectReference Include="..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Respawn;
+using Respawn.Graph;
 
 namespace FooCommerce.Tests;
 
@@ -8,5 +9,6 @@ public class DatabaseCheckpoint
     {
         WithReseed = true,
         CheckTemporalTables = true,
+        TablesToIgnore = new[] { new Table("__EFMigrationsHistory"), new Table("SchemaVersions") }
     };
 }

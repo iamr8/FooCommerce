@@ -1,10 +1,9 @@
 ﻿using FooCommerce.Common.Protection;
 using FooCommerce.DbProvider;
 using FooCommerce.Domain.Enums;
-using FooCommerce.IdentityAPI.Contracts.FaultedResponses;
-using FooCommerce.IdentityAPI.Contracts.FaultedResponses.Enums;
-using FooCommerce.IdentityAPI.Contracts.Requests;
-using FooCommerce.IdentityAPI.Contracts.Responses;
+using FooCommerce.IdentityAPI.Worker.Contracts;
+using FooCommerce.IdentityAPI.Worker.Contracts.Enums;
+using FooCommerce.IdentityAPI.Worker.Enums;
 using FooCommerce.IdentityAPI.Worker.Services.Repositories;
 
 using MassTransit;
@@ -25,8 +24,8 @@ public class GetUserClaimsConsumer
     {
         using var dbConnection = _dbConnectionFactory.CreateConnection();
 
-        var usernameType = context.Message.Username.Contains('@') ? CommunicationType.Email_Message : CommunicationType.Mobile_Sms;
-        var userCredentialModel = await UserService.GetUserModelAsync(usernameType, context.Message.Username, dbConnection, context.CancellationToken);
+        var usernameType = context.Message.Username.Contains('@') ? CommType.Email : CommType.Sms;
+        var userCredentialModel = await UserManager.GetUserModelAsync(usernameType, context.Message.Username, dbConnection);
         if (userCredentialModel == null)
         {
             await context.RespondAsync<UserClaimFindingFaulted>(new
@@ -36,7 +35,7 @@ public class GetUserClaimsConsumer
             return;
         }
 
-        var (passwordMatched, passwordNeedsUpgrade) = DataProtector.Check(userCredentialModel.Hash, context.Message.Password, 32, 10_000);
+        var (passwordMatched, _) = DataProtector.Check(userCredentialModel.Hash, context.Message.Password, 32, 10_000);
         if (!passwordMatched)
         {
             await context.RespondAsync<UserClaimFindingFaulted>(new
@@ -46,7 +45,7 @@ public class GetUserClaimsConsumer
             return;
         }
 
-        var communicationModel = await CommunicationService.GetModelByIdAsync(userCredentialModel.CommunicationId, dbConnection, context.CancellationToken);
+        var communicationModel = await CommunicationsManager.GetModelByIdAsync(userCredentialModel.CommunicationId, dbConnection);
         if (!communicationModel.IsVerified)
         {
             await context.RespondAsync<UserClaimFindingFaulted>(new
@@ -57,7 +56,7 @@ public class GetUserClaimsConsumer
             return;
         }
 
-        var informationModels = await UserService.GetUserInformationAsync(userCredentialModel.UserId, dbConnection, context.CancellationToken);
+        var informationModels = await UserManager.GetUserInformationAsync(userCredentialModel.UserId, dbConnection);
         if (informationModels == null || !informationModels.Any())
         {
             await context.RespondAsync<UserClaimFindingFaulted>(new
@@ -67,7 +66,7 @@ public class GetUserClaimsConsumer
             return;
         }
 
-        var settingModels = await UserService.GetUserSettingsAsync(userCredentialModel.UserId, dbConnection, context.CancellationToken);
+        var settingModels = await UserManager.GetUserSettingsAsync(userCredentialModel.UserId, dbConnection);
         if (settingModels == null || !settingModels.Any())
         {
             await context.RespondAsync<UserClaimFindingFaulted>(new
@@ -77,7 +76,7 @@ public class GetUserClaimsConsumer
             return;
         }
 
-        var claimsPrincipal = UserService.GetClaimsPrincipal(context.Message.Username, userCredentialModel, communicationModel, informationModels, settingModels);
+        var claimsPrincipal = UserManager.GetClaimsPrincipal(context.Message.Username, userCredentialModel, communicationModel, informationModels, settingModels);
 
         await context.RespondAsync<UserClaimFound>(new
         {

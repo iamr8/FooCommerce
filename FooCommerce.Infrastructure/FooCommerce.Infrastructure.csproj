@@ -1,36 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+	  <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="6.0.8">
-		  <TreatAsUsed>true</TreatAsUsed>
-		</PackageReference>
 		<PackageReference Include="Dapper" Version="2.0.123" />
-		<PackageReference Include="FluentValidation.AspNetCore" Version="11.2.1" />
+		<PackageReference Include="FluentValidation.AspNetCore" Version="11.2.2" />
+		<PackageReference Include="Microsoft.Extensions.Http.Polly" Version="7.0.1" />
+		<PackageReference Include="Polly.Contrib.WaitAndRetry" Version="1.1.1" />
 	
 	</ItemGroup>
 
 	<!-- Internal dependencies-->
 	<ItemGroup>
-		<ProjectReference Include="..\FooCommerce.Caching\FooCommerce.Caching.csproj" />
-		<ProjectReference Include="..\FooCommerce.DbProvider\FooCommerce.DbProvider.csproj" />
-		<ProjectReference Include="..\FooCommerce.AspNetCoreExtensions\FooCommerce.AspNetCoreExtensions.csproj" />
-		<ProjectReference Include="..\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
+		<ProjectReference Include="..\FooCommerce.AspNetCoreExtensions\FooCommerce.AspNetCoreExtensions.csproj">
+		  <TreatAsUsed>true</TreatAsUsed>
+		</ProjectReference>
 		<ProjectReference Include="..\FooCommerce.Localization.AspNetCoreExtensions\FooCommerce.Localization.AspNetCoreExtensions.csproj" />
-		<ProjectReference Include="..\FooCommerce.Localization\FooCommerce.Localization.csproj" />
 		<ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
-		<ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
+		<ProjectReference Include="..\FooCommerce.Localization.DependencyInjection\FooCommerce.Localization.DependencyInjection.csproj" />
 	</ItemGroup>
 
 	<!-- Workers -->
-	<ItemGroup>
-		<ProjectReference Include="..\FooCommerce.IdentityAPI\FooCommerce.IdentityAPI.csproj" />
-		<ProjectReference Include="..\FooCommerce.NotificationAPI\FooCommerce.NotificationAPI.csproj" />
-	</ItemGroup>
 
 </Project>

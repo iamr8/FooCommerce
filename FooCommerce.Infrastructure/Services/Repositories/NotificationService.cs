@@ -1,47 +1,59 @@
-﻿using MassTransit;
+﻿using System.Net.Mime;
+using System.Text;
+using System.Text.Json;
+
+using FooCommerce.AspNetCoreExtensions.Helpers;
 
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace FooCommerce.Infrastructure.Services.Repositories;
 
 public class NotificationService : INotificationService
 {
-    private readonly IBus _bus;
+    private readonly HttpClient _httpClient;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public NotificationService(IHttpContextAccessor httpContextAccessor, IBus bus)
+    private readonly ILogger<NotificationService> _logger;
+
+    public NotificationService(HttpClient httpClient, IHttpContextAccessor httpContextAccessor, ILogger<NotificationService> logger)
     {
+        _httpClient = httpClient;
         _httpContextAccessor = httpContextAccessor;
-        _bus = bus;
+        _logger = logger;
     }
 
-    //public async Task EnqueueAsync(NotificationAction action, NotificationReceiverStrategy strategy, Guid id, CancellationToken cancellationToken = default)
-    //{
-    //    IEnumerable<UserCommunicationModel> communicationModels;
-    //    switch (strategy)
-    //    {
-    //        case NotificationReceiverStrategy.ByUserCommunicationId:
-    //            communicationModels = await _communicationService.GetModelsByUserIdAsync(id, cancellationToken);
-    //            break;
+    public async Task EnqueueAsync(string purpose, Guid receiverUserId)
+    {
+        if (purpose == null)
+            throw new ArgumentNullException(nameof(purpose));
 
-    //        case NotificationReceiverStrategy.ByUserId:
-    //            communicationModels = await _communicationService.GetModelsByUserIdAsync(id, cancellationToken);
-    //            break;
+        // TODO: fetch receiver information from userId
 
-    //        default:
-    //            throw new ArgumentOutOfRangeException(nameof(strategy), strategy, null);
-    //    }
-    //    var communicationModel = await _communicationService.GetModelByIdAsync(userCommunicationId, cancellationToken);
-    //    await _notificationService.EnqueueAsync(new NotificationOptions
-    //    {
-    //        Action = action,
-    //        // Receiver = new NotificationReceiverProvider(NotificationReceiverStrategy.ByUserCommunicationId, result.CommunicationId!.Value),
-    //        Receiver = new NotificationReceiverProvider
-    //        {
-    //            UserId = communicationModel.
-    //        },
-    //        Content = Enumerable.Range(0, 1).Select(_ => new NotificationFormatter("authToken", result.Token)),
-    //        RequestInfo = (ContextRequestInfo)_httpContextAccessor.HttpContext.GetRequestInfo()
-    //    }, cancellationToken);
-    //}
+        var requestContext = this._httpContextAccessor.HttpContext.GetRequestInfo();
+        try
+        {
+            var payload = new
+            {
+                purpose = purpose, // "VERIFICATION_REQUEST_EMAIL",
+                receiverName = "Arash",
+                receiverCommunications = new Dictionary<string, string>
+               {
+                   {"EMAIL", "arash.shabbeh@gmail.com"},
+                   {"SMS", "+905317251106"},
+                   {"PUSH", "12312312312"}
+               },
+                baseUrl = "http://localhost:5000",
+                requestInfo = requestContext,
+            };
+            var response = await _httpClient.PostAsync("send",
+                new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, MediaTypeNames.Application.Json));
+            response.EnsureSuccessStatusCode();
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
 }

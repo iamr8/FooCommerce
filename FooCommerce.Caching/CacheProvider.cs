@@ -13,7 +13,7 @@ public class CacheProvider : ICacheProvider
         _cache = cache;
     }
 
-    public static readonly TimeSpan ExpirationFallback = TimeSpan.FromMinutes(30);
+    private static readonly TimeSpan ExpirationFallback = TimeSpan.FromMinutes(30);
 
     private static async Task<TModel> ParseAsync<TModel>(string key, object value, CacheOptions options = null, CancellationToken cancellationToken = default) where TModel : class
     {
@@ -95,19 +95,17 @@ public class CacheProvider : ICacheProvider
         var hasCache = await _cache.ExistsAsync(key, cancellationToken);
         if (!hasCache)
         {
-            var cached = await SetAsync(key, factory, options, cancellationToken);
-            return cached;
+            return await SetAsync(key, factory, options, cancellationToken);
         }
         else
         {
             var _value = await _cache.GetAsync<TModel>(key, cancellationToken);
-            if (!_value.HasValue || _value.IsNull)
-            {
-                await _cache.RemoveAsync(key, cancellationToken);
-                return await GetOrCreateAsync(key, factory, options, cancellationToken);
-            }
+            if (_value.HasValue && !_value.IsNull)
+                return await ParseAsync<TModel>(key, _value.Value, cancellationToken: cancellationToken);
+            
+            await _cache.RemoveAsync(key, cancellationToken);
+            return await GetOrCreateAsync(key, factory, options, cancellationToken);
 
-            return await ParseAsync<TModel>(key, _value.Value, cancellationToken: cancellationToken);
         }
     }
 }

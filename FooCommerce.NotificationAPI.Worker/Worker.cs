@@ -2,7 +2,7 @@
 
 namespace FooCommerce.NotificationAPI.Worker;
 
-public class Worker : IHostedService
+public class Worker : IHostedService, IAsyncDisposable
 {
     private readonly ILogger<Worker> _logger;
     private readonly IBusControl _bus;
@@ -23,5 +23,11 @@ public class Worker : IHostedService
     {
         _logger.LogInformation($"Stopping the {this.GetType().Assembly.FullName} bus...");
         return _bus.StopAsync(cancellationToken);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _bus.StopAsync();
+        GC.SuppressFinalize(this);
     }
 }

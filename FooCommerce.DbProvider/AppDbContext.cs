@@ -1,7 +1,6 @@
 ﻿using FooCommerce.DbProvider.Entities.Configurations;
 using FooCommerce.DbProvider.Entities.Identities;
 using FooCommerce.DbProvider.Entities.Listings.Entities;
-using FooCommerce.DbProvider.Entities.Notifications;
 using FooCommerce.DbProvider.Entities.Products;
 using FooCommerce.DbProvider.Entities.Shoppings;
 using FooCommerce.DbProvider.Entities.Subscriptions;
@@ -22,14 +21,6 @@ public class AppDbContext : DbContext
 
     public static bool TestMode { get; set; }
 
-    #region Notification
-
-    public virtual DbSet<Notification> Notifications { get; set; }
-    public virtual DbSet<NotificationTemplate> NotificationTemplates { get; set; }
-    public virtual DbSet<UserNotification> UserNotifications { get; set; }
-
-    #endregion Notification
-
     #region Identity
 
     public virtual DbSet<User> Users { get; set; }
@@ -40,7 +31,6 @@ public class AppDbContext : DbContext
     public virtual DbSet<UserSetting> UserSettings { get; set; }
     public virtual DbSet<UserLockout> UserLockouts { get; set; }
     public virtual DbSet<UserInformation> UserInformation { get; set; }
-    public virtual DbSet<AuthToken> AuthTokens { get; set; }
 
     #endregion Identity
 

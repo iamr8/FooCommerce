@@ -35,7 +35,7 @@ public class LocalizerValueCollection : SortedList<CultureInfo, string>
     {
         get
         {
-            if (this.TryGetValue(CultureInfo.CurrentCulture, out var s))
+            if (this.TryGetValue(culture, out var s))
             {
                 return s;
             }

@@ -1,4 +1,5 @@
 ﻿using FooCommerce.Common.Configurations;
+using FooCommerce.Domain.Jsons;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinders;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;

@@ -4,14 +4,19 @@ using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost
+    .UseContentRoot(Directory.GetCurrentDirectory())
+    .UseKestrel()
+    .UseIISIntegration()
+    .UseSetting("detailedErrors", "true")
+    .CaptureStartupErrors(true);
+
 builder.Configuration
     .SetBasePath(AppContext.BaseDirectory)
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
     .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
     .AddEnvironmentVariables()
     .Build();
-
-var ff = Environment.GetEnvironmentVariables();
 
 builder.Services.ConfigureModules();
 
@@ -36,7 +41,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-ContextRequestHelper.UseWebsiteUrl(ref app);
+HttpContextHelper.UseWebsiteUrl(ref app);
 
 app.UseAuthorization();
 
