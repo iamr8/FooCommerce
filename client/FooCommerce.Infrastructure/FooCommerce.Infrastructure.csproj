@@ -17,12 +17,9 @@
 
 	<!-- Internal dependencies-->
 	<ItemGroup>
-		<ProjectReference Include="..\FooCommerce.AspNetCoreExtensions\FooCommerce.AspNetCoreExtensions.csproj">
-		  <TreatAsUsed>true</TreatAsUsed>
-		</ProjectReference>
+		<ProjectReference Include="..\..\core\FooCommerce.Common\FooCommerce.Common.csproj" />
+		<ProjectReference Include="..\..\core\FooCommerce.Localization.DependencyInjection\FooCommerce.Localization.DependencyInjection.csproj" />
 		<ProjectReference Include="..\FooCommerce.Localization.AspNetCoreExtensions\FooCommerce.Localization.AspNetCoreExtensions.csproj" />
-		<ProjectReference Include="..\FooCommerce.Common\FooCommerce.Common.csproj" />
-		<ProjectReference Include="..\FooCommerce.Localization.DependencyInjection\FooCommerce.Localization.DependencyInjection.csproj" />
 	</ItemGroup>
 
 	<!-- Workers -->
