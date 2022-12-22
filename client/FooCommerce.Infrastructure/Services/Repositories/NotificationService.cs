@@ -2,7 +2,7 @@
 using System.Text;
 using System.Text.Json;
 
-using FooCommerce.AspNetCoreExtensions.Helpers;
+using FooCommerce.Infrastructure.Helpers;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;

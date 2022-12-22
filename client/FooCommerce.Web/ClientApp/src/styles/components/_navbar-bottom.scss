@@ -5,8 +5,8 @@
             background-color: var(--bs-gray-100);
             border-top: 1px solid var(--bs-gray-200);
             transition: padding-bottom 0.1s ease-in-out;
-            padding-bottom: var(--safe-area-inset-bottom);
-            position: fixed;
+            padding-bottom: var(--safe-area-inset-bottom) !important;
+            position: fixed !important;
             bottom: 0;
             left: 0;
             width: 100%;

@@ -1,6 +1,6 @@
-using FooCommerce.AspNetCoreExtensions.Helpers;
 using FooCommerce.Infrastructure.Bootstrapper;
 using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
+using FooCommerce.Infrastructure.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
 

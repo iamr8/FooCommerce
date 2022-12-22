@@ -22,7 +22,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\..\core\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
-	  <ProjectReference Include="..\..\core\FooCommerce.Localization.DependencyInjection\FooCommerce.Localization.DependencyInjection.csproj" />
+	  <ProjectReference Include="..\..\core\FooCommerce.Localization\FooCommerce.Localization.csproj" />
 	</ItemGroup>
 
 </Project>
