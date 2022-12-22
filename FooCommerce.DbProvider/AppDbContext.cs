@@ -1,5 +1,4 @@
 ﻿using FooCommerce.DbProvider.Entities.Configurations;
-using FooCommerce.DbProvider.Entities.Identities;
 using FooCommerce.DbProvider.Entities.Listings.Entities;
 using FooCommerce.DbProvider.Entities.Products;
 using FooCommerce.DbProvider.Entities.Shoppings;
@@ -20,19 +19,6 @@ public class AppDbContext : DbContext
     }
 
     public static bool TestMode { get; set; }
-
-    #region Identity
-
-    public virtual DbSet<User> Users { get; set; }
-    public virtual DbSet<Role> Roles { get; set; }
-    public virtual DbSet<UserRole> UserRoles { get; set; }
-    public virtual DbSet<UserCommunication> UserCommunications { get; set; }
-    public virtual DbSet<UserPassword> UserPasswords { get; set; }
-    public virtual DbSet<UserSetting> UserSettings { get; set; }
-    public virtual DbSet<UserLockout> UserLockouts { get; set; }
-    public virtual DbSet<UserInformation> UserInformation { get; set; }
-
-    #endregion Identity
 
     #region Configurations
 

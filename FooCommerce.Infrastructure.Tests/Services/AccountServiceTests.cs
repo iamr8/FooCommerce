@@ -28,7 +28,7 @@
 
 //        await using var fixture = new Fixture(TestConsole);
 //        await fixture.InitializeAsync();
-//        var accountService = fixture.ServiceProvider.GetService<IAccountService>();
+//        var accountService = fixture.ServiceProvider.GetService<IMembershipService>();
 
 //        var request = new SignUpRequest
 //        {

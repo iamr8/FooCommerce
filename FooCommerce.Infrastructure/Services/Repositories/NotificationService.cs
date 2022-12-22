@@ -46,7 +46,7 @@ public class NotificationService : INotificationService
                 baseUrl = "http://localhost:5000",
                 requestInfo = requestContext,
             };
-            var response = await _httpClient.PostAsync("send",
+            var response = await _httpClient.PostAsync("api/Notification/send",
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, MediaTypeNames.Application.Json));
             response.EnsureSuccessStatusCode();
         }

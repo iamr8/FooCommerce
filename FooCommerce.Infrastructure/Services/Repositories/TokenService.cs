@@ -28,7 +28,7 @@ public class TokenService : ITokenService
                 id = userCommunicationId,
                 interval = (long)interval.TotalSeconds
             };
-            var response = await _httpClient.PostAsync("generate",
+            var response = await _httpClient.PostAsync("api/Token/generate",
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
 
@@ -66,7 +66,7 @@ public class TokenService : ITokenService
                 id = userCommunicationId,
                 code
             };
-            var response = await _httpClient.PostAsync("validate",
+            var response = await _httpClient.PostAsync("api/Token/validate",
                 new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json"));
 
             switch (response.StatusCode)

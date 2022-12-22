@@ -20,4 +20,8 @@
 	  <ProjectReference Include="..\FooCommerce.Domain\FooCommerce.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Entities\Identities\" />
+	</ItemGroup>
+
 </Project>
