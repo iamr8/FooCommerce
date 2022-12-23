@@ -9,6 +9,10 @@ using FooCommerce.Domain.Jsons.JsonConverters;
 namespace FooCommerce.Domain.ContextRequest;
 
 [Serializable]
+[JsonSerializable(typeof(ContextRequestBrowser))]
+[JsonSerializable(typeof(ContextRequestEngine))]
+[JsonSerializable(typeof(ContextRequestPlatform))]
+[JsonSerializable(typeof(ContextRequestDevice))]
 public sealed record ContextRequestInfo : ITimezone
 {
     [JsonConverter(typeof(JsonIPAddressToStringConverter))]

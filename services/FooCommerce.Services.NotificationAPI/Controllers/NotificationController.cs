@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Net;
+
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Services.NotificationAPI.Models;
 using FooCommerce.Services.NotificationAPI.Services;
@@ -22,34 +23,53 @@ public class NotificationController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Send a notification to the user.
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <response code="202">Notification sent to queue.</response>
+    /// <response code="400">Invalid request.</response>
+    /// <response code="500">Internal server error.</response>
     [HttpPost, Route("send")]
+    [ProducesResponseType(typeof(SendResp), StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(SendResp), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(SendResp), StatusCodes.Status500InternalServerError)]
     public async Task<SendResp> Send(SendReq req, CancellationToken cancellationToken = default)
     {
         try
         {
             var reqInfo = new ContextRequestInfo
             {
-                Browser = req.RequestInfo.Browser,
-                Device = req.RequestInfo.Device,
-                IPAddress = IPAddress.Parse(req.RequestInfo.IPAddress),
-                Platform = req.RequestInfo.Platform,
-                UserAgent = req.RequestInfo.UserAgent,
-                Country = new RegionInfo(req.RequestInfo.Country),
-                Culture = CultureInfo.GetCultureInfo(req.RequestInfo.Culture),
-                Engine = req.RequestInfo.Engine,
-                TimezoneId = req.RequestInfo.TimezoneId,
+                Browser = req.Headers.Browser,
+                Device = req.Headers.Device,
+                IPAddress = IPAddress.Parse(req.Headers.IPAddress),
+                Platform = req.Headers.Platform,
+                UserAgent = req.Headers.UserAgent,
+                Country = new RegionInfo(req.Headers.Country),
+                Culture = CultureInfo.GetCultureInfo(req.Headers.Culture),
+                Engine = req.Headers.Engine,
+                TimezoneId = req.Headers.TimezoneId,
             };
-            
+
+            var communications = req.ReceiverCommunications.ToDictionary();
+            if (!communications.Any())
+            {
+                this.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return new SendResp();
+            }
+
             await _service.EnqueueAsync(req.Purpose,
                 req.ReceiverName,
-                req.ReceiverCommunications,
+                communications,
                 req.Links,
                 req.Formatters,
                 req.BaseUrl,
                 reqInfo,
                 cancellationToken);
 
-            this.Response.StatusCode = StatusCodes.Status200OK;
+            this.Response.StatusCode = StatusCodes.Status202Accepted;
             return new SendResp();
         }
         catch (Exception e)

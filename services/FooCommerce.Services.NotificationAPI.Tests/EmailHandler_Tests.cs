@@ -47,13 +47,13 @@ public class EmailHandler_Tests : FixturePerTest
             "http://localhost:5000",
             new ContextRequestInfo
             {
-                IPAddress = IPAddress.Any,
-                Browser = new ContextRequestBrowser("Chrome", "105"),
-                Device = new ContextRequestDevice("Desktop"),
-                Platform = new ContextRequestPlatform("Windows", "11 22H2"),
+                IPAddress = IPAddress.Parse("127.0.0.1"),
+                Browser = new ContextRequestBrowser { Name = "Chrome", Version = "105" },
+                Device = new ContextRequestDevice { Type = "Desktop" },
+                Platform = new ContextRequestPlatform { Name = "Windows", Version = "11 22H2" },
                 TimezoneId = "Europe/Istanbul",
-                UserAgent = "Chrome",
-                Engine = new ContextRequestEngine("Chromium"),
+                UserAgent = "Chrome v105 AppleWebKit",
+                Engine = new ContextRequestEngine { Name = "Chromium" },
                 Country = RegionInfo.CurrentRegion,
                 Culture = CultureInfo.CurrentCulture
             });

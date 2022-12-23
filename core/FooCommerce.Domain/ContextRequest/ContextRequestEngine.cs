@@ -1,3 +1,10 @@
-﻿namespace FooCommerce.Domain.ContextRequest;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
-public record ContextRequestEngine(string Name);
+namespace FooCommerce.Domain.ContextRequest;
+
+public record ContextRequestEngine
+{
+    [Required, JsonRequired, RegularExpression("^[A-Z0-9]{1}[a-zA-Z0-9 -]{1,30}")]
+    public string Name { get; init; }
+}
