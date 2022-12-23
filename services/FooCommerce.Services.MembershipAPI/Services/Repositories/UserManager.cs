@@ -124,7 +124,7 @@ public class UserManager : IUserManager
         var role = await dbContext.Roles
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(x => !x.IsDeleted && !x.IsHidden && x.Type == type)
+            .Where(x => !x.IsDeleted && !x.IsInvisible && x.Type == type)
             .Select(x => new RoleModel
             {
                 Id = x.Id,
@@ -210,7 +210,7 @@ public class UserManager : IUserManager
         var roles = await dbContext.Roles
             .AsNoTracking()
             .AsSplitQuery()
-            .Where(x => !x.IsDeleted && !x.IsHidden)
+            .Where(x => !x.IsDeleted && !x.IsInvisible)
             .Select(x => new RoleModel
             {
                 Id = x.Id,

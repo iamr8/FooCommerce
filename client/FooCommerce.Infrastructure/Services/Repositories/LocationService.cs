@@ -27,9 +27,9 @@
 //        using (var dbConnection = _dbConnectionFactory.CreateConnection())
 //        {
 //            var locations = await dbConnection.QueryAsync<LocationModel>(
-//                $"SELECT [location].{nameof(Location.Id)}, [location].{nameof(Location.Division)}, [location].{nameof(Location.Name)}, [location].{nameof(Location.PublicId)}, [location].{nameof(Location.ParentId)} " +
+//                $"SELECT [location].{nameof(Location.Id)}, [location].{nameof(Location.Division)}, [location].{nameof(Location.Name)}, [location].{nameof(Location.ExternalId)}, [location].{nameof(Location.ParentId)} " +
 //                     "FROM [Locations] AS [location] " +
-//                    $"WHERE [location].{nameof(Location.IsDeleted)} <> 1 AND [location].{nameof(Location.IsHidden)} <> 1");
+//                    $"WHERE [location].{nameof(Location.IsDeleted)} <> 1 AND [location].{nameof(Location.IsInvisible)} <> 1");
 
 //            _logger.LogInformation("Locations are retrieved from database directly.");
 //            return locations;
@@ -49,6 +49,6 @@
 //    public async Task<bool> IsCountryValidAsync(uint countryId, CancellationToken cancellationToken = default)
 //    {
 //        var countries = await GetLocationsAsync(cancellationToken);
-//        return countries.Any(x => x.PublicId == countryId);
+//        return countries.Any(x => x.ExternalId == countryId);
 //    }
 //}

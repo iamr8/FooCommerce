@@ -2,5 +2,5 @@
 
 public interface IEntitySoftDeletable
 {
-    bool IsDeleted { get; init; }
+    bool IsDeleted { get; set; }
 }

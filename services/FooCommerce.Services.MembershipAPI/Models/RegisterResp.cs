@@ -29,27 +29,12 @@ public record CreateReq
     public string Password { get; init; }
 }
 
-public interface ICreateResp { }
-
 [Serializable]
-public record CreateResp : ICreateResp
+public record CreateResp
 {
     /// <summary>
     /// User's Communication Id.
     /// </summary>
     [JsonPropertyName("commId")]
     public Guid? CommunicationId { get; init; }
-}
-[Serializable]
-public record CreateRespEmpty : ICreateResp
-{
-}
-[Serializable]
-public record CreateRespFaulted : ICreateResp
-{
-    /// <summary>
-    /// Error Message.
-    /// </summary>
-    [JsonPropertyName("message")]
-    public string Message { get; init; }
 }

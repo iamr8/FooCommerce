@@ -10,10 +10,10 @@ public record Product
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public bool IsDeleted { get; init; }
+    public bool IsDeleted { get; set; }
     public string? Name { get; init; }
-    public Guid CategoryId { get; init; }
-    public virtual ProductCategory Category { get; init; }
+    public Guid CatalogId { get; init; }
+    public virtual Catalog Catalog { get; init; }
     public virtual ICollection<ProductMultimedia> Multimedias { get; init; }
     public virtual ICollection<ProductSpecification> Specifications { get; init; }
 }

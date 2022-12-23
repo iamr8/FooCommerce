@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products.Configurations;
 
-public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCategory>
+public class CatalogConfiguration : IEntityTypeConfiguration<Catalog>
 {
-    public void Configure(EntityTypeBuilder<ProductCategory> builder)
+    public void Configure(EntityTypeBuilder<Catalog> builder)
     {
-        builder.ToTable("ProductCategories");
+        builder.ToTable("Catalogs");
         builder.Property(x => x.Id)
             .HasColumnType("UNIQUEIDENTIFIER ROWGUIDCOL");
         builder.HasIndex(x => x.Id)
@@ -26,12 +26,6 @@ public class ProductCategoryConfiguration : IEntityTypeConfiguration<ProductCate
             .WithMany(x => x.Children)
             .HasForeignKey(x => x.ParentId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.NoAction);
-
-        builder.HasOne(x => x.Group)
-            .WithMany(x => x.Categories)
-            .HasForeignKey(x => x.GroupId)
-            .IsRequired()
             .OnDelete(DeleteBehavior.NoAction);
     }
 }

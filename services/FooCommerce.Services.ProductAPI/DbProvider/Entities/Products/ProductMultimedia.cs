@@ -3,12 +3,12 @@
 namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
 
 public record ProductMultimedia
-    : IEntity, IEntityPublicId, IEntityMedia, IEntitySortable
+    : IEntity, IEntityExternalId, IEntityMedia, IEntitySortable
 {
     public Guid Id { get; init; }
     public DateTime Created { get; init; }
     public byte[] RowVersion { get; init; }
-    public uint PublicId { get; init; }
+    public uint ExternalId { get; init; }
     public bool IsVideo { get; init; }
     public string Metadata { get; init; }
     public string Path { get; init; }

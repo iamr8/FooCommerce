@@ -22,9 +22,9 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .IsRowVersion()
             .IsConcurrencyToken();
 
-        builder.HasOne(x => x.Category)
+        builder.HasOne(x => x.Catalog)
             .WithMany(x => x.Products)
-            .HasForeignKey(x => x.CategoryId)
+            .HasForeignKey(x => x.CatalogId)
             .IsRequired()
             .OnDelete(DeleteBehavior.NoAction);
     }

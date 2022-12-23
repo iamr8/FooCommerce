@@ -85,9 +85,8 @@ public static class Program
         //     });
         // });
         //
-        builder.Services.AddScoped<ICategoryManager, CategoryManager>();
+        builder.Services.AddScoped<ICatalogManager, CatalogManager>();
         builder.Services.AddScoped<IProductManager, ProductManager>();
-        builder.Services.AddScoped<IBasketService, BasketService>();
 
         var app = builder.Build();
 

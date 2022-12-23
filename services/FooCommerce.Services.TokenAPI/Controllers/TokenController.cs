@@ -1,4 +1,5 @@
 ﻿using System.Net.Mime;
+
 using FooCommerce.Domain.Helpers;
 using FooCommerce.Services.TokenAPI.Contracts;
 using FooCommerce.Services.TokenAPI.Enums;
@@ -35,19 +36,16 @@ public class TokenController : ControllerBase
     /// <response code="201">A token has been created.</response>
     /// <response code="400">The given payload is not as expected.</response>
     /// <response code="500">An internal server error occurred.</response>
-    [HttpPost, Route("generate")]
+    [HttpPost, Route("index")]
     [ProducesResponseType(typeof(GenerateTokenResp), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(GenerateTokenRespFaulted), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(GenerateTokenRespFaulted), StatusCodes.Status500InternalServerError)]
-    public async Task<IGeneratedTokenResp> GenerateToken(GenerateTokenReq req, CancellationToken cancellationToken = default)
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Generate(GenerateTokenReq req, CancellationToken cancellationToken = default)
     {
         try
         {
             if (req.LifetimeInSeconds < 1000)
-            {
-                this.Response.StatusCode = StatusCodes.Status400BadRequest;
-                return new GenerateTokenRespFaulted();
-            }
+                return BadRequest();
 
             var response = await _requestCodeClient.GetResponse<TokenGenerated>(new
             {
@@ -55,18 +53,16 @@ public class TokenController : ControllerBase
                 LifetimeInSeconds = (int)req.LifetimeInSeconds
             }, cancellationToken);
 
-            this.Response.StatusCode = StatusCodes.Status201Created;
-            return new GenerateTokenResp
+            return Created("/api/token/index", new GenerateTokenResp
             {
                 TokenId = response.Message.CorrelationId,
                 Expiry = response.Message.ExpiresOn.ToUnixTime(),
-            };
+            });
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            this.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return new GenerateTokenRespFaulted();
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 
@@ -82,14 +78,14 @@ public class TokenController : ControllerBase
     /// <response code="429">Max retries on token check has been exceeded.</response>
     /// <response code="404">Token not found.</response>
     /// <response code="500">An internal server error occurred.</response>
-    [HttpPost, Route("validate")]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status202Accepted)]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status406NotAcceptable)]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status408RequestTimeout)]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status429TooManyRequests)]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status500InternalServerError)]
-    public async Task<ValidateTokenResp> ValidateToken(ValidateTokenReq req, CancellationToken cancellationToken = default)
+    [HttpPut, Route("index")]
+    [ProducesResponseType(StatusCodes.Status202Accepted)]
+    [ProducesResponseType(StatusCodes.Status406NotAcceptable)]
+    [ProducesResponseType(StatusCodes.Status408RequestTimeout)]
+    [ProducesResponseType(StatusCodes.Status429TooManyRequests)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<IActionResult> Validate(ValidateTokenReq req, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -109,13 +105,12 @@ public class TokenController : ControllerBase
                 _ => this.Response.StatusCode
             };
 
-            return new ValidateTokenResp();
+            return new EmptyResult();
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
-            Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return new ValidateTokenResp();
+            return StatusCode(StatusCodes.Status500InternalServerError);
         }
     }
 }

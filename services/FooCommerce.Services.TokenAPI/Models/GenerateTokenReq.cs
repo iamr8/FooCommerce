@@ -19,10 +19,8 @@ public record GenerateTokenReq
     public long LifetimeInSeconds { get; set; }
 }
 
-public interface IGeneratedTokenResp { }
-
 [Serializable]
-public record GenerateTokenResp : IGeneratedTokenResp
+public record GenerateTokenResp
 {
     /// <summary>
     /// A Unique Identifier for the generated token instance.
@@ -34,9 +32,4 @@ public record GenerateTokenResp : IGeneratedTokenResp
     /// </summary>
     [JsonPropertyName("expiry")]
     public long Expiry { get; set; }
-}
-
-[Serializable]
-public record GenerateTokenRespFaulted : IGeneratedTokenResp
-{
 }

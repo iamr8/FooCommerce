@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FooCommerce.Services.ProductAPI.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/product/manager")]
 [ApiController]
 [Produces(MediaTypeNames.Application.Json)]
-public class ProductController : ControllerBase
+public class ProductManagerController : ControllerBase
 {
 }

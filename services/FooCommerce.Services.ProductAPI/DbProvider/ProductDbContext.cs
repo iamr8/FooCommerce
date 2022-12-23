@@ -17,8 +17,7 @@ public class ProductDbContext : DbContext
 
     public static bool TestMode { get; set; }
 
-    public virtual DbSet<ProductCategoryGroup> ProductCategoryGroups { get; set; }
-    public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+    public virtual DbSet<Catalog> Catalogs { get; set; }
     public virtual DbSet<Product> Products { get; set; }
     public virtual DbSet<ProductMultimedia> ProductMultimedia { get; set; }
     public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
