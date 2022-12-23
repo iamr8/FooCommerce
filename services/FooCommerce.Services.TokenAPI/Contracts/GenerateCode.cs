@@ -4,5 +4,5 @@ namespace FooCommerce.Services.TokenAPI.Contracts;
 
 public interface GenerateCode : IIdentifier
 {
-    int Seconds { get; }
+    int LifetimeInSeconds { get; }
 }

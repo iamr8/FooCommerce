@@ -1,23 +1,25 @@
-﻿using System.Text.Json.Serialization;
-
-using FooCommerce.Domain.Jsons.JsonConverters;
-using FooCommerce.Services.TokenAPI.Enums;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FooCommerce.Services.TokenAPI.Models;
 
 [Serializable]
 public record ValidateTokenReq
 {
-    [JsonRequired, JsonPropertyName("id"), JsonConverter(typeof(JsonGuidToStringConverter))]
-    public Guid Identifier { get; set; }
+    /// <summary>
+    /// A Unique identifier for the token that is already generated.
+    /// </summary>
+    [Required, JsonRequired, JsonPropertyName("id")]
+    public Guid TokenId { get; set; }
 
-    [JsonRequired, JsonPropertyName("code")]
+    /// <summary>
+    /// A code to validate the generated token.
+    /// </summary>
+    [Required, JsonRequired, JsonPropertyName("code"), RegularExpression("\\d{5}")]
     public string Code { get; set; }
 }
 
 [Serializable]
 public record ValidateTokenResp
 {
-    [JsonPropertyName("status")]
-    public TokenStatus Status { get; set; }
 }

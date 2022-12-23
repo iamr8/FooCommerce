@@ -5,7 +5,7 @@ using MassTransit;
 namespace FooCommerce.Services.TokenAPI.Sagas;
 
 public class TokenState
-    : SagaStateMachineInstance, IIdentifier
+    : SagaStateMachineInstance
 {
     public const int MaxRetryCount = 3;
 
@@ -15,7 +15,7 @@ public class TokenState
 
     public Guid? TokenTimeoutTokenId { get; set; }
     public string Code { get; set; }
-    public int IntervalSeconds { get; set; }
+    public int LifetimeInSeconds { get; set; }
 
     public int FalseTries { get; set; }
 

@@ -1,22 +1,42 @@
-﻿using System.Text.Json.Serialization;
-
-using FooCommerce.Domain.Jsons.JsonConverters;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace FooCommerce.Services.TokenAPI.Models;
 
 [Serializable]
 public record GenerateTokenReq
 {
-    [JsonRequired, JsonPropertyName("id"), JsonConverter(typeof(JsonGuidToStringConverter))]
+    /// <summary>
+    /// A Unique identifier to generate a token for.
+    /// </summary>
+    [Required, JsonRequired, JsonPropertyName("id")]
     public Guid Identifier { get; set; }
 
-    [JsonRequired, JsonPropertyName("interval")]
-    public long Interval { get; set; }
+    /// <summary>
+    /// Token's lifetime in Seconds.
+    /// </summary>
+    [Required, JsonRequired, JsonPropertyName("interval")]
+    public long LifetimeInSeconds { get; set; }
+}
+
+public interface IGeneratedTokenResp { }
+
+[Serializable]
+public record GenerateTokenResp : IGeneratedTokenResp
+{
+    /// <summary>
+    /// A Unique Identifier for the generated token instance.
+    /// </summary>
+    [JsonPropertyName("id")]
+    public Guid TokenId { get; set; }
+    /// <summary>
+    /// The expiry date of the token in Unix second time.
+    /// </summary>
+    [JsonPropertyName("expiry")]
+    public long Expiry { get; set; }
 }
 
 [Serializable]
-public record GenerateTokenResp
+public record GenerateTokenRespFaulted : IGeneratedTokenResp
 {
-    [JsonPropertyName("expiry"), JsonConverter(typeof(JsonDateTimeToUnixConverter))]
-    public DateTime Expiry { get; set; }
 }

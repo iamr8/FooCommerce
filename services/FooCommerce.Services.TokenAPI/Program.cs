@@ -1,10 +1,10 @@
+using System.Reflection;
+
 using FooCommerce.Domain.Jsons;
 using FooCommerce.EventSource;
 using FooCommerce.Services.TokenAPI.Sagas;
 
 using MassTransit;
-
-using Microsoft.AspNetCore.HttpOverrides;
 
 namespace FooCommerce.Services.TokenAPI;
 
@@ -15,7 +15,11 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
 
         builder.Services
             .AddMvc()
@@ -27,7 +31,7 @@ public static class Program
                     if (!duplicateConverter)
                         options.JsonSerializerOptions.Converters.Add(jsonConverter);
                 }
-                
+
                 options.JsonSerializerOptions.DefaultIgnoreCondition = JsonDefaultSettings.Settings.DefaultIgnoreCondition;
                 options.JsonSerializerOptions.UnknownTypeHandling = JsonDefaultSettings.Settings.UnknownTypeHandling;
                 options.JsonSerializerOptions.DictionaryKeyPolicy = JsonDefaultSettings.Settings.DictionaryKeyPolicy;

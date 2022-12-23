@@ -1,6 +1,7 @@
 ﻿namespace FooCommerce.Services.TokenAPI.Contracts;
 
-public interface TokenGenerationStatus
+public interface TokenGenerated
 {
+    Guid CorrelationId { get; }
     DateTime ExpiresOn { get; }
 }

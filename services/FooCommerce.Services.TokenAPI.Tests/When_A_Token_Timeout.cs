@@ -1,4 +1,5 @@
 ﻿using FooCommerce.Services.TokenAPI.Contracts;
+using FooCommerce.Services.TokenAPI.Enums;
 using FooCommerce.Services.TokenAPI.Sagas.Contracts;
 using FooCommerce.Services.TokenAPI.Tests.Setup;
 
@@ -24,16 +25,17 @@ public class When_A_Token_Timeout :
         await Harness.Bus.Publish<GenerateCode>(new
         {
             IdentifierId = identifier,
-            Seconds = (int)TimeSpan.FromSeconds(5).TotalSeconds,
+            LifetimeInSeconds = (int)TimeSpan.FromSeconds(5).TotalSeconds,
         });
 
         await Task.Delay(500);
 
         // Assert
-        Assert.True(await SagaHarness.Created.Any(x => x.CorrelationId == identifier));
-        Assert.True(await SagaHarness.Consumed.Any<SagaTokenGenerated>(), "Message not consumed");
+        Assert.True(await SagaHarness.Created.Any(x => x.IdentifierId == identifier));
+        var correlationId = SagaHarness.Created.Select(x => x.IdentifierId == identifier).ElementAt(0).Saga.CorrelationId;
+        Assert.True(await Harness.Published.Any<TokenGenerated>(x => ((TokenGenerated)x.MessageObject).CorrelationId == correlationId));
 
-        var instance = SagaHarness.Created.ContainsInState(identifier, SagaHarness.StateMachine, SagaHarness.StateMachine.Active);
+        var instance = SagaHarness.Created.ContainsInState(correlationId, SagaHarness.StateMachine, SagaHarness.StateMachine.Active);
         Assert.True(instance != null, "Saga instance not found");
 
         Assert.NotNull(instance.GeneratedOn);
@@ -44,16 +46,18 @@ public class When_A_Token_Timeout :
 
         await Harness.Bus.Publish<ValidateCode>(new
         {
-            IdentifierId = identifier,
+            instance.CorrelationId,
             instance.Code
         });
 
         await Task.Delay(500);
 
-        Assert.True(await SagaHarness.Consumed.Any<SagaTokenExpired>(), "Message not consumed");
+        Assert.True(await SagaHarness.Consumed.Any<TokenExpiredInternal>(), "Message not consumed");
 
-        instance = SagaHarness.Created.ContainsInState(identifier, SagaHarness.StateMachine, SagaHarness.StateMachine.Final);
+        instance = SagaHarness.Created.ContainsInState(correlationId, SagaHarness.StateMachine, SagaHarness.StateMachine.Final);
         Assert.True(instance != null, "Saga instance not found");
+
+        Assert.True(await Harness.Published.Any<TokenFulfilled>(x => ((TokenFulfilled)x.MessageObject).Status == TokenStatus.Expired));
 
         Assert.NotNull(instance.InvalidatedOn);
     }

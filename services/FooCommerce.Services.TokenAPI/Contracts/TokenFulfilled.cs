@@ -2,7 +2,7 @@
 
 namespace FooCommerce.Services.TokenAPI.Contracts;
 
-public interface TokenValidationStatus
+public interface TokenFulfilled
 {
     TokenStatus Status { get; }
 }

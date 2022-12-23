@@ -1,4 +1,6 @@
-﻿using FooCommerce.Services.TokenAPI.Contracts;
+﻿using System.Net.Mime;
+using FooCommerce.Domain.Helpers;
+using FooCommerce.Services.TokenAPI.Contracts;
 using FooCommerce.Services.TokenAPI.Enums;
 using FooCommerce.Services.TokenAPI.Models;
 
@@ -10,6 +12,7 @@ namespace FooCommerce.Services.TokenAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Produces(MediaTypeNames.Application.Json)]
 public class TokenController : ControllerBase
 {
     private readonly IRequestClient<GenerateCode> _requestCodeClient;
@@ -24,46 +27,85 @@ public class TokenController : ControllerBase
         _logger = logger;
     }
 
+    /// <summary>
+    /// Requests to generate a new code.
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="cancellationToken"></param>
+    /// <response code="201">A token has been created.</response>
+    /// <response code="400">The given payload is not as expected.</response>
+    /// <response code="500">An internal server error occurred.</response>
     [HttpPost, Route("generate")]
-    public async Task<GenerateTokenResp> GenerateToken(GenerateTokenReq req, CancellationToken cancellationToken = default)
+    [ProducesResponseType(typeof(GenerateTokenResp), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GenerateTokenRespFaulted), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(GenerateTokenRespFaulted), StatusCodes.Status500InternalServerError)]
+    public async Task<IGeneratedTokenResp> GenerateToken(GenerateTokenReq req, CancellationToken cancellationToken = default)
     {
         try
         {
-            var response = await _requestCodeClient.GetResponse<TokenGenerationStatus>(new
+            if (req.LifetimeInSeconds < 1000)
+            {
+                this.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return new GenerateTokenRespFaulted();
+            }
+
+            var response = await _requestCodeClient.GetResponse<TokenGenerated>(new
             {
                 IdentifierId = req.Identifier,
-                Seconds = (int)req.Interval
+                LifetimeInSeconds = (int)req.LifetimeInSeconds
             }, cancellationToken);
 
-            this.Response.StatusCode = StatusCodes.Status200OK;
-            return new GenerateTokenResp { Expiry = response.Message.ExpiresOn };
+            this.Response.StatusCode = StatusCodes.Status201Created;
+            return new GenerateTokenResp
+            {
+                TokenId = response.Message.CorrelationId,
+                Expiry = response.Message.ExpiresOn.ToUnixTime(),
+            };
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
             this.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            return new GenerateTokenResp();
+            return new GenerateTokenRespFaulted();
         }
     }
 
+    /// <summary>
+    /// Requests to validate a code.
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns></returns>
+    /// <response code="202">Token has been validated.</response>
+    /// <response code="406">The given code is wrong.</response>
+    /// <response code="408">Token is already expired.</response>
+    /// <response code="429">Max retries on token check has been exceeded.</response>
+    /// <response code="404">Token not found.</response>
+    /// <response code="500">An internal server error occurred.</response>
     [HttpPost, Route("validate")]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status202Accepted)]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status406NotAcceptable)]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status408RequestTimeout)]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status429TooManyRequests)]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ValidateTokenResp), StatusCodes.Status500InternalServerError)]
     public async Task<ValidateTokenResp> ValidateToken(ValidateTokenReq req, CancellationToken cancellationToken = default)
     {
         try
         {
-            var response = await _validateCodeClient.GetResponse<TokenValidationStatus>(new
+            var response = await _validateCodeClient.GetResponse<TokenFulfilled>(new
             {
-                IdentifierId = req.Identifier,
+                CorrelationId = req.TokenId,
                 Code = req.Code
             }, cancellationToken);
 
             this.Response.StatusCode = response.Message.Status switch
             {
-                TokenStatus.Validated => StatusCodes.Status200OK,
-                TokenStatus.TokenInvalid => StatusCodes.Status400BadRequest,
-                TokenStatus.Expired => StatusCodes.Status404NotFound,
+                TokenStatus.Validated => StatusCodes.Status202Accepted,
+                TokenStatus.CodeInvalid => StatusCodes.Status406NotAcceptable,
+                TokenStatus.Expired => StatusCodes.Status408RequestTimeout,
                 TokenStatus.MaxRetryExceeded => StatusCodes.Status429TooManyRequests,
-                TokenStatus.NotFound => StatusCodes.Status500InternalServerError,
+                TokenStatus.NotFound => StatusCodes.Status404NotFound,
                 _ => this.Response.StatusCode
             };
 

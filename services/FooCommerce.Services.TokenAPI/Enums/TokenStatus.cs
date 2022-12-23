@@ -4,7 +4,7 @@ public enum TokenStatus
 {
     Validated,
     Expired,
-    TokenInvalid,
+    CodeInvalid,
     MaxRetryExceeded,
     NotFound
 }
