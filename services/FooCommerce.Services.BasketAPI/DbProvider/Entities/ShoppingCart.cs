@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.BasketAPI.DbProvider.Entities;
+namespace FooCommerce.BasketService.DbProvider.Entities;
 
 public record ShoppingCart
     : IEntity, IEntitySoftDeletable, IEntityExternalId

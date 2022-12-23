@@ -1,13 +1,10 @@
 ﻿using System.ComponentModel;
-using System.Data;
-
 using FooCommerce.Domain.Enums;
-using FooCommerce.Services.MembershipAPI.DbProvider;
-using FooCommerce.Services.MembershipAPI.Dtos;
-
+using FooCommerce.MembershipService.DbProvider;
+using FooCommerce.MembershipService.Dtos;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.MembershipAPI.Services.Repositories;
+namespace FooCommerce.MembershipService.Services.Repositories;
 
 public class CommunicationsManager : ICommunicationsManager
 {

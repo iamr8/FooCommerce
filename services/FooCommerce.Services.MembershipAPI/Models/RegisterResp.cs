@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace FooCommerce.Services.MembershipAPI.Models;
+namespace FooCommerce.MembershipService.Models;
 
 [Serializable]
 public record CreateReq

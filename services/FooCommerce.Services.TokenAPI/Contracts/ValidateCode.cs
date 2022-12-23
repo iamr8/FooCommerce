@@ -1,6 +1,4 @@
-﻿using FooCommerce.Services.TokenAPI.Interfaces;
-
-namespace FooCommerce.Services.TokenAPI.Contracts;
+﻿namespace FooCommerce.TokenService.Contracts;
 
 public interface ValidateCode
 {

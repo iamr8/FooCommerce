@@ -1,12 +1,10 @@
 using System.Reflection;
-
 using FooCommerce.Domain.Jsons;
 using FooCommerce.EventSource;
-using FooCommerce.Services.TokenAPI.Sagas;
-
+using FooCommerce.TokenService.Sagas;
 using MassTransit;
 
-namespace FooCommerce.Services.TokenAPI;
+namespace FooCommerce.TokenService;
 
 public static class Program
 {

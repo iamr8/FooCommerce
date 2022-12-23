@@ -1,13 +1,10 @@
 ﻿using System.Net.Mime;
-
-using FooCommerce.Services.MembershipAPI.Contracts;
-using FooCommerce.Services.MembershipAPI.Models;
-
+using FooCommerce.MembershipService.Contracts;
+using FooCommerce.MembershipService.Models;
 using MassTransit;
-
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.MembershipAPI.Controllers;
+namespace FooCommerce.MembershipService.Controllers;
 
 [Route("api/membership/manager")]
 [ApiController]

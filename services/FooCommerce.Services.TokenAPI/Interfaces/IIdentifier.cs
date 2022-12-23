@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.TokenAPI.Interfaces;
+﻿namespace FooCommerce.TokenService.Interfaces;
 
 public interface IIdentifier
 {

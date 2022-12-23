@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.ProductAPI.Exceptions;
-using FooCommerce.Services.ProductAPI.Services.Repositories.Models;
+﻿using FooCommerce.CatalogService.Exceptions;
+using FooCommerce.CatalogService.Services.Repositories.Models;
 
-namespace FooCommerce.Services.ProductAPI.Services;
+namespace FooCommerce.CatalogService.Services;
 
 public interface ICatalogManager
 {

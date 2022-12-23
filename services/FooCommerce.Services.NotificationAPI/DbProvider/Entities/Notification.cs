@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.NotificationAPI.DbProvider.Entities;
+namespace FooCommerce.NotificationService.DbProvider.Entities;
 
 public record Notification
     : IEntity

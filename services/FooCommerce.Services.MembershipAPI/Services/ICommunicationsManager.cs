@@ -1,9 +1,8 @@
 ﻿using System.ComponentModel;
-
 using FooCommerce.Domain.Enums;
-using FooCommerce.Services.MembershipAPI.Dtos;
+using FooCommerce.MembershipService.Dtos;
 
-namespace FooCommerce.Services.MembershipAPI.Services;
+namespace FooCommerce.MembershipService.Services;
 
 public interface ICommunicationsManager
 {

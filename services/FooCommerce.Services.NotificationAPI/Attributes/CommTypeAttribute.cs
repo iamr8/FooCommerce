@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Attributes;
+namespace FooCommerce.NotificationService.Attributes;
 
 [AttributeUsage(AttributeTargets.Field)]
 public class CommTypeAttribute : Attribute

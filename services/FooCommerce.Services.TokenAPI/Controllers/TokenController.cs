@@ -1,15 +1,12 @@
 ﻿using System.Net.Mime;
-
 using FooCommerce.Domain.Helpers;
-using FooCommerce.Services.TokenAPI.Contracts;
-using FooCommerce.Services.TokenAPI.Enums;
-using FooCommerce.Services.TokenAPI.Models;
-
+using FooCommerce.TokenService.Contracts;
+using FooCommerce.TokenService.Enums;
+using FooCommerce.TokenService.Models;
 using MassTransit;
-
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.TokenAPI.Controllers;
+namespace FooCommerce.TokenService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

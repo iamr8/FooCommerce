@@ -1,20 +1,18 @@
 using FooCommerce.Domain.Jsons;
 using FooCommerce.EventSource;
 using FooCommerce.Localization.DependencyInjection;
-using FooCommerce.Services.NotificationAPI.Consumers;
-using FooCommerce.Services.NotificationAPI.Contracts;
-using FooCommerce.Services.NotificationAPI.DbProvider;
-using FooCommerce.Services.NotificationAPI.Handlers;
-using FooCommerce.Services.NotificationAPI.Interfaces;
-using FooCommerce.Services.NotificationAPI.Models;
-using FooCommerce.Services.NotificationAPI.Services;
-using FooCommerce.Services.NotificationAPI.Services.Repositories;
-
+using FooCommerce.NotificationService.Consumers;
+using FooCommerce.NotificationService.Contracts;
+using FooCommerce.NotificationService.DbProvider;
+using FooCommerce.NotificationService.Handlers;
+using FooCommerce.NotificationService.Interfaces;
+using FooCommerce.NotificationService.Models;
+using FooCommerce.NotificationService.Services;
+using FooCommerce.NotificationService.Services.Repositories;
 using MassTransit;
-
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.NotificationAPI;
+namespace FooCommerce.NotificationService;
 
 public static class Program
 {

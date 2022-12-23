@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.PaymentAPI.Controllers
+namespace FooCommerce.PaymentService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

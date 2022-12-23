@@ -1,6 +1,6 @@
-﻿using FooCommerce.Services.NotificationAPI.Interfaces;
+﻿using FooCommerce.NotificationService.Interfaces;
 
-namespace FooCommerce.Services.NotificationAPI.Dtos;
+namespace FooCommerce.NotificationService.Dtos;
 
 public record NotificationModel
     : INotification

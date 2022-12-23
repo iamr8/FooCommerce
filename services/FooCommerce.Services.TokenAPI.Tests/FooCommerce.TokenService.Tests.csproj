@@ -33,7 +33,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\core\FooCommerce.Tests\FooCommerce.Tests.csproj" />
-		<ProjectReference Include="..\FooCommerce.Services.TokenAPI\FooCommerce.Services.TokenAPI.csproj" />
+		<ProjectReference Include="..\FooCommerce.Services.TokenAPI\FooCommerce.TokenService.csproj" />
 	</ItemGroup>
 
 </Project>

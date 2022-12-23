@@ -1,24 +1,20 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Text;
-
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Localization;
 using FooCommerce.Localization.Helpers;
-using FooCommerce.Services.NotificationAPI.Contracts;
-using FooCommerce.Services.NotificationAPI.Dtos;
-using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Interfaces;
-using FooCommerce.Services.NotificationAPI.Services.Repositories;
-
+using FooCommerce.NotificationService.Contracts;
+using FooCommerce.NotificationService.Dtos;
+using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Interfaces;
+using FooCommerce.NotificationService.Services.Repositories;
 using HtmlAgilityPack;
 using HtmlAgilityPack.CssSelectors.NetCore;
-
 using MassTransit;
-
 using WebMarkupMin.Core;
 
-namespace FooCommerce.Services.NotificationAPI.Handlers;
+namespace FooCommerce.NotificationService.Handlers;
 
 public class EmailHandler : MessageHandler
 {

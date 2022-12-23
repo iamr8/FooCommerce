@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Interfaces;
+﻿using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Interfaces;
 
-namespace FooCommerce.Services.NotificationAPI.Services;
+namespace FooCommerce.NotificationService.Services;
 
 public interface ITemplateService
 {

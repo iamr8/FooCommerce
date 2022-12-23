@@ -1,18 +1,16 @@
 ﻿using System.Globalization;
 using System.Net;
-
 using FooCommerce.Common.Helpers;
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Localization.Models;
-using FooCommerce.Services.NotificationAPI.Contracts;
-using FooCommerce.Services.NotificationAPI.Dtos;
-using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Handlers;
-using FooCommerce.Services.NotificationAPI.Tests.Setup;
-
+using FooCommerce.NotificationService.Contracts;
+using FooCommerce.NotificationService.Dtos;
+using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Handlers;
+using FooCommerce.NotificationService.Tests.Setup;
 using Xunit.Abstractions;
 
-namespace FooCommerce.Services.NotificationAPI.Tests;
+namespace FooCommerce.NotificationService.Tests;
 
 public class EmailHandler_Tests : FixturePerTest
 {

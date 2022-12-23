@@ -1,6 +1,6 @@
-﻿using FooCommerce.Services.MembershipAPI.DbProvider.Entities;
+﻿using FooCommerce.MembershipService.DbProvider.Entities;
 
-namespace FooCommerce.Services.MembershipAPI.Models;
+namespace FooCommerce.MembershipService.Models;
 
 public record CreatedUserModel
 {

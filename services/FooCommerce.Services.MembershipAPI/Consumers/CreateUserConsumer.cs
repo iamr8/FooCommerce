@@ -1,11 +1,10 @@
 ﻿using FooCommerce.Domain.Enums;
-using FooCommerce.Services.MembershipAPI.Contracts;
-using FooCommerce.Services.MembershipAPI.Enums;
-using FooCommerce.Services.MembershipAPI.Services;
-
+using FooCommerce.MembershipService.Contracts;
+using FooCommerce.MembershipService.Enums;
+using FooCommerce.MembershipService.Services;
 using MassTransit;
 
-namespace FooCommerce.Services.MembershipAPI.Consumers;
+namespace FooCommerce.MembershipService.Consumers;
 
 public class CreateUserConsumer :
     IConsumer<CreateUser>,

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.BasketAPI.Controllers
+namespace FooCommerce.BasketService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

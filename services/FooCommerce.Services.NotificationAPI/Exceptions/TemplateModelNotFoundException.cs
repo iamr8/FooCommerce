@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Domain.Enums;
-using FooCommerce.Services.NotificationAPI.Enums;
+using FooCommerce.NotificationService.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Exceptions;
+namespace FooCommerce.NotificationService.Exceptions;
 
 public class TemplateModelNotFoundException : Exception
 {

@@ -1,17 +1,15 @@
 ﻿using FooCommerce.EventSource;
-using FooCommerce.Services.TokenAPI.Sagas;
 using FooCommerce.Tests;
-
+using FooCommerce.TokenService.Sagas;
 using MassTransit;
 using MassTransit.Testing;
-
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
 
-namespace FooCommerce.Services.TokenAPI.Tests.Setup;
+namespace FooCommerce.TokensService.Tests.Setup;
 
 public class FixturePerTestClass : IAsyncLifetime
 {

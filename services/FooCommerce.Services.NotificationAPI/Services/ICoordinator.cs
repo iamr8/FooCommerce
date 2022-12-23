@@ -1,10 +1,9 @@
 ﻿using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
-using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Exceptions;
-using FooCommerce.Services.NotificationAPI.Models;
+using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Exceptions;
 
-namespace FooCommerce.Services.NotificationAPI.Services;
+namespace FooCommerce.NotificationService.Services;
 
 public interface ICoordinator
 {

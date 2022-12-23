@@ -1,13 +1,11 @@
 using System.Net.Mime;
-
-using FooCommerce.Services.ProductAPI.Exceptions;
-using FooCommerce.Services.ProductAPI.Models;
-using FooCommerce.Services.ProductAPI.Services;
-using FooCommerce.Services.ProductAPI.Services.Repositories.Models;
-
+using FooCommerce.CatalogService.Exceptions;
+using FooCommerce.CatalogService.Models;
+using FooCommerce.CatalogService.Services;
+using FooCommerce.CatalogService.Services.Repositories.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.ProductAPI.Controllers;
+namespace FooCommerce.CatalogService.Controllers;
 
 [Route("api/catalog/manager")]
 [ApiController]

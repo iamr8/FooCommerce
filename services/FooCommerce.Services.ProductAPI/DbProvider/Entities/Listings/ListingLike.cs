@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Listings;
+namespace FooCommerce.CatalogService.DbProvider.Entities.Listings;
 
 public record ListingLike
     : IEntity

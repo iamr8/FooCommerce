@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FooCommerce.Services.ProductAPI.Services.Repositories.Models;
+namespace FooCommerce.CatalogService.Services.Repositories.Models;
 
 public record UpdateCatalog
 {

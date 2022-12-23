@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.MembershipAPI.DbProvider.Entities;
+﻿using FooCommerce.MembershipService.DbProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.MembershipAPI.DbProvider;
+namespace FooCommerce.MembershipService.DbProvider;
 
 public class MembershipDbContext : DbContext
 {

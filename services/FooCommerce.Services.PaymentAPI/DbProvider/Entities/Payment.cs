@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.PaymentAPI.DbProvider.Entities;
+namespace FooCommerce.PaymentService.DbProvider.Entities;
 
 public record Payment
     : IEntity

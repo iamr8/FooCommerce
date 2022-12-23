@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.MembershipAPI.Exceptions;
+﻿namespace FooCommerce.MembershipService.Exceptions;
 
 public class UserNotAuthenticatedException : Exception
 {

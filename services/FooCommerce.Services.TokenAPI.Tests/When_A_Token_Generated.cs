@@ -1,11 +1,9 @@
-﻿using FooCommerce.Services.TokenAPI.Contracts;
-using FooCommerce.Services.TokenAPI.Tests.Setup;
-
+﻿using FooCommerce.TokenService.Contracts;
+using FooCommerce.TokensService.Tests.Setup;
 using MassTransit;
-
 using Xunit.Abstractions;
 
-namespace FooCommerce.Services.TokenAPI.Tests;
+namespace FooCommerce.TokensService.Tests;
 
 public class When_A_Token_Generated :
     FixturePerTest

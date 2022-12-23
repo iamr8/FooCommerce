@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.NotificationAPI.Interfaces;
+﻿namespace FooCommerce.NotificationService.Interfaces;
 
 public interface IContent
 {

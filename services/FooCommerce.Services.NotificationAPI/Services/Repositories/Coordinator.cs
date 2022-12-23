@@ -1,16 +1,15 @@
 ﻿using System.Text;
-
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
 using FooCommerce.Domain.Helpers;
-using FooCommerce.Services.NotificationAPI.Attributes;
-using FooCommerce.Services.NotificationAPI.Dtos;
-using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Exceptions;
-using FooCommerce.Services.NotificationAPI.Handlers;
-using FooCommerce.Services.NotificationAPI.Interfaces;
+using FooCommerce.NotificationService.Attributes;
+using FooCommerce.NotificationService.Dtos;
+using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Exceptions;
+using FooCommerce.NotificationService.Handlers;
+using FooCommerce.NotificationService.Interfaces;
 
-namespace FooCommerce.Services.NotificationAPI.Services.Repositories;
+namespace FooCommerce.NotificationService.Services.Repositories;
 
 public class Coordinator : ICoordinator
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products.Configurations;
+namespace FooCommerce.CatalogService.DbProvider.Entities.Products.Configurations;
 
 public class CatalogConfiguration : IEntityTypeConfiguration<Catalog>
 {

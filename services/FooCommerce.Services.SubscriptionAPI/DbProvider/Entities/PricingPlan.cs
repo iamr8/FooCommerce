@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.SubscriptionAPI.DbProvider.Entities;
+namespace FooCommerce.SubscriptionsService.DbProvider.Entities;
 
 public record PricingPlan
     : IEntity, IEntitySortable

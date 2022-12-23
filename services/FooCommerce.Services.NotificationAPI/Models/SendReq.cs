@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
-
 using FooCommerce.Domain.ContextRequest;
 using FooCommerce.Domain.Enums;
-using FooCommerce.Services.NotificationAPI.Enums;
+using FooCommerce.NotificationService.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Models;
+namespace FooCommerce.NotificationService.Models;
 
 [Serializable]
 [JsonSerializable(typeof(ClientInfo))]

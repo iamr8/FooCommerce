@@ -1,18 +1,15 @@
 using System.Reflection;
-
 using FooCommerce.Domain.Jsons;
 using FooCommerce.EventSource;
-using FooCommerce.Services.MembershipAPI.Consumers;
-using FooCommerce.Services.MembershipAPI.Contracts;
-using FooCommerce.Services.MembershipAPI.DbProvider;
-using FooCommerce.Services.MembershipAPI.Services;
-using FooCommerce.Services.MembershipAPI.Services.Repositories;
-
+using FooCommerce.MembershipService.Consumers;
+using FooCommerce.MembershipService.Contracts;
+using FooCommerce.MembershipService.DbProvider;
+using FooCommerce.MembershipService.Services;
+using FooCommerce.MembershipService.Services.Repositories;
 using MassTransit;
-
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.MembershipAPI;
+namespace FooCommerce.MembershipService;
 
 public static class Program
 {

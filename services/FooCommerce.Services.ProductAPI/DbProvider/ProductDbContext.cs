@@ -1,9 +1,8 @@
-﻿using FooCommerce.Services.ProductAPI.DbProvider.Entities.Listings;
-using FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
-
+﻿using FooCommerce.CatalogService.DbProvider.Entities.Listings;
+using FooCommerce.CatalogService.DbProvider.Entities.Products;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.ProductAPI.DbProvider;
+namespace FooCommerce.CatalogService.DbProvider;
 
 public class ProductDbContext : DbContext
 {

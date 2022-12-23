@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
+namespace FooCommerce.CatalogService.DbProvider.Entities.Products;
 
 public record Specification
     : IEntity, IEntitySoftDeletable, IEntityVisibility

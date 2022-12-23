@@ -1,8 +1,7 @@
-﻿using FooCommerce.Services.NotificationAPI.DbProvider.Entities;
-
+﻿using FooCommerce.NotificationService.DbProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.NotificationAPI.DbProvider;
+namespace FooCommerce.NotificationService.DbProvider;
 
 public class NotificationDbContext : DbContext
 {

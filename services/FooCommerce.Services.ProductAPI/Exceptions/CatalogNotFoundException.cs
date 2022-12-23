@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.ProductAPI.Exceptions;
+﻿namespace FooCommerce.CatalogService.Exceptions;
 
 public class CatalogNotFoundException : Exception
 {

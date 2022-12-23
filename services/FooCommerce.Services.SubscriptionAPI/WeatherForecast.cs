@@ -1,4 +1,4 @@
-namespace FooCommerce.Services.SubscriptionAPI
+namespace FooCommerce.SubscriptionsService
 {
     public class WeatherForecast
     {

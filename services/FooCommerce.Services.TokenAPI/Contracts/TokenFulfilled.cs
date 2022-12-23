@@ -1,6 +1,6 @@
-﻿using FooCommerce.Services.TokenAPI.Enums;
+﻿using FooCommerce.TokenService.Enums;
 
-namespace FooCommerce.Services.TokenAPI.Contracts;
+namespace FooCommerce.TokenService.Contracts;
 
 public interface TokenFulfilled
 {

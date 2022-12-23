@@ -1,6 +1,6 @@
 ﻿using MimeKit;
 
-namespace FooCommerce.Services.NotificationAPI.Interfaces;
+namespace FooCommerce.NotificationService.Interfaces;
 
 public interface IEmailClient : IDisposable, IAsyncDisposable
 {

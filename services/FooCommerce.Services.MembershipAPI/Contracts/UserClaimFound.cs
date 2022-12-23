@@ -1,6 +1,6 @@
 ﻿using System.Security.Claims;
 
-namespace FooCommerce.Services.MembershipAPI.Contracts;
+namespace FooCommerce.MembershipService.Contracts;
 
 public interface UserClaimFound
 {

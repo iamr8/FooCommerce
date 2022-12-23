@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.BasketAPI.DbProvider.Entities;
+﻿using FooCommerce.BasketService.DbProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.BasketAPI.DbProvider;
+namespace FooCommerce.BasketService.DbProvider;
 
 public class BasketDbContext : DbContext
 {

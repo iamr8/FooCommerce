@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace FooCommerce.Services.TokenAPI.Models;
+namespace FooCommerce.TokenService.Models;
 
 [Serializable]
 public record ValidateTokenReq

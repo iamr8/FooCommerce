@@ -1,13 +1,11 @@
 using System.Reflection;
-
+using FooCommerce.CatalogService.DbProvider;
+using FooCommerce.CatalogService.Services;
+using FooCommerce.CatalogService.Services.Repositories;
 using FooCommerce.Domain.Jsons;
-using FooCommerce.Services.ProductAPI.DbProvider;
-using FooCommerce.Services.ProductAPI.Services;
-using FooCommerce.Services.ProductAPI.Services.Repositories;
-
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.ProductAPI;
+namespace FooCommerce.CatalogService;
 
 public static class Program
 {

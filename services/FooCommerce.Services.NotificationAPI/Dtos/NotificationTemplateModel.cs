@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Dtos;
+namespace FooCommerce.NotificationService.Dtos;
 
 internal record NotificationTemplateModel
 {

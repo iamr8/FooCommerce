@@ -1,8 +1,7 @@
-﻿using FooCommerce.Services.NotificationAPI.Contracts;
-
+﻿using FooCommerce.NotificationService.Contracts;
 using MassTransit;
 
-namespace FooCommerce.Services.NotificationAPI.Consumers;
+namespace FooCommerce.NotificationService.Consumers;
 
 public class EnqueueSmsConsumer :
     IConsumer<EnqueueSms>,

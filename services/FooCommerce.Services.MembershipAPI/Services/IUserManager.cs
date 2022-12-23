@@ -1,10 +1,10 @@
 ﻿using FooCommerce.Domain.Enums;
-using FooCommerce.Services.MembershipAPI.Contracts;
-using FooCommerce.Services.MembershipAPI.Dtos;
-using FooCommerce.Services.MembershipAPI.Enums;
-using FooCommerce.Services.MembershipAPI.Models;
+using FooCommerce.MembershipService.Contracts;
+using FooCommerce.MembershipService.Dtos;
+using FooCommerce.MembershipService.Enums;
+using FooCommerce.MembershipService.Models;
 
-namespace FooCommerce.Services.MembershipAPI.Services;
+namespace FooCommerce.MembershipService.Services;
 
 public interface IUserManager
 {

@@ -1,13 +1,11 @@
 ﻿using System.Globalization;
 using System.Net;
-
 using FooCommerce.Domain.ContextRequest;
-using FooCommerce.Services.NotificationAPI.Models;
-using FooCommerce.Services.NotificationAPI.Services;
-
+using FooCommerce.NotificationService.Models;
+using FooCommerce.NotificationService.Services;
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.NotificationAPI.Controllers;
+namespace FooCommerce.NotificationService.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]

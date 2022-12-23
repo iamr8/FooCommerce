@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace FooCommerce.Services.ProductAPI.Models;
+namespace FooCommerce.CatalogService.Models;
 
 [Serializable]
 public record DeleteCatalogReq

@@ -1,14 +1,10 @@
 ﻿using System.Diagnostics;
-
-using FooCommerce.Services.TokenAPI.Sagas;
-
+using FooCommerce.TokenService.Sagas;
 using MassTransit.Testing;
-
 using Microsoft.Extensions.Logging;
-
 using Xunit.Abstractions;
 
-namespace FooCommerce.Services.TokenAPI.Tests.Setup;
+namespace FooCommerce.TokensService.Tests.Setup;
 
 public class FixturePerTest : IClassFixture<FixturePerTestClass>, IDisposable
 {

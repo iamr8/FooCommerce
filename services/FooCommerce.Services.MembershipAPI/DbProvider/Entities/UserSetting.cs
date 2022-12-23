@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Domain;
-using FooCommerce.Services.MembershipAPI.Enums;
+using FooCommerce.MembershipService.Enums;
 
-namespace FooCommerce.Services.MembershipAPI.DbProvider.Entities;
+namespace FooCommerce.MembershipService.DbProvider.Entities;
 
 public record UserSetting
     : IEntity

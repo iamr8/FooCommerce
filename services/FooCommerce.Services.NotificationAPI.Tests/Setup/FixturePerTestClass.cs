@@ -1,18 +1,16 @@
 ﻿using FooCommerce.EventSource;
-using FooCommerce.Services.NotificationAPI.Consumers;
-using FooCommerce.Services.NotificationAPI.Contracts;
-using FooCommerce.Services.NotificationAPI.DbProvider;
-using FooCommerce.Services.NotificationAPI.Handlers;
-using FooCommerce.Services.NotificationAPI.Interfaces;
-using FooCommerce.Services.NotificationAPI.Models;
-using FooCommerce.Services.NotificationAPI.Services;
-using FooCommerce.Services.NotificationAPI.Services.Repositories;
+using FooCommerce.NotificationService.Consumers;
+using FooCommerce.NotificationService.Contracts;
+using FooCommerce.NotificationService.DbProvider;
+using FooCommerce.NotificationService.Handlers;
+using FooCommerce.NotificationService.Interfaces;
+using FooCommerce.NotificationService.Models;
+using FooCommerce.NotificationService.Services;
+using FooCommerce.NotificationService.Services.Repositories;
 using FooCommerce.Tests;
 using FooCommerce.Tests.Mocks;
-
 using MassTransit;
 using MassTransit.Testing;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +19,7 @@ using Microsoft.Extensions.Logging.Configuration;
 
 [assembly: CollectionBehavior(CollectionBehavior.CollectionPerClass, DisableTestParallelization = true, MaxParallelThreads = 1)]
 
-namespace FooCommerce.Services.NotificationAPI.Tests.Setup;
+namespace FooCommerce.NotificationService.Tests.Setup;
 
 public class FixturePerTestClass : IAsyncLifetime
 {

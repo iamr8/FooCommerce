@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.ProductAPI.Services;
+﻿namespace FooCommerce.CatalogService.Services;
 
 public interface IProductManager
 {

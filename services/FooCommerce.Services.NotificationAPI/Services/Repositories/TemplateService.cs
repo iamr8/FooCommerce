@@ -1,15 +1,13 @@
 ﻿using System.Text.Json.Nodes;
-
 using FooCommerce.Domain.Enums;
 using FooCommerce.Localization.Helpers;
-using FooCommerce.Services.NotificationAPI.DbProvider;
-using FooCommerce.Services.NotificationAPI.Dtos;
-using FooCommerce.Services.NotificationAPI.Enums;
-using FooCommerce.Services.NotificationAPI.Interfaces;
-
+using FooCommerce.NotificationService.DbProvider;
+using FooCommerce.NotificationService.Dtos;
+using FooCommerce.NotificationService.Enums;
+using FooCommerce.NotificationService.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.NotificationAPI.Services.Repositories;
+namespace FooCommerce.NotificationService.Services.Repositories;
 
 public class TemplateService : ITemplateService
 {

@@ -1,6 +1,6 @@
-﻿using FooCommerce.Services.TokenAPI.Interfaces;
+﻿using FooCommerce.TokenService.Interfaces;
 
-namespace FooCommerce.Services.TokenAPI.Contracts;
+namespace FooCommerce.TokenService.Contracts;
 
 public interface GenerateCode : IIdentifier
 {

@@ -1,7 +1,7 @@
 ﻿using System.Security.Claims;
-using FooCommerce.Services.MembershipAPI.Enums;
+using FooCommerce.MembershipService.Enums;
 
-namespace FooCommerce.Services.MembershipAPI.Models;
+namespace FooCommerce.MembershipService.Models;
 
 public interface IClaimedUser
 {

@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.MembershipAPI.Dtos;
-using FooCommerce.Services.MembershipAPI.Enums;
+﻿using FooCommerce.MembershipService.Dtos;
+using FooCommerce.MembershipService.Enums;
 
-namespace FooCommerce.Services.MembershipAPI.Contracts;
+namespace FooCommerce.MembershipService.Contracts;
 
 public interface UserClaimFindingFaulted
 {

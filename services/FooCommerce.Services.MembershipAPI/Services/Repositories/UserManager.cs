@@ -1,19 +1,16 @@
-﻿using System.Data;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Security.Claims;
-
 using FooCommerce.Common.Protection;
 using FooCommerce.Domain.Enums;
-using FooCommerce.Services.MembershipAPI.Contracts;
-using FooCommerce.Services.MembershipAPI.DbProvider;
-using FooCommerce.Services.MembershipAPI.DbProvider.Entities;
-using FooCommerce.Services.MembershipAPI.Dtos;
-using FooCommerce.Services.MembershipAPI.Enums;
-using FooCommerce.Services.MembershipAPI.Models;
-
+using FooCommerce.MembershipService.Contracts;
+using FooCommerce.MembershipService.DbProvider;
+using FooCommerce.MembershipService.DbProvider.Entities;
+using FooCommerce.MembershipService.Dtos;
+using FooCommerce.MembershipService.Enums;
+using FooCommerce.MembershipService.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.MembershipAPI.Services.Repositories;
+namespace FooCommerce.MembershipService.Services.Repositories;
 
 public class UserManager : IUserManager
 {

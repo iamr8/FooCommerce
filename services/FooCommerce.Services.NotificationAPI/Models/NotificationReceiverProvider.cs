@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Models;
+namespace FooCommerce.NotificationService.Models;
 
 public record NotificationReceiverProvider
 {

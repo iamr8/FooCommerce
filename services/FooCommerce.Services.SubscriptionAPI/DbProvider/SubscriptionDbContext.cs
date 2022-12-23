@@ -1,8 +1,7 @@
-﻿using FooCommerce.Services.SubscriptionAPI.DbProvider.Entities;
-
+﻿using FooCommerce.SubscriptionsService.DbProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.SubscriptionAPI.DbProvider;
+namespace FooCommerce.SubscriptionsService.DbProvider;
 
 public class SubscriptionDbContext : DbContext
 {

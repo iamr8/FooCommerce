@@ -1,8 +1,8 @@
 ﻿using System.Security.Claims;
-using FooCommerce.Services.MembershipAPI.Exceptions;
-using FooCommerce.Services.MembershipAPI.Models;
+using FooCommerce.MembershipService.Exceptions;
+using FooCommerce.MembershipService.Models;
 
-namespace FooCommerce.Services.MembershipAPI.Helpers;
+namespace FooCommerce.MembershipService.Helpers;
 
 public static class ClaimedUserHelper
 {

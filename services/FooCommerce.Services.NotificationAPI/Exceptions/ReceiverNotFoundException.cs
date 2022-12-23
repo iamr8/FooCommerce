@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.Exceptions;
+namespace FooCommerce.NotificationService.Exceptions;
 
 public class ReceiverNotFoundException : Exception
 {

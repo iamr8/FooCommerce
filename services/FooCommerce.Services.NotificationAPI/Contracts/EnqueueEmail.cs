@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.NotificationAPI.Contracts;
+﻿namespace FooCommerce.NotificationService.Contracts;
 
 public interface EnqueueEmail : _EnqueuePayload
 {

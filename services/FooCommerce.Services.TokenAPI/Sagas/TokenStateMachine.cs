@@ -1,12 +1,10 @@
 ﻿using System.Security.Cryptography;
-
-using FooCommerce.Services.TokenAPI.Contracts;
-using FooCommerce.Services.TokenAPI.Enums;
-using FooCommerce.Services.TokenAPI.Sagas.Contracts;
-
+using FooCommerce.TokenService.Contracts;
+using FooCommerce.TokenService.Enums;
+using FooCommerce.TokenService.Sagas.Contracts;
 using MassTransit;
 
-namespace FooCommerce.Services.TokenAPI.Sagas;
+namespace FooCommerce.TokenService.Sagas;
 
 // ReSharper disable once ClassNeverInstantiated.Global
 public class TokenStateMachine

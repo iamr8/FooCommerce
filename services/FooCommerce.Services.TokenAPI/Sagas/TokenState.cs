@@ -1,8 +1,6 @@
-﻿using FooCommerce.Services.TokenAPI.Interfaces;
+﻿using MassTransit;
 
-using MassTransit;
-
-namespace FooCommerce.Services.TokenAPI.Sagas;
+namespace FooCommerce.TokenService.Sagas;
 
 public class TokenState
     : SagaStateMachineInstance

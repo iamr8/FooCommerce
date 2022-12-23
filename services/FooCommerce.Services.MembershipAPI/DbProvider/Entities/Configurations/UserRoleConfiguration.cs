@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Services.MembershipAPI.DbProvider.Entities.Configurations;
+namespace FooCommerce.MembershipService.DbProvider.Entities.Configurations;
 
 public class UserRoleConfiguration : IEntityTypeConfiguration<UserRole>
 {

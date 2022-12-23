@@ -1,6 +1,6 @@
 ﻿using FooCommerce.Domain;
 
-namespace FooCommerce.Services.MembershipAPI.DbProvider.Entities;
+namespace FooCommerce.MembershipService.DbProvider.Entities;
 
 public record User
     : IEntity

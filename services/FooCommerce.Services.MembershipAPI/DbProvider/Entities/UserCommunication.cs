@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Domain;
 using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.MembershipAPI.DbProvider.Entities;
+namespace FooCommerce.MembershipService.DbProvider.Entities;
 
 public record UserCommunication
     : IEntity

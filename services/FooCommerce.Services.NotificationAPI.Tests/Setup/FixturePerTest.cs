@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace FooCommerce.Services.NotificationAPI.Tests.Setup;
+namespace FooCommerce.NotificationService.Tests.Setup;
 
 public class FixturePerTest : IClassFixture<FixturePerTestClass>, IDisposable
 {

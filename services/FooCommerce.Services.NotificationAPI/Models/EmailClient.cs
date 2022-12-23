@@ -1,12 +1,9 @@
 ﻿using System.Text;
-
-using FooCommerce.Services.NotificationAPI.Interfaces;
-
+using FooCommerce.NotificationService.Interfaces;
 using MailKit.Net.Smtp;
-
 using MimeKit;
 
-namespace FooCommerce.Services.NotificationAPI.Models;
+namespace FooCommerce.NotificationService.Models;
 
 public record EmailClient : IEmailClient
 {

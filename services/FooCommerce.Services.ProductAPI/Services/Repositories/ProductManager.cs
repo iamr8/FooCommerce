@@ -1,6 +1,6 @@
-﻿using FooCommerce.Services.ProductAPI.DbProvider;
+﻿using FooCommerce.CatalogService.DbProvider;
 
-namespace FooCommerce.Services.ProductAPI.Services.Repositories;
+namespace FooCommerce.CatalogService.Services.Repositories;
 
 public class ProductManager : IProductManager
 {

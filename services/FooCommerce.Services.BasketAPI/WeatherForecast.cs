@@ -1,4 +1,4 @@
-namespace FooCommerce.Services.BasketAPI
+namespace FooCommerce.BasketService
 {
     public class WeatherForecast
     {

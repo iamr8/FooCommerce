@@ -1,6 +1,4 @@
-﻿using FooCommerce.Services.TokenAPI.Interfaces;
-
-namespace FooCommerce.Services.TokenAPI.Sagas.Contracts;
+﻿namespace FooCommerce.TokenService.Sagas.Contracts;
 
 //public interface TokenGeneratedInternal : IIdentifier
 //{

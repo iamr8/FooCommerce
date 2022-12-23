@@ -1,8 +1,8 @@
 ﻿using FooCommerce.Domain.Enums;
 using FooCommerce.Localization.Attributes;
-using FooCommerce.Services.NotificationAPI.Attributes;
+using FooCommerce.NotificationService.Attributes;
 
-namespace FooCommerce.Services.NotificationAPI.Enums;
+namespace FooCommerce.NotificationService.Enums;
 
 public enum NotificationPurpose : short
 {

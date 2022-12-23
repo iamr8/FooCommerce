@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.MembershipAPI.Enums;
+﻿namespace FooCommerce.MembershipService.Enums;
 
 public enum AuthTokenState
 {

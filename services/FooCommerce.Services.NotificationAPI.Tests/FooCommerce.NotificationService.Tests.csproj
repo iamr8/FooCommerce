@@ -53,7 +53,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\core\FooCommerce.Tests\FooCommerce.Tests.csproj" />
-    <ProjectReference Include="..\FooCommerce.Services.NotificationAPI\FooCommerce.Services.NotificationAPI.csproj" />
+    <ProjectReference Include="..\FooCommerce.Services.NotificationAPI\FooCommerce.NotificationService.csproj" />
   </ItemGroup>
 
 </Project>

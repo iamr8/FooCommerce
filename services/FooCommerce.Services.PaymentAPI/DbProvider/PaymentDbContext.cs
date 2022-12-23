@@ -1,7 +1,7 @@
-﻿using FooCommerce.Services.PaymentAPI.DbProvider.Entities;
+﻿using FooCommerce.PaymentService.DbProvider.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.PaymentAPI.DbProvider;
+namespace FooCommerce.PaymentService.DbProvider;
 
 public class PaymentDbContext : DbContext
 {

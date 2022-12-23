@@ -1,12 +1,10 @@
 ﻿using FooCommerce.Domain.Enums;
-using FooCommerce.Services.NotificationAPI.Contracts;
-using FooCommerce.Services.NotificationAPI.Interfaces;
-
+using FooCommerce.NotificationService.Contracts;
+using FooCommerce.NotificationService.Interfaces;
 using MassTransit;
-
 using MimeKit;
 
-namespace FooCommerce.Services.NotificationAPI.Consumers;
+namespace FooCommerce.NotificationService.Consumers;
 
 public class EnqueueEmailConsumer :
     IConsumer<EnqueueEmail>,

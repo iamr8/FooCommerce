@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace FooCommerce.Services.NotificationAPI.DbProvider.Entities.Configurations;
+namespace FooCommerce.NotificationService.DbProvider.Entities.Configurations;
 
 public class NotificationConfiguration : IEntityTypeConfiguration<Notification>
 {

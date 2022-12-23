@@ -1,8 +1,7 @@
 using System.Net.Mime;
-
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.ProductAPI.Controllers;
+namespace FooCommerce.CatalogService.Controllers;
 
 [Route("api/product/manager")]
 [ApiController]

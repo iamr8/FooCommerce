@@ -1,11 +1,10 @@
-﻿using FooCommerce.Services.ProductAPI.DbProvider;
-using FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
-using FooCommerce.Services.ProductAPI.Exceptions;
-using FooCommerce.Services.ProductAPI.Services.Repositories.Models;
-
+﻿using FooCommerce.CatalogService.DbProvider;
+using FooCommerce.CatalogService.DbProvider.Entities.Products;
+using FooCommerce.CatalogService.Exceptions;
+using FooCommerce.CatalogService.Services.Repositories.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace FooCommerce.Services.ProductAPI.Services.Repositories;
+namespace FooCommerce.CatalogService.Services.Repositories;
 
 public class CatalogManager : ICatalogManager
 {

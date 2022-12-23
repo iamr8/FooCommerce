@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.MembershipAPI.Contracts;
+﻿namespace FooCommerce.MembershipService.Contracts;
 
 public interface CreateUser
 {

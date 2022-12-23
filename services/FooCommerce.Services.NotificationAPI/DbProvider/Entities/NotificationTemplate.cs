@@ -1,7 +1,7 @@
 ﻿using FooCommerce.Domain;
 using FooCommerce.Domain.Enums;
 
-namespace FooCommerce.Services.NotificationAPI.DbProvider.Entities;
+namespace FooCommerce.NotificationService.DbProvider.Entities;
 
 public record NotificationTemplate
     : IEntity

@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace FooCommerce.Services.SubscriptionAPI.Controllers
+namespace FooCommerce.SubscriptionsService.Controllers
 {
     [ApiController]
     [Route("[controller]")]

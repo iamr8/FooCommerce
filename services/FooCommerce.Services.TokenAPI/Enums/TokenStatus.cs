@@ -1,4 +1,4 @@
-﻿namespace FooCommerce.Services.TokenAPI.Enums;
+﻿namespace FooCommerce.TokenService.Enums;
 
 public enum TokenStatus
 {

@@ -1,4 +1,4 @@
-namespace FooCommerce.Services.PaymentAPI
+namespace FooCommerce.PaymentService
 {
     public class WeatherForecast
     {
