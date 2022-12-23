@@ -2,7 +2,7 @@
 
 public static class DateTimeHelper
 {
-    public static long ToUnixTime(DateTime datetime)
+    public static long ToUnixTime(this DateTime datetime)
     {
         var timestamp = (long)datetime.Subtract(DateTime.UnixEpoch).TotalSeconds;
         return timestamp;
