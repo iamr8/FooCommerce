@@ -3,7 +3,11 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
+using FooCommerce.Domain.Helpers;
+using FooCommerce.Infrastructure.Exceptions;
 using FooCommerce.Infrastructure.Membership.Contracts;
+
+using JetBrains.Annotations;
 
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
@@ -24,8 +28,12 @@ public class MembershipService : IMembershipService
         _logger = logger;
     }
 
-    public async Task<Guid> RegisterAsync(SignUpRequest model)
+    public async Task<Guid> RegisterAsync([NotNull] SignUpRequest model, CancellationToken cancellationToken = default)
     {
+        if (model == null)
+            throw new ArgumentNullException(nameof(model));
+
+        JsonObject json = null;
         try
         {
             var payload = new
@@ -37,26 +45,31 @@ public class MembershipService : IMembershipService
                 //country = model.Country
             };
             var response = await _httpClient.PostAsync("api/Membership/register",
-                new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, MediaTypeNames.Application.Json));
+                new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, MediaTypeNames.Application.Json), cancellationToken);
             response.EnsureSuccessStatusCode();
 
-            var json = await JsonSerializer.DeserializeAsync<JsonNode>(await response.Content.ReadAsStreamAsync());
-            if (json.AsObject().TryGetPropertyValue("commId", out var _commId))
-            {
-                if (Guid.TryParse(_commId.AsValue().ToString(), out var commId))
-                {
-                    if (commId != Guid.Empty)
-                    {
-                        return commId;
-                    }
-                }
-            }
+            json = await JsonSerializer.DeserializeAsync<JsonObject>(await response.Content.ReadAsStreamAsync(), cancellationToken: cancellationToken);
+            var hasCommId = json.TryGetGuid("commId", out var commId);
+            if (!hasCommId)
+                throw new NotRegisteredException("Unable to register user");
 
-            throw new Exception("Unable to register user");
+            return commId;
+        }
+        catch (NotRegisteredException e)
+        {
+            throw;
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
+
+            if (json is not null)
+            {
+                var hasMessage = json.TryGetPropertyValue("message", out var message);
+                if (hasMessage)
+                    throw new NotRegisteredException(message.AsValue().ToString());
+            }
+
             throw;
         }
     }

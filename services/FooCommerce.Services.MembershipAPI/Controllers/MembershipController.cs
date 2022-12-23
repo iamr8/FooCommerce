@@ -33,12 +33,12 @@ public class MembershipController : ControllerBase
     /// <response code="201">A User has been created.</response>
     /// <response code="409">A User with the given email exists.</response>
     /// <response code="500">An internal server error occurred.</response>
-    [HttpPost, Route("register")]
-    [ProducesResponseType(typeof(RegisterResp), StatusCodes.Status201Created)]
-    [ProducesResponseType(typeof(RegisterRespEmpty), StatusCodes.Status409Conflict)]
-    [ProducesResponseType(typeof(RegisterRespFaulted), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(RegisterRespFaulted), StatusCodes.Status500InternalServerError)]
-    public async Task<IRegisterResp> Register(RegisterReq req, CancellationToken cancellationToken = default)
+    [HttpPost, Route("create")]
+    [ProducesResponseType(typeof(CreateResp), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(CreateRespEmpty), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(CreateRespFaulted), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateRespFaulted), StatusCodes.Status500InternalServerError)]
+    public async Task<ICreateResp> Create(CreateReq req, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -54,7 +54,7 @@ public class MembershipController : ControllerBase
             if (resp.Message.Success)
             {
                 this.Response.StatusCode = StatusCodes.Status201Created;
-                return new RegisterResp
+                return new CreateResp
                 {
                     CommunicationId = resp.Message.CommId.Value
                 };
@@ -62,12 +62,12 @@ public class MembershipController : ControllerBase
             else if (resp.Message.IsAlreadyExists)
             {
                 this.Response.StatusCode = StatusCodes.Status409Conflict;
-                return new RegisterRespEmpty();
+                return new CreateRespEmpty();
             }
             else
             {
                 this.Response.StatusCode = StatusCodes.Status400BadRequest;
-                return new RegisterRespFaulted
+                return new CreateRespFaulted
                 {
                     Message = resp.Message.Message
                 };
@@ -78,7 +78,7 @@ public class MembershipController : ControllerBase
             _logger.LogError(e, e.Message);
             this.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            return new RegisterRespFaulted
+            return new CreateRespFaulted
             {
                 Message = e.Message
             };

@@ -11,4 +11,5 @@ public record Specification
     public bool IsDeleted { get; init; }
     public bool IsHidden { get; init; }
     public string Name { get; init; }
+    public virtual ICollection<ProductSpecification> ProductSpecifications { get; init; }
 }

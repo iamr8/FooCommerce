@@ -1,5 +1,7 @@
 ﻿using System.Globalization;
-using FooCommerce.Infrastructure.Bootstrapper.Mvc.ModelBinding.CustomProviders;
+
+using FooCommerce.Infrastructure.Mvc.ModelBinding.CustomProviders;
+
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Primitives;

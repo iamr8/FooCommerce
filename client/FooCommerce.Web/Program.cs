@@ -1,6 +1,7 @@
-using FooCommerce.Infrastructure.Bootstrapper;
-using FooCommerce.Infrastructure.Bootstrapper.Mvc.Localization;
+using FooCommerce.Common.Helpers;
 using FooCommerce.Infrastructure.Helpers;
+using FooCommerce.Infrastructure.Modules;
+using FooCommerce.Infrastructure.Mvc.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,15 @@ builder.Configuration
     .AddEnvironmentVariables()
     .Build();
 
-builder.Services.ConfigureModules();
+var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
+
+builder.Services.AddService<AutoFluentValidationModule>();
+builder.Services.AddService(new MvcModule());
+builder.Services.AddService<ServicesModule>();
+builder.Services.AddService<ProtectionModule>();
+
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 // In production, the React files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration => configuration.RootPath = "wwwroot/build");
@@ -31,6 +40,12 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     //app.UseHsts();
     //app.UseHttpsRedirection();
+}
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
 app.UseStaticFiles();

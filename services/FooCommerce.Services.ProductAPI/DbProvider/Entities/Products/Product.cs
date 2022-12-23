@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using FooCommerce;
 using FooCommerce.Domain;
 
 namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
@@ -14,4 +13,7 @@ public record Product
     public bool IsDeleted { get; init; }
     public string? Name { get; init; }
     public Guid CategoryId { get; init; }
+    public virtual ProductCategory Category { get; init; }
+    public virtual ICollection<ProductMultimedia> Multimedias { get; init; }
+    public virtual ICollection<ProductSpecification> Specifications { get; init; }
 }

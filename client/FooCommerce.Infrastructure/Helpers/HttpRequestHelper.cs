@@ -66,10 +66,24 @@ public static class ContextRequestHelper
                 platformService);
         }
 
-        requestInfo.Browser = new ContextRequestBrowser(detectionService.Browser.Name.ToString(), detectionService.Browser.Version.ToString());
-        requestInfo.Device = new ContextRequestDevice(detectionService.Device.Type.ToString());
-        requestInfo.Platform = new ContextRequestPlatform(detectionService.Platform.Name.ToString(), detectionService.Platform.Version.ToString());
-        requestInfo.Engine = new ContextRequestEngine(detectionService.Engine.Name.ToString());
+        requestInfo.Browser = new ContextRequestBrowser
+        {
+            Name = detectionService.Browser.Name.ToString(),
+            Version = detectionService.Browser.Version.ToString()
+        };
+        requestInfo.Device = new ContextRequestDevice
+        {
+            Type = detectionService.Device.Type.ToString()
+        };
+        requestInfo.Platform = new ContextRequestPlatform
+        {
+            Name = detectionService.Platform.Name.ToString(),
+            Version = detectionService.Platform.Version.ToString()
+        };
+        requestInfo.Engine = new ContextRequestEngine
+        {
+            Name = detectionService.Engine.Name.ToString()
+        };
     }
 
     // public static void SetHttpContext(HttpContext httpContext)

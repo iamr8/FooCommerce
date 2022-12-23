@@ -1,6 +1,5 @@
 ﻿#nullable enable
 
-using FooCommerce;
 using FooCommerce.Domain;
 
 namespace FooCommerce.Services.ProductAPI.DbProvider.Entities.Products;
@@ -15,4 +14,6 @@ public record ProductSpecification
     public int Order { get; set; }
     public Guid SpecificationId { get; init; }
     public Guid ProductId { get; init; }
+    public virtual Product Product { get; init; }
+    public virtual Specification Specification { get; init; }
 }

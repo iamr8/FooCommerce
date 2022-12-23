@@ -1,5 +1,5 @@
 ﻿using FooCommerce.Common.Helpers;
-using FooCommerce.Infrastructure.Bootstrapper.Modules;
+using FooCommerce.Infrastructure.Modules;
 using FooCommerce.Tests;
 
 using Microsoft.AspNetCore.Builder;

@@ -4,7 +4,7 @@ using System.Text.Json.Serialization;
 namespace FooCommerce.Services.MembershipAPI.Models;
 
 [Serializable]
-public record RegisterReq
+public record CreateReq
 {
     /// <summary>
     /// First Name of the User.
@@ -29,10 +29,10 @@ public record RegisterReq
     public string Password { get; init; }
 }
 
-public interface IRegisterResp { }
+public interface ICreateResp { }
 
 [Serializable]
-public record RegisterResp : IRegisterResp
+public record CreateResp : ICreateResp
 {
     /// <summary>
     /// User's Communication Id.
@@ -41,11 +41,11 @@ public record RegisterResp : IRegisterResp
     public Guid? CommunicationId { get; init; }
 }
 [Serializable]
-public record RegisterRespEmpty : IRegisterResp
+public record CreateRespEmpty : ICreateResp
 {
 }
 [Serializable]
-public record RegisterRespFaulted : IRegisterResp
+public record CreateRespFaulted : ICreateResp
 {
     /// <summary>
     /// Error Message.
