@@ -1,4 +1,6 @@
-﻿using FooCommerce.Services.MembershipAPI.Contracts;
+﻿using System.Net.Mime;
+
+using FooCommerce.Services.MembershipAPI.Contracts;
 using FooCommerce.Services.MembershipAPI.Models;
 
 using MassTransit;
@@ -9,6 +11,7 @@ namespace FooCommerce.Services.MembershipAPI.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Produces(MediaTypeNames.Application.Json)]
 public class MembershipController : ControllerBase
 {
     private readonly IRequestClient<CreateUser> _requestClient;
@@ -21,12 +24,25 @@ public class MembershipController : ControllerBase
         _requestClient = requestClient;
     }
 
+    /// <summary>
+    /// Requests to create a new user.
+    /// </summary>
+    /// <param name="req"></param>
+    /// <param name="cancellationToken"></param>
+    /// <returns>A <see cref="Guid"/> value that represents User's Communication Id.</returns>
+    /// <response code="201">A User has been created.</response>
+    /// <response code="409">A User with the given email exists.</response>
+    /// <response code="500">An internal server error occurred.</response>
     [HttpPost, Route("register")]
-    public async Task<RegisterResp> Register(RegisterReq req, CancellationToken cancellationToken = default)
+    [ProducesResponseType(typeof(RegisterResp), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(RegisterRespEmpty), StatusCodes.Status409Conflict)]
+    [ProducesResponseType(typeof(RegisterRespFaulted), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(RegisterRespFaulted), StatusCodes.Status500InternalServerError)]
+    public async Task<IRegisterResp> Register(RegisterReq req, CancellationToken cancellationToken = default)
     {
         try
         {
-            var resp = await _requestClient.GetResponse<UserCreationStatus>(new
+            var resp = await _requestClient.GetResponse<UserCreated>(new
             {
                 FirstName = req.FirstName,
                 LastName = req.LastName,
@@ -35,25 +51,37 @@ public class MembershipController : ControllerBase
                 //Country = req.Country
             }, cancellationToken);
 
-            if (!string.IsNullOrEmpty(resp.Message.ExceptionMessage))
-                throw new Exception(resp.Message.ExceptionMessage);
-
-            if (resp.Message.Fault != null)
-                throw new Exception(resp.Message.Fault.Value.ToString());
-
-            this.Response.StatusCode = StatusCodes.Status200OK;
-            return new RegisterResp
+            if (resp.Message.Success)
             {
-                CommunicationId = resp.Message.CommunicationId.Value
-            };
+                this.Response.StatusCode = StatusCodes.Status201Created;
+                return new RegisterResp
+                {
+                    CommunicationId = resp.Message.CommId.Value
+                };
+            }
+            else if (resp.Message.IsAlreadyExists)
+            {
+                this.Response.StatusCode = StatusCodes.Status409Conflict;
+                return new RegisterRespEmpty();
+            }
+            else
+            {
+                this.Response.StatusCode = StatusCodes.Status400BadRequest;
+                return new RegisterRespFaulted
+                {
+                    Message = resp.Message.Message
+                };
+            }
         }
         catch (Exception e)
         {
             _logger.LogError(e, e.Message);
             this.Response.StatusCode = StatusCodes.Status500InternalServerError;
 
-            // Send status
-            return new RegisterResp();
+            return new RegisterRespFaulted
+            {
+                Message = e.Message
+            };
         }
     }
 }

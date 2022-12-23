@@ -30,9 +30,10 @@ public class CreateUserConsumer :
         var establishedUserCommunicationId = await _communicationsManager.GetVerifiedCommunicationIdAsync(CommType.Email, context.Message.Email);
         if (establishedUserCommunicationId.HasValue)
         {
-            await context.RespondAsync<UserCreationStatus>(new
+            await context.RespondAsync<UserCreated>(new
             {
-                Fault = UserCreationFault.EmailAlreadyEstablished
+                Success = false,
+                Message = "User already exists",
             });
             return;
         }
@@ -42,18 +43,19 @@ public class CreateUserConsumer :
         try
         {
             var createdUserModel = await _user.CreateUserAsync(context.Message, role);
-            await context.RespondAsync<UserCreationStatus>(new
+            await context.RespondAsync<UserCreated>(new
             {
-                CommunicationId = createdUserModel.Communication.Id,
+                CommId = createdUserModel.Communication.Id,
+                Success = true
             });
         }
         catch (Exception e)
         {
-            await context.RespondAsync<UserCreationStatus>(new
+            await context.RespondAsync<UserCreated>(new
             {
-                ExceptionMessage = e.Message
+                Success = false,
+                Message = e.Message
             });
-            return;
         }
     }
 

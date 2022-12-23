@@ -1,4 +1,9 @@
+using System.Reflection;
+
 using FooCommerce.Domain.Jsons;
+using FooCommerce.EventSource;
+using FooCommerce.Services.MembershipAPI.Consumers;
+using FooCommerce.Services.MembershipAPI.Contracts;
 using FooCommerce.Services.MembershipAPI.DbProvider;
 using FooCommerce.Services.MembershipAPI.Services;
 using FooCommerce.Services.MembershipAPI.Services.Repositories;
@@ -16,7 +21,11 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+        });
 
         var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
 
@@ -64,28 +73,22 @@ public static class Program
             options.LowercaseQueryStrings = false;
         });
 
-        //builder.Services.AddScoped<EnqueueEmailConsumer>();
-        //builder.Services.AddScoped<EnqueuePushConsumer>();
-        //builder.Services.AddScoped<EnqueueSmsConsumer>();
+        builder.Services.AddScoped<CreateUserConsumer>();
 
-        //builder.Services.AddMassTransit(cfg =>
-        //{
-        //    cfg.ConfigureBus(config =>
-        //    {
-        //        config.TransportConfig = (_, context) =>
-        //        {
-        //            context.Message<EnqueueEmail>(c => c.SetEntityName("notification"));
-        //            context.Message<EnqueueSms>(c => c.SetEntityName("notification"));
-        //            context.Message<EnqueuePush>(c => c.SetEntityName("notification"));
-        //        };
-        //        config.BusConfig = configurator =>
-        //        {
-        //            configurator.AddConsumer<EnqueueEmailConsumer>();
-        //            configurator.AddConsumer<EnqueueSmsConsumer>();
-        //            configurator.AddConsumer<EnqueuePushConsumer>();
-        //        };
-        //    });
-        //});
+        builder.Services.AddMassTransit(cfg =>
+        {
+            cfg.ConfigureBus(config =>
+            {
+                config.TransportConfig = (_, context) =>
+                {
+                    context.Message<CreateUser>(c => c.SetEntityName("account"));
+                };
+                config.BusConfig = configurator =>
+                {
+                    configurator.AddConsumer<CreateUserConsumer>();
+                };
+            });
+        });
 
         builder.Services.AddScoped<ICommunicationsManager, CommunicationsManager>();
         builder.Services.AddScoped<IUserManager, UserManager>();
