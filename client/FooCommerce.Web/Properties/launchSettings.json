@@ -1,15 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5000",
+      "sslPort": 5001
+    }
+  },
   "profiles": {
-    "iisSettings": {
-      "windowsAuthentication": false,
-      "anonymousAuthentication": true,
-      "iisExpress": {
-        "applicationUrl": "http://localhost:5000",
-        "sslPort": 5001
-      }
-    },
-    "Kestrel": {
+    "FooCommerce.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

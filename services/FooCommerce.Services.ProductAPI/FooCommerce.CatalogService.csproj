@@ -16,6 +16,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\core\FooCommerce.EntityFrameworkCore.Extensions\FooCommerce.EntityFrameworkCore.Extensions.csproj" />
 		<ProjectReference Include="..\..\core\FooCommerce.EventSource\FooCommerce.EventSource.csproj" />
 	</ItemGroup>
 

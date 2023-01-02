@@ -14,4 +14,5 @@ public record ListingReport
     public string? Description { get; init; }
     public Guid ListingId { get; init; }
     public Guid UserId { get; init; }
+    public virtual Listing Listing { get; init; }
 }

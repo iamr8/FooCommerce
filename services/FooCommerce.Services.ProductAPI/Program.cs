@@ -1,8 +1,10 @@
 using System.Reflection;
+
 using FooCommerce.CatalogService.DbProvider;
 using FooCommerce.CatalogService.Services;
 using FooCommerce.CatalogService.Services.Repositories;
 using FooCommerce.Domain.Jsons;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.CatalogService;
@@ -83,6 +85,9 @@ public static class Program
         //     });
         // });
         //
+
+        builder.Services.AddScoped<ICatalogService, Services.Repositories.CatalogService>();
+        builder.Services.AddScoped<IListingService, ListingService>();
         builder.Services.AddScoped<ICatalogManager, CatalogManager>();
         builder.Services.AddScoped<IProductManager, ProductManager>();
 

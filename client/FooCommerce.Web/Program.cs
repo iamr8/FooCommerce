@@ -1,8 +1,3 @@
-using FooCommerce.Common.Helpers;
-using FooCommerce.Infrastructure.Helpers;
-using FooCommerce.Infrastructure.Modules;
-using FooCommerce.Infrastructure.Mvc.Localization;
-
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost
@@ -18,16 +13,6 @@ builder.Configuration
     .AddEnvironmentVariables()
     .Build();
 
-var connectionString = Environment.GetEnvironmentVariable("ConnectionString");
-
-builder.Services.AddService<AutoFluentValidationModule>();
-builder.Services.AddService(new MvcModule());
-builder.Services.AddService<ServicesModule>();
-builder.Services.AddService<ProtectionModule>();
-
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
 // In production, the React files will be served from this directory
 builder.Services.AddSpaStaticFiles(configuration => configuration.RootPath = "wwwroot/build");
 
@@ -42,29 +27,15 @@ if (!app.Environment.IsDevelopment())
     //app.UseHttpsRedirection();
 }
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseStaticFiles();
 
 app.UseRouting();
 
-HttpContextHelper.UseWebsiteUrl(ref app);
+//app.UseAuthorization();
 
-app.UseAuthorization();
+//app.MapControllers();
 
-var defaultCulture = app.Configuration.GetSection("SupportedLanguages").Get<string[]>()[0];
-const string culturePattern = $"{LanguageConstraints.LanguageKey}:{LanguageConstraints.LanguageKey}";
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{" + culturePattern + "}/{controller}/{action=Index}/{id?}",
-    defaults: new { culture = defaultCulture });
-
-app.MapRazorPages();
+//app.MapRazorPages();
 
 app.MapFallbackToFile("index.html");
 

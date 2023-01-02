@@ -10,4 +10,5 @@ public record ListingLike
     public byte[] RowVersion { get; init; }
     public Guid ListingId { get; init; }
     public Guid UserId { get; init; }
+    public virtual Listing Listing { get; init; }
 }

@@ -18,7 +18,7 @@ public class ProductDbContext : DbContext
 
     public virtual DbSet<Catalog> Catalogs { get; set; }
     public virtual DbSet<Product> Products { get; set; }
-    public virtual DbSet<ProductMultimedia> ProductMultimedia { get; set; }
+    public virtual DbSet<ProductMedia> ProductMultimedia { get; set; }
     public virtual DbSet<ProductSpecification> ProductSpecifications { get; set; }
     public virtual DbSet<Specification> Specifications { get; set; }
 
@@ -27,7 +27,7 @@ public class ProductDbContext : DbContext
     public virtual DbSet<ListingLike> ListingLikes { get; set; }
     public virtual DbSet<ListingRating> ListingRatings { get; set; }
     public virtual DbSet<ListingReport> ListingReports { get; set; }
-    public virtual DbSet<PurchasePrice> PurchasePrices { get; set; }
+    public virtual DbSet<ListingPrice> PurchasePrices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

@@ -1,5 +1,5 @@
 ﻿using FooCommerce.CatalogService.Exceptions;
-using FooCommerce.CatalogService.Services.Repositories.Models;
+using FooCommerce.CatalogService.Models;
 
 namespace FooCommerce.CatalogService.Services;
 

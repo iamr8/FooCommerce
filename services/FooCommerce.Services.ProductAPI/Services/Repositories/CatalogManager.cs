@@ -1,7 +1,7 @@
 ﻿using FooCommerce.CatalogService.DbProvider;
 using FooCommerce.CatalogService.DbProvider.Entities.Products;
 using FooCommerce.CatalogService.Exceptions;
-using FooCommerce.CatalogService.Services.Repositories.Models;
+using FooCommerce.CatalogService.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace FooCommerce.CatalogService.Services.Repositories;
